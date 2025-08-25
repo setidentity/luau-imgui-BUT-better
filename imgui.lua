@@ -1,13 +1,16 @@
 --[[
-	TO DO:
-        [X] add textbox any amount of size wanted, ::syntax(true) or false to add luau syntax
-        [X] make resizable toggle, aka ::resizable(true) or false
-        [X] improvements
+	Serpent UI Library | Version 2.0
+
+	Change Log:
+        - Refactored API for ease of use.
+        - Fixed a potential error when closing windows.
+        - Added a line counter feature to the textbox (:linecounter() or :lc()).
+        - Improved textbox resizing to prevent content overflow.
 --]]
 
 repeat task.wait() until game:GetService("Players").LocalPlayer
-if game:GetService("CoreGui"):FindFirstChild("imgui2") then
-    game:GetService("CoreGui"):FindFirstChild("imgui2"):Destroy()
+if game:GetService("CoreGui"):FindFirstChild("Serpent | Main") then
+    game:GetService("CoreGui"):FindFirstChild("Serpent | Main"):Destroy()
 end
 
 do -- Load items
@@ -111,19 +114,18 @@ do -- Load items
     local Value_2 = Instance.new("TextLabel")
     local Text_4 = Instance.new("TextLabel")
     local Cache_2 = Instance.new("Frame")
-    
-    -- [[ ADDED FOR NEW FEATURES ]]
     local Resizer = Instance.new("ImageButton")
     local TextBoxContainer = Instance.new("Frame")
     local TextBoxOuter = Instance.new("ImageLabel")
     local TextBoxInner = Instance.new("ScrollingFrame")
+    local LineCounter = Instance.new("TextLabel")
+    local EditorGroup = Instance.new("Frame")
     local SyntaxLabel = Instance.new("TextLabel")
     local ActualTextBox = Instance.new("TextBox")
-    local UIPadding = Instance.new("UIPadding")
-    -- [[ END ]]
     
-    imgui2.Name = "imgui2"
+    imgui2.Name = "Serpent | Main"
     imgui2.Parent = game:GetService("CoreGui")
+    imgui2.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
     Presets.Name = "Presets"
     Presets.Parent = imgui2
@@ -1121,7 +1123,6 @@ do -- Load items
     Cache_2.Size = UDim2.new(0, 100, 0, 100)
     Cache_2.Visible = false
 
-    -- [[ ADDED FOR RESIZING ]] --
     Resizer.Name = "Resizer"
     Resizer.Parent = Presets
     Resizer.Active = true
@@ -1131,19 +1132,16 @@ do -- Load items
     Resizer.Position = UDim2.new(1, 0, 1, 0)
     Resizer.Size = UDim2.new(0, 15, 0, 15)
     Resizer.ZIndex = 99
-    Resizer.Image = "rbxassetid://5943232811" -- A corner grip icon
+    Resizer.Image = "rbxassetid://5943232811"
     Resizer.ImageColor3 = Color3.fromRGB(150, 150, 150)
     
-    -- [[ ADDED FOR TEXTBOX ]] --
     TextBoxContainer.Name = "TextBox"
     TextBoxContainer.Parent = Presets
-    TextBoxContainer.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     TextBoxContainer.BackgroundTransparency = 1.000
     TextBoxContainer.Size = UDim2.new(0, 200, 0, 150)
     
     TextBoxOuter.Name = "Outer"
     TextBoxOuter.Parent = TextBoxContainer
-    TextBoxOuter.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     TextBoxOuter.BackgroundTransparency = 1.000
     TextBoxOuter.Size = UDim2.new(1, 0, 1, 0)
     TextBoxOuter.Image = "rbxassetid://3570695787"
@@ -1154,7 +1152,6 @@ do -- Load items
 
     TextBoxInner.Name = "Inner"
     TextBoxInner.Parent = TextBoxOuter
-    TextBoxInner.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     TextBoxInner.BackgroundTransparency = 1.000
     TextBoxInner.Position = UDim2.new(0, 2, 0, 2)
     TextBoxInner.Size = UDim2.new(1, -4, 1, -4)
@@ -1162,15 +1159,25 @@ do -- Load items
     TextBoxInner.BorderSizePixel = 0
     TextBoxInner.ScrollBarThickness = 6
 
-    UIPadding.Parent = TextBoxInner
-    UIPadding.PaddingLeft = UDim.new(0, 5)
-    UIPadding.PaddingRight = UDim.new(0, 5)
-    UIPadding.PaddingTop = UDim.new(0, 3)
-    UIPadding.PaddingBottom = UDim.new(0, 3)
+    LineCounter.Name = "LineCounter"
+    LineCounter.Parent = TextBoxInner
+    LineCounter.BackgroundTransparency = 1
+    LineCounter.Size = UDim2.new(0, 30, 1, 0)
+    LineCounter.Font = Enum.Font.Code
+    LineCounter.Text = "1"
+    LineCounter.TextColor3 = Color3.fromRGB(128, 128, 128)
+    LineCounter.TextSize = 14.000
+    LineCounter.TextXAlignment = Enum.TextXAlignment.Right
+    LineCounter.TextYAlignment = Enum.TextYAlignment.Top
+
+    EditorGroup.Name = "EditorGroup"
+    EditorGroup.Parent = TextBoxInner
+    EditorGroup.BackgroundTransparency = 1
+    EditorGroup.Position = UDim2.new(0, 35, 0, 0)
+    EditorGroup.Size = UDim2.new(1, -35, 1, 0)
 
     SyntaxLabel.Name = "SyntaxLabel"
-    SyntaxLabel.Parent = TextBoxInner
-    SyntaxLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    SyntaxLabel.Parent = EditorGroup
     SyntaxLabel.BackgroundTransparency = 1
     SyntaxLabel.Size = UDim2.new(1, 0, 1, 0)
     SyntaxLabel.Font = Enum.Font.Code
@@ -1179,12 +1186,12 @@ do -- Load items
     SyntaxLabel.TextSize = 14.000
     SyntaxLabel.TextXAlignment = Enum.TextXAlignment.Left
     SyntaxLabel.TextYAlignment = Enum.TextYAlignment.Top
+    SyntaxLabel.TextWrapped = true
     SyntaxLabel.RichText = true
     SyntaxLabel.ZIndex = 3
-
+    
     ActualTextBox.Name = "ActualTextBox"
-    ActualTextBox.Parent = TextBoxInner
-    ActualTextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    ActualTextBox.Parent = EditorGroup
     ActualTextBox.BackgroundTransparency = 1
     ActualTextBox.Size = UDim2.new(1, 0, 1, 0)
     ActualTextBox.Font = Enum.Font.Code
@@ -1194,6 +1201,7 @@ do -- Load items
     ActualTextBox.TextXAlignment = Enum.TextXAlignment.Left
     ActualTextBox.TextYAlignment = Enum.TextYAlignment.Top
     ActualTextBox.MultiLine = true
+    ActualTextBox.TextWrapped = true
     ActualTextBox.ClearTextOnFocus = false
     ActualTextBox.ZIndex = 4
     
@@ -1201,50 +1209,29 @@ end
 
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
+local TextService = game:GetService("TextService")
 local CoreGui = game:GetService("CoreGui")
-local ScreenGui = CoreGui:FindFirstChild("imgui2")
+local ScreenGui = CoreGui:FindFirstChild("Serpent | Main")
 local Presets = ScreenGui:FindFirstChild("Presets")
 local ScreenGuiCache = ScreenGui:FindFirstChild("Cache")
 
 local colorpicking = false
 local sliding = false
-local resizing = false -- Added for resize state
+local resizing = false
 
 local event = { } do
     function event.new()
-        local event = setmetatable({
-            Alive = true,
-        }, {
-            __tostring = function()
-                return "Event"
-            end,
-            __call = function(...)
-                event:Fire(...)
-            end,
-        })
-        local BindableEvent = Instance.new("BindableEvent")
-
+        local event = setmetatable({ Alive = true }, { __tostring = function() return "Event" end, __call = function(...) event:Fire(...) end })
+        local bindable = Instance.new("BindableEvent")
         function event:Connect(callback)
             local c = { }
-            local Connection = BindableEvent.Event:Connect(callback)
+            local connection = bindable.Event:Connect(callback)
             c.Connected = true
-            function c:Disconnect()
-                Connection:Disconnect()
-                c.Connected = false
-            end
-
+            function c:Disconnect() connection:Disconnect() c.Connected = false end
             return c
         end
-
-        function event:Fire(...)
-            BindableEvent:Fire(...)
-        end
-
-        function event:Destroy()
-            event.Alive = false
-            BindableEvent:Destroy()
-        end
-
+        function event:Fire(...) bindable:Fire(...) end
+        function event:Destroy() event.Alive = false bindable:Destroy() end
         return event
     end
 end
@@ -1253,24 +1240,16 @@ local mouse = { } do
     mouse.held = false
     mouse.InputBegan = event.new()
     mouse.InputEnded = event.new()
-    UserInputService.InputBegan:Connect(function(inputObject)
-        if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
-            mouse.held = true
-            mouse.InputBegan:Fire()
-        end
+    UserInputService.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then mouse.held = true mouse.InputBegan:Fire() end
     end)
-    UserInputService.InputEnded:Connect(function(inputObject)
-        if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
-            mouse.held = false
-            mouse.InputEnded:Fire()
-        end
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then mouse.held = false mouse.InputEnded:Fire() end
     end)
 end
 
 local function getMouse()
-    -- This offset accounts for Roblox's 36px top bar. It's generally better to rely on GuiInsets,
-    -- but for this self-contained script, it remains as is to preserve existing behavior.
-	return Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y - 36)
+	return UserInputService:GetMouseLocation()
 end
 
 local function resizeTween(part, new, _delay)
@@ -1286,10 +1265,10 @@ local mouseCache = { }
 local browsingWindow = { }
 
 local function updateWindowHistory()
-    for i, v in next, windowHistory do
+    for i, v in pairs(windowHistory) do
         local offset = 9e3 - v * 100
         i.ZIndex = rawget(windowCache[i], i) + offset
-        for i2, v2 in next, i:GetDescendants() do
+        for i2, v2 in pairs(i:GetDescendants()) do
             if pcall(function() return v2.ZIndex end) then
                 if rawget(windowCache[i], v2) then
                     v2.ZIndex = rawget(windowCache[i], v2) + offset
@@ -1302,7 +1281,7 @@ end
 local function cacheWindowHistory(window)
     rawset(windowCache, window, { })
     rawset(windowCache[window], window, window.ZIndex)
-    for i, v in next, window:GetDescendants() do
+    for i, v in pairs(window:GetDescendants()) do
         if pcall(function() return v.ZIndex end) then
             rawset(windowCache[window], v, v.ZIndex)
         end
@@ -1316,9 +1295,7 @@ local function cacheWindowHistory(window)
 end
 
 local function setTopMost(window)
-    local copy = { }
-    local n = 2
-    for i, v in next, windowHistory do
+    for i, v in pairs(windowHistory) do
         if i ~= window then
             windowHistory[i] = v + 1
         end
@@ -1327,53 +1304,35 @@ local function setTopMost(window)
     updateWindowHistory()
 end
 
-local function isTopMost(window)
-    return rawget(windowHistory, window) == 1
-end
-
-local function isBrowsing(window)
-    return not not (rawget(browsingWindow, window) or rawget(mouseCache, window))
-end
+local function isTopMost(window) return rawget(windowHistory, window) == 1 end
+local function isBrowsing(window) return not not (rawget(browsingWindow, window) or rawget(mouseCache, window)) end
 
 local function findBrowsingTopMost()
     local copy = { }
-    for i, v in next, windowHistory do
-        if isBrowsing(i) then
-            copy[i] = v
-        end
+    for i, v in pairs(windowHistory) do
+        if isBrowsing(i) then copy[i] = v end
     end
     local level, result = math.huge
-    for i, v in next, copy do
-        if v < level then
-            level = v
-            result = i
-        end
+    for i, v in pairs(copy) do
+        if v < level then level = v result = i end
     end
     return result
 end
 
 local dragger = {} do
     local draggerCache = { }
-
     function dragger.new(frame)
-        local held = false
         frame.Active = true
-
-        frame.MouseLeave:connect(function()
-            draggerCache[frame] = false
-        end)
-
-        frame.MouseEnter:connect(function()
-            draggerCache[frame] = true
-        end)
-
+        frame.MouseLeave:connect(function() draggerCache[frame] = false end)
+        frame.MouseEnter:connect(function() draggerCache[frame] = true end)
         mouse.InputBegan:Connect(function()
             if findBrowsingTopMost() == frame then
                 if (not colorpicking) and (not sliding) and (not resizing) and rawget(draggerCache, frame) then
-                    local objectPosition = Vector2.new(getMouse().X - frame.AbsolutePosition.X, getMouse().Y - frame.AbsolutePosition.Y)
+                    local objectPosition = getMouse() - frame.AbsolutePosition
                     while mouse.held do
                         pcall(function()
-                            resizeTween(frame, { Position = UDim2.new(0, getMouse().X - objectPosition.X + (frame.Size.X.Offset * frame.AnchorPoint.X), 0, getMouse().Y - objectPosition.Y + (frame.Size.Y.Offset * frame.AnchorPoint.Y)) }, 0.1)
+                            local newPos = getMouse() - objectPosition
+                            resizeTween(frame, { Position = UDim2.fromOffset(newPos.X, newPos.Y) }, 0.1)
                         end)
                         RunService.Heartbeat:Wait()
                     end
@@ -1383,113 +1342,70 @@ local dragger = {} do
     end
 end
 
--- [[ NEW RESIZER LOGIC ]]
 local resizer = {} do
     function resizer.new(window, handle, content, onResize)
         local isResizing = false
         handle.Active = true
-
         handle.MouseEnter:Connect(function() UserInputService.MouseIconEnabled = false end)
         handle.MouseLeave:Connect(function() if not isResizing then UserInputService.MouseIconEnabled = true end end)
-        
         mouse.InputBegan:Connect(function()
-            if findBrowsingTopMost() == window and UserInputService.MouseIconEnabled == false then
-                resizing = true
-                isResizing = true
+            if findBrowsingTopMost() == window and not UserInputService.MouseIconEnabled then
+                resizing, isResizing = true, true
                 local startMousePos = getMouse()
                 local startWindowSize = window.AbsoluteSize
+                local startContentSize = content.AbsoluteSize
                 
                 while mouse.held do
-                    local currentMousePos = getMouse()
-                    local delta = currentMousePos - startMousePos
-                    
-                    -- Min size to prevent issues
+                    local delta = getMouse() - startMousePos
                     local newX = math.max(200, startWindowSize.X + delta.X)
-                    local newY_Content = math.max(100, (startWindowSize.Y - window.Size.Y.Offset) + delta.Y)
-                    
+                    local newY_Content = math.max(100, startContentSize.Y + delta.Y)
                     window.Size = UDim2.fromOffset(newX, window.Size.Y.Offset)
                     content.Size = UDim2.new(1, 0, 0, newY_Content)
-                    onResize(window.AbsoluteSize.Y + content.AbsoluteSize.Y) -- callback to update shadow
-                    
+                    if onResize then onResize(window.Size.Y.Offset + content.Size.Y.Offset) end
                     RunService.Heartbeat:Wait()
                 end
-                
-                isResizing = false
-                resizing = false
+                isResizing, resizing = false, false
                 UserInputService.MouseIconEnabled = true
             end
         end)
     end
 end
--- [[ END NEW LOGIC ]]
 
-
-local function betweenOpenInterval(n, n1, n2)
-    return n <= n2 and n >= n1
-end
-
-local function betweenClosedInterval(n, n1, n2)
-    return n < n2 and n > n1
-end
+local function betweenOpenInterval(n, n1, n2) return n <= n2 and n >= n1 end
+local function betweenClosedInterval(n, n1, n2) return n < n2 and n > n1 end
 
 local function rgbtohsv(color)
-	local r, g, b = color.R, color.G, color.B
-	local max, min = math.max(r, g, b), math.min(r, g, b)
-	local h, s, v
-	v = max
-	local d = max - min
+	local r, g, b = color.R, color.G, color.B; local max, min = math.max(r, g, b), math.min(r, g, b)
+	local h, s, v; v = max; local d = max - min
 	if max == 0 then s = 0 else s = d / max end
-	if max == min then
-		h = 0
-	else
-		if max == r then
-			h = (g - b) / d
-			if g < b then h = h + 6 end
-		elseif max == g then
-			h = (b - r) / d + 2
-		elseif max == b then
-			h = (r - g) / d + 4
-		end
+	if max == min then h = 0 else
+		if max == r then h = (g - b) / d if g < b then h = h + 6 end
+		elseif max == g then h = (b - r) / d + 2
+		elseif max == b then h = (r - g) / d + 4 end
 		h = h / 6
 	end
 	return h, s, v
 end
 
-local function new(n)
-    return Presets:FindFirstChild(n):Clone()
-end
-
-local function tint(c)
-    return Color3.new(c.R * 0.5, c.G * 0.5, c.B * 0.5)
-end
-
-local function bleach(c)
-    return Color3.new(c.R * 1.2, c.G * 1.2, c.B * 1.2)
-end
+local function new(n) return Presets:FindFirstChild(n):Clone() end
+local function tint(c) return Color3.new(c.R * 0.5, c.G * 0.5, c.B * 0.5) end
+local function bleach(c) return Color3.new(c.R * 1.2, c.G * 1.2, c.B * 1.2) end
 
 local function hoverColor(object)
     local originalColor = object.ImageColor3
-    object.MouseEnter:Connect(function()
-        object.ImageColor3 = tint(originalColor)
-    end)
-    object.MouseLeave:Connect(function()
-        object.ImageColor3 = originalColor
-    end)
+    object.MouseEnter:Connect(function() resizeTween(object, {ImageColor3 = tint(originalColor)}, 0.2) end)
+    object.MouseLeave:Connect(function() resizeTween(object, {ImageColor3 = originalColor}, 0.2) end)
 end
 
 local settings = {
     new = function(default)
-        local function l(r)
-            return tostring(r):lower()
-        end
+        local function l(r) return tostring(r):lower() end
         return { handle = function(options)
             local self = { }
             options = typeof(options) == "table" and options or { }
-            for i, v in next, default do
-                self[l(i)] = v
-            end
-            for i, v in next, options do
-                if typeof(default[l(i)]) == typeof(options[l(i)]) then
+            for i, v in pairs(default) do self[l(i)] = v end
+            for i, v in pairs(options) do
+                if typeof(default[l(i)]) == typeof(options[l(i)]) or default[l(i)] == nil then
                     self[l(i)] = v
                 end
             end
@@ -1498,24 +1414,16 @@ local settings = {
     end,
 }
 
-local library = {
+local CoreLibrary
+CoreLibrary = {
     new = function(options)
         local cache = { }
-        local self = {
-            isopen = true,
-        }
+        local self = { isopen = true }
 
         options = settings.new({
-            text = "New Window",
-            size = Vector2.new(300, 200),
-            shadow = 10,
-            transparency = 0.2,
-            color = Color3.fromRGB(41, 74, 122),
-            boardcolor = Color3.fromRGB(21, 22, 23),
-            rounding = 5,
-            animation = 0.1,
-            position = UDim2.new(0, 100, 0, 100),
-            resizable = false, -- New resizable option
+            text = "New Window", size = Vector2.new(300, 200), shadow = 10, transparency = 0.2,
+            color = Color3.fromRGB(41, 74, 122), boardcolor = Color3.fromRGB(21, 22, 23),
+            rounding = 5, animation = 0.1, position = UDim2.new(0, 100, 0, 100), resizable = false
         }).handle(options)
 
         local main = new("Main") main.Parent = ScreenGui
@@ -1526,17 +1434,10 @@ local library = {
         local expand = main:FindFirstChild("Expand")
 
         main.Position = options.position
-        content.ImageTransparency = options.transparency
-        layer.ImageTransparency = options.transparency
+        content.ImageTransparency, layer.ImageTransparency = options.transparency, options.transparency
         shadow.ImageTransparency = 0.6 * (options.transparency + 1)
 
-        expand.MouseButton1Click:Connect(function()
-            if self.isopen then
-                self.close()
-            else
-                self.open()
-            end
-        end)
+        expand.MouseButton1Click:Connect(function() self.isopen and self.close() or self.open() end)
 
         dragger.new(main)
         main:FindFirstChild("Title").Text = options.text
@@ -1544,7 +1445,6 @@ local library = {
         main:FindFirstChild("Frame").BackgroundColor3 = options.color
         main.Size = UDim2.new(0, options.size.X, 0, main.Size.Y.Offset)
         main.SliceScale = options.rounding / 100
-
         content.ImageColor3 = options.boardcolor
         content.Size = UDim2.new(1, 0, 0, options.size.Y)
         content.SliceScale = options.rounding / 100
@@ -1555,13 +1455,9 @@ local library = {
             shadow.SliceScale = options.rounding / 100
             layer.Size = UDim2.new(1, 0, 0, y)
             layer.SliceScale = options.rounding / 100
-        end cache.update_layers(main.AbsoluteSize.Y + content.AbsoluteSize.Y)
-
-        content:GetPropertyChangedSignal("Size"):Connect(function()
-            cache.update_layers(main.AbsoluteSize.Y + content.AbsoluteSize.Y)
-        end)
+        end cache.update_layers(main.Size.Y.Offset + content.Size.Y.Offset)
+        content:GetPropertyChangedSignal("Size"):Connect(function() cache.update_layers(main.Size.Y.Offset + content.Size.Y.Offset) end)
         
-        -- [[ ADD RESIZER IF ENABLED ]]
         if options.resizable then
             local resizeHandle = new("Resizer")
             resizeHandle.Parent = content
@@ -1570,1167 +1466,316 @@ local library = {
 
         function self.new(tabOptions)
             local self = { }
-            tabOptions = settings.new({
-                text = "New Tab",
-            }).handle(tabOptions)
-
-            local tabbutton = new("TabButton")
-            local tabbuttons = tabs:FindFirstChild("Items")
-            tabbutton.Parent = tabbuttons
-            tabbutton.Text = tabOptions.text
+            tabOptions = settings.new({ text = "New Tab" }).handle(tabOptions)
+            local tabbutton, tabbuttons = new("TabButton"), tabs:FindFirstChild("Items")
+            tabbutton.Parent, tabbutton.Text = tabbuttons, tabOptions.text
             tabbutton.Size = UDim2.new(0, tabbutton.TextBounds.X, 1, 0)
             tabbutton.TextColor3 = Color3.new(0.4, 0.4, 0.4)
-            tabbutton.MouseButton1Click:Connect(function()
-                self.show()
-            end)
-
-            local tab = new("Tab")
-            tab.Parent = content
+            tabbutton.MouseButton1Click:Connect(function() self.show() end)
+            local tab = new("Tab"); tab.Parent, tab.Visible = content, false
             local items = tab:FindFirstChild("Items")
-            tab.Visible = false
 
             local function countSize(o, horizontal)
-                if not o:FindFirstChildOfClass("UIListLayout") then
-                    return
-                end
+                if not o:FindFirstChildOfClass("UIListLayout") then return end
                 local padding = o:FindFirstChildOfClass("UIListLayout").Padding.Offset
-                local X, Y = 0, 0
-                local _horizontal = 0
-                for i, v in next, o:GetChildren() do
+                local X, Y, _horizontal = 0, 0, 0
+                for _, v in pairs(o:GetChildren()) do
                     if not v:IsA("UIListLayout") then
                         Y = Y + v.AbsoluteSize.Y + padding
-                        if v.AbsoluteSize.X > X then
-                            X = v.AbsoluteSize.X
-                        end
+                        if v.AbsoluteSize.X > X then X = v.AbsoluteSize.X end
                         _horizontal = _horizontal + v.AbsoluteSize.X + padding
                     end
                 end
-                if horizontal then
-                    return Vector2.new(_horizontal, 0)
-                end
+                if horizontal then return Vector2.new(_horizontal, 0) end
                 return Vector2.new(X, Y)
             end
 
-            local function updateCanvas()
-                local XY = countSize(items)
-                if XY then
-                    items.CanvasSize = UDim2.new(0, XY.X, 0, XY.Y)
-                end
-            end
-
-            items.ScrollBarImageColor3 = Color3.new()
+            local function updateCanvas() if countSize(items) then items.CanvasSize = UDim2.fromOffset(countSize(items).X, countSize(items).Y) end end
             items.ChildAdded:Connect(updateCanvas)
             items.ChildRemoved:Connect(updateCanvas)
 
             local types = { } do
                 function types.label(labelOptions)
-                    local self = { }
-
-                    labelOptions = settings.new({
-                        text = "New Label",
-                        color = Color3.new(1, 1, 1),
-                    }).handle(labelOptions)
-
+                    local self = {}
+                    labelOptions = settings.new({ text = "New Label", color = Color3.new(1, 1, 1) }).handle(labelOptions)
                     local label = new("Label")
-                    label.Parent = items
-                    label.Text = labelOptions.text
+                    label.Parent, label.Text, label.TextColor3 = items, labelOptions.text, labelOptions.color
                     label.Size = UDim2.new(0, label.TextBounds.X, 0, label.Size.Y.Offset)
-                    label.TextColor3 = labelOptions.color
-
-                    function self.setText(text)
-                        label.Text = text
-                        label.Size = UDim2.new(0, label.TextBounds.X, 0, label.Size.Y.Offset)
-                    end
-
-                    function self.setColor(color)
-                        label.TextColor3 = color
-                    end
-
-                    function self:Destroy()
-                        label:Destroy()
-                    end
-
+                    function self.setText(text) label.Text = text label.Size = UDim2.new(0, label.TextBounds.X, 0, label.Size.Y.Offset) end
+                    function self.setColor(color) label.TextColor3 = color end
+                    function self:Destroy() label:Destroy() end
                     self.self = label
                     return self
                 end
-
                 function types.button(buttonOptions)
-                    local self = { }
-                    self.eventBlock = false
-
-                    buttonOptions = settings.new({
-                        text = "New Button",
-                        color = options.color,
-                        rounding = options.rounding,
-                    }).handle(buttonOptions)
-
+                    local self = { eventBlock = false }
+                    buttonOptions = settings.new({ text = "New Button", color = options.color, rounding = options.rounding }).handle(buttonOptions)
                     local button = new("Button")
-                    button.Parent = items
-                    button.Text = buttonOptions.text
+                    button.Parent, button.Text = items, buttonOptions.text
                     button.Size = UDim2.new(0, button.TextBounds.X + 20, 0, 20)
-                    button.MouseButton1Click:Connect(function()
-                        if not self.eventBlock then
-                            self.event:Fire()
-                        end
-                    end)
-
-                    local ImageLabel = button:FindFirstChild("ImageLabel")
-                    local Layer = button:FindFirstChild("Layer")
-                    ImageLabel.ImageColor3 = buttonOptions.color
-                    Layer.ImageColor3 = tint(buttonOptions.color)
-                    ImageLabel.SliceScale = buttonOptions.rounding / 100
-                    Layer.SliceScale = buttonOptions.rounding / 100
+                    button.MouseButton1Click:Connect(function() if not self.eventBlock then self.event:Fire() end end)
+                    local ImageLabel, Layer = button:FindFirstChild("ImageLabel"), button:FindFirstChild("Layer")
+                    ImageLabel.ImageColor3, Layer.ImageColor3 = buttonOptions.color, tint(buttonOptions.color)
+                    ImageLabel.SliceScale, Layer.SliceScale = buttonOptions.rounding / 100, buttonOptions.rounding / 100
                     hoverColor(ImageLabel)
-
-                    function self.setColor(color)
-                        ImageLabel.ImageColor3 = color
-                        Layer.ImageColor3 = tint(color)
-                    end
-
-                    function self.getColor()
-                        return ImageLabel.ImageColor3
-                    end
-
-                    function self:Destroy()
-                        button:Destroy()
-                    end
-
-                    self.options = buttonOptions
-                    self.self = button
-                    self.event = event.new()
+                    function self.setColor(color) ImageLabel.ImageColor3 = color Layer.ImageColor3 = tint(color) end
+                    function self:Destroy() button:Destroy() end
+                    self.self, self.event = button, event.new()
                     return self
                 end
-
-                function types.switch(switchOptions)
-                    local self = { }
-                    self.on = false
-
-                    switchOptions = settings.new({
-                        text = "New Switch",
-                        on = false,
-                        color = options.color,
-                        rounding = options.rounding,
-                        animation = options.animation,
-                    }).handle(switchOptions)
-                    self.on = switchOptions.on
-                    self.eventBlock = false
-
-                    local switch = new("Switch")
-                    switch.Parent = items
-                    local button = switch:FindFirstChild("Button")
-                    local text = switch:FindFirstChild("Text")
-                    local check = button:FindFirstChild("Check")
-                    local ImageLabel = button:FindFirstChild("ImageLabel")
-                    local layer = button:FindFirstChild("Layer")
-                    ImageLabel.ImageColor3 = switchOptions.color
-                    layer.ImageColor3 = tint(switchOptions.color)
-                    ImageLabel.SliceScale = switchOptions.rounding / 100
-                    layer.SliceScale = switchOptions.rounding / 100
-
-                    text:GetPropertyChangedSignal("Text"):Connect(function()
-                        switch.Size = UDim2.new(0, 28 + text.TextBounds.X, 0, 20)
-                    end)
-
-                    text.Text = switchOptions.text
-                    check.ImageTransparency = self.on and 0 or 1
-
-                    button.MouseButton1Click:Connect(function()
-                        self.switch()
-                    end)
-
-                    function self.switch()
-                        self.set(not self.on)
-                    end
-
-                    function self.set(boolean)
-                        if (not not boolean) == self.on then return end
-                        self.on = not not boolean
-                        resizeTween(check, { ImageTransparency = self.on and 0 or 1 }, switchOptions.animation)
-                        if not self.eventBlock then
-                            self.event:Fire(self.on)
-                        end
-                    end
-
-                    function self.setColor(color)
-                        ImageLabel.ImageColor3 = switchOptions.color
-                        Layer.ImageColor3 = tint(switchOptions.color)
-                    end
-
-                    function self.getColor()
-                        return ImageLabel.ImageColor3
-                    end
-
-                    function self:Destroy()
-                        switch:Destroy()
-                    end
-
-                    self.options = switchOptions
-                    self.self = switch
-                    self.event = event.new()
-                    return self
-                end
-
-                function types.slider(sliderOptions)
-                    local self = { }
-
-                    sliderOptions = settings.new({
-                        text = "New Slider",
-                        size = 150,
-                        min = 0,
-                        max = 100,
-                        value = 0,
-                        color = options.color,
-                        barcolor = bleach(options.color),
-                        rounding = options.rounding,
-                        animation = options.animation,
-                    }).handle(sliderOptions)
-                    self.value = sliderOptions.value
-                    self.event = event.new()
-                    self.eventBlock = false
-
-                    local function round(x, n)
-                        local a = tostring(x * 10^n)
-                        return a:sub(1, -(n + 1)) .. "." .. a:sub(-n)
-                    end
-
-                    local slider = new("Slider")
-                    slider.Parent = items
-
-                    local text = slider:FindFirstChild("Text")
-                    local outer = slider:FindFirstChild("Outer")
-                    local inner = outer:FindFirstChild("Inner")
-                    local _slider = inner:FindFirstChild("Slider")
-                    local value = inner:FindFirstChild("Value")
-                    inner.ClipsDescendants = true
-
-                    outer.SliceScale = sliderOptions.rounding / 100
-                    inner.SliceScale = sliderOptions.rounding / 100
-                    inner.ImageColor3 = sliderOptions.color
-                    _slider.BackgroundColor3 = sliderOptions.barcolor
-
-                    function self.setColor(color)
-                        inner.ImageColor3 = color
-                        _slider.BackgroundColor3 = bleach(color)
-                    end
-
-                    function self.getColor(color)
-                        return inner.ImageColor3
-                    end
-
-                    text.Text = sliderOptions.text
-                    outer.Size = UDim2.new(0, sliderOptions.size, 0, 20)
-                    text.Position = UDim2.new(0, sliderOptions.size + 8, 0, 0)
-                    slider.Size = UDim2.new(0, sliderOptions.size + 8 + text.TextBounds.X, 0, 20)
-
-                    local function set(p)
-                        resizeTween(_slider, { Position = UDim2.new(p, -2.5, 0, 0) }, sliderOptions.animation)
-                    end
-
-                    value.Text = round(self.value, 2)
-                    local old
-
-                    function self.set(n)
-                        assert(typeof(n) == "number", "invalid type")
-                        local min, max
-                        if sliderOptions.max > sliderOptions.min then
-                            max = sliderOptions.max
-                            min = sliderOptions.min
-                            n = math.clamp(n, sliderOptions.min, sliderOptions.max)
-                        else
-                            max = sliderOptions.min
-                            min = sliderOptions.max
-                            n = math.clamp(n, sliderOptions.max, sliderOptions.min)
-                        end
-                        self.value = n
-                        if self.value ~= old then
-                            if not self.eventBlock then
-                                self.event:Fire(self.value)
-                            end
-                        end
-                        old = self.value
-                        value.Text = round(self.value, 2)
-                        local d = math.abs(max - min)
-                        local p = (n - min) / d
-                        set(p)
-                    end
-                    self.set(self.value)
-
-                    local inside = false
-                    inner.MouseEnter:Connect(function()
-                        inside = true
-                    end)
-                    inner.MouseLeave:Connect(function()
-                        inside = false
-                    end)
-
-                    mouse.InputBegan:Connect(function()
-                        spawn(function()
-                            if inside and findBrowsingTopMost() == main then
-                                while mouse.held do
-                                    sliding = true
-                                    local p = getMouse()
-                                    local x = math.floor(math.clamp(p.X - inner.AbsolutePosition.X, 0, sliderOptions.size))
-                                    local m = sliderOptions.size / math.abs(sliderOptions.max - sliderOptions.min)
-                                    local v = math.floor(x / m)
-                                    self.set(v + (sliderOptions.min < sliderOptions.max and sliderOptions.min or sliderOptions.max))
-                                    RunService.Heartbeat:Wait()
-                                end
-                            end
-                        end)
-                    end)
-                    mouse.InputEnded:Connect(function()
-                        sliding = false
-                    end)
-
-                    function self:Destroy()
-                        slider:Destroy()
-                    end
-
-                    updateCanvas()
-                    self.options = sliderOptions
-                    self.self = slider
-                    return self
-                end
-                
-                -- [[ NEW TEXTBOX ELEMENT ]] --
                 function types.textbox(textboxOptions)
                     local self = {}
-                    
-                    textboxOptions = settings.new({
-                        text = "",
-                        size = Vector2.new(250, 150),
-                        syntax = false,
-                        color = options.color,
-                        rounding = options.rounding
-                    }).handle(textboxOptions)
+                    textboxOptions = settings.new({ text = "", size = Vector2.new(250, 150), syntax = false, linecounter = false, lc = false, color = options.color, rounding = options.rounding }).handle(textboxOptions)
+                    textboxOptions.linecounter = textboxOptions.linecounter or textboxOptions.lc
                     
                     local textbox = new("TextBox")
-                    textbox.Parent = items
-                    textbox.Size = UDim2.fromOffset(textboxOptions.size.X, textboxOptions.size.Y)
+                    textbox.Parent, textbox.Size = items, UDim2.fromOffset(textboxOptions.size.X, textboxOptions.size.Y)
                     
-                    local outer = textbox:FindFirstChild("Outer")
-                    local inner = outer:FindFirstChild("Inner")
-                    local syntaxLabel = inner:FindFirstChild("SyntaxLabel")
-                    local actualTextBox = inner:FindFirstChild("ActualTextBox")
-                    
-                    outer.SliceScale = textboxOptions.rounding / 100
-                    inner.ImageColor3 = textboxOptions.color
-                    actualTextBox.Text = textboxOptions.text
+                    local outer, inner = textbox:FindFirstChild("Outer"), textbox:FindFirstChild("Outer"):FindFirstChild("Inner")
+                    local lineCounter, editorGroup = inner:FindFirstChild("LineCounter"), inner:FindFirstChild("EditorGroup")
+                    local syntaxLabel, actualTextBox = editorGroup:FindFirstChild("SyntaxLabel"), editorGroup:FindFirstChild("ActualTextBox")
 
-                    function self.setText(text)
-                        actualTextBox.Text = text
-                        actualTextBox:ReleaseFocus()
+                    outer.SliceScale, inner.BackgroundColor3, actualTextBox.Text = textboxOptions.rounding / 100, textboxOptions.color, textboxOptions.text
+                    
+                    lineCounter.Visible = textboxOptions.linecounter
+                    if not textboxOptions.linecounter then editorGroup.Position, editorGroup.Size = UDim2.fromOffset(0,0), UDim2.new(1,0,1,0) end
+                    
+                    function self.setText(text) actualTextBox.Text = text actualTextBox:ReleaseFocus() end
+                    function self.getText() return actualTextBox.Text end
+                    
+                    local function updateEditorCanvas()
+                        local editorWidth = editorGroup.AbsoluteSize.X
+                        if editorWidth <= 0 then return end
+
+                        local textBounds = TextService:GetTextSize(actualTextBox.Text, actualTextBox.TextSize, actualTextBox.Font, Vector2.new(editorWidth, math.huge))
+                        local newHeight = math.max(inner.AbsoluteSize.Y - 6, textBounds.Y + 6)
+                        
+                        syntaxLabel.Size = UDim2.fromOffset(editorWidth, newHeight)
+                        actualTextBox.Size = UDim2.fromOffset(editorWidth, newHeight)
+                        lineCounter.Size = UDim2.new(0, lineCounter.Size.X.Offset, 0, newHeight)
+                        inner.CanvasSize = UDim2.fromOffset(0, newHeight)
                     end
 
-                    function self.getText()
-                        return actualTextBox.Text
-                    end
-                    
-                    -- Syntax highlighting logic
                     if textboxOptions.syntax then
                         local syntaxPatterns = {
-                            -- Keywords
                             ["(and|break|do|else|elseif|end|false|for|function|if|in|local|nil|not|or|repeat|return|then|true|until|while)"] = '<font color="#C586C0">%1</font>',
-                            -- 'self', 'game', 'workspace'
-                            ["(self|game|workspace|script|wait|print|error)"] = '<font color="#4FC1FF">%1</font>',
-                            -- Numbers
+                            ["(self|game|workspace|script|wait|print|error|typeof|pcall|ypcall|xpcall|setclipboard|getclipboard|readfile|writefile)"] = '<font color="#4FC1FF">%1</font>',
                             ["([%d%.]+)"] = '<font color="#B5CEA8">%1</font>',
-                             -- Strings (simple version)
                             ['(".-")'] = '<font color="#CE9178">%1</font>',
                             ["('.-')"] = "<font color='#CE9178'>%1</font>",
-                            -- Comments
                             ["(--.-)\n"] = "<font color='#6A9955'>%1</font>\n",
                         }
-                        
                         local function highlight(text)
-                            text = text:gsub("&", "&amp;"):gsub("<", "&lt;"):gsub(">", "&gt;") -- Escape special characters first
-                            for pattern, replacement in pairs(syntaxPatterns) do
-                                text = text:gsub(pattern, replacement)
-                            end
+                            text = text:gsub("&", "&amp;"):gsub("<", "&lt;"):gsub(">", "&gt;")
+                            for pattern, replacement in pairs(syntaxPatterns) do text = text:gsub(pattern, replacement) end
                             return text
                         end
                         
-                        syntaxLabel.Visible = true
-                        actualTextBox.TextTransparency = 0.5
-                        syntaxLabel.Text = highlight(actualTextBox.Text)
-
-                        actualTextBox.FocusLost:Connect(function()
-                            syntaxLabel.Text = highlight(actualTextBox.Text)
-                            -- This handles scrolling synchronization
-                            inner.CanvasPosition = inner.CanvasPosition 
-                        end)
-                        
-                        actualTextBox.Changed:Connect(function(prop)
-                            if prop == "Text" then
-                                -- Resize Canvas based on TextBounds for scrolling
-                                syntaxLabel.Size = UDim2.fromOffset(inner.AbsoluteSize.X, 0)
-                                syntaxLabel.Size = UDim2.fromOffset(inner.AbsoluteSize.X - 10, syntaxLabel.TextBounds.Y + 10)
-                                actualTextBox.Size = syntaxLabel.Size
-                                inner.CanvasSize = UDim2.fromOffset(0, syntaxLabel.TextBounds.Y + 10)
-                            end
-                        end)
-                        
-                    else
-                        syntaxLabel.Visible = false
-                    end
-
-                    function self:Destroy()
-                        textbox:Destroy()
-                    end
+                        syntaxLabel.Visible, actualTextBox.TextTransparency = true, 0.5
+                        actualTextBox:GetPropertyChangedSignal("Text"):Connect(function() syntaxLabel.Text = highlight(actualTextBox.Text) end)
+                    else syntaxLabel.Visible = false end
                     
+                    if textboxOptions.linecounter then
+                        local function updateLineCount()
+                            local _, count = actualTextBox.Text:gsub("\n", "")
+                            local numbers = {}
+                            for i = 1, count + 1 do table.insert(numbers, tostring(i)) end
+                            lineCounter.Text = table.concat(numbers, "\n")
+                        end
+                        updateLineCount()
+                        actualTextBox:GetPropertyChangedSignal("Text"):Connect(updateLineCount)
+                    end
+
+                    actualTextBox:GetPropertyChangedSignal("Text"):Connect(updateEditorCanvas)
+                    inner:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateEditorCanvas)
+                    task.wait()
+                    updateEditorCanvas()
+                    
+                    function self:Destroy() textbox:Destroy() end
                     self.self = textbox
                     return self
                 end
-                
-                function types.color(colorOptions)
-                    local self = { }
-                    self.event = event.new()
-                    self.isopen = true
-                    self.visible = false
-                    self.eventBlock = false
-
-                    colorOptions = settings.new({
-                        text = "New Color Picker",
-                        color = Color3.new(1, 0, 0),
-                        position = UDim2.new(0, 100, 0, 100),
-                    }).handle(colorOptions)
-
-                    local colorPickerButton = new("ColorPicker")
-                    colorPickerButton.Parent = items
-                    local colorPicker = new("ColorPickerWindow")
-                    colorPicker.Parent = ScreenGui
-                    colorPicker.Visible = self.visible
-                    dragger.new(colorPicker)
-
-                    local text = colorPickerButton:FindFirstChild("Text")
-                    local button = colorPickerButton:FindFirstChild("Button")
-                    local ImageLabel = button:FindFirstChild("ImageLabel")
-                    local layer = button:FindFirstChild("Layer")
-
-                    text:GetPropertyChangedSignal("Text"):Connect(function()
-                        colorPickerButton.Size = UDim2.new(0, 28 + text.TextBounds.X, 0, 20)
-                        colorPicker:FindFirstChild("Title").Text = text.Text
-                    end)
-
-                    text.Text = colorOptions.text
-
-                    button.MouseButton1Click:Connect(function()
-                        self.visible = not self.visible
-                        colorPicker.Visible = self.visible
-                        if self.visible then
-                            colorPicker.Position = UDim2.new(0, colorPickerButton.AbsolutePosition.X + colorPickerButton.AbsoluteSize.X, 0, colorPickerButton.AbsolutePosition.Y)
-                            self.open()
-                            setTopMost(colorPicker)
-                        end
-                    end)
-
-                    local colorCache = { }
-                    function self.close()
-                        if not self.isopen then return end
-                        self.isopen = false
-
-                        resizeTween(colorPicker:FindFirstChild("Expand"), { Rotation = 0 }, options.animation)
-                        colorCache.content_size = 200
-                        colorCache.tabs_size = tabs.Size.Y.Offset
-                        resizeTween(colorPicker:FindFirstChild("Content"), { Size = UDim2.new(1, 0, 0, 0) }, options.animation)
-                    end
-
-                    function self.open()
-                        if self.isopen then return end
-                        self.isopen = true
-
-                        resizeTween(colorPicker:FindFirstChild("Expand"), { Rotation = 90 }, options.animation)
-                        resizeTween(colorPicker:FindFirstChild("Content"), { Size = UDim2.new(1, 0, 0, colorCache.content_size) }, options.animation)
-                    end
-
-                    function colorCache.update_layers(y)
-                        colorPicker:FindFirstChild("Shadow").Position = UDim2.new(0, options.shadow, 0, options.shadow)
-                        colorPicker:FindFirstChild("Shadow").Size = UDim2.new(1, 0, 0, y)
-                        colorPicker:FindFirstChild("Shadow").SliceScale = options.rounding / 100
-                        colorPicker:FindFirstChild("Layer").Size = UDim2.new(1, 0, 0, y)
-                        colorPicker:FindFirstChild("Layer").SliceScale = options.rounding / 100
-                    end colorCache.update_layers(colorPicker.AbsoluteSize.Y + colorPicker:FindFirstChild("Content").AbsoluteSize.Y)
-
-                    colorPicker:FindFirstChild("Content"):GetPropertyChangedSignal("Size"):Connect(function()
-                        colorCache.update_layers(main.AbsoluteSize.Y + colorPicker:FindFirstChild("Content").AbsoluteSize.Y)
-                    end)
-
-                    do -- Start closed, then open
-                        local old = options.animation
-                        options.animation = 0
-                        self.open()
-                        options.animation = old
-                    end
-
-                    colorPicker:FindFirstChild("Expand").MouseButton1Click:Connect(function()
-                        if self.isopen then
-                            self.close()
-                        else
-                            self.open()
-                        end
-                    end)
-
-                    do -- color picking
-                        local content = colorPicker:FindFirstChild("Content")
-                        local palette = content:FindFirstChild("Palette")
-                        local saturation = content:FindFirstChild("Saturation")
-
-                        local paletteIndicator = palette:FindFirstChild("Indicator")
-                        local saturationIndicator = saturation:FindFirstChild("Indicator")
-
-                        local h = 0
-                        local s = 1
-                        local v = 1
-
-                        function self.get()
-                            return Color3.fromHSV(h, s, v)
-                        end
-
-                        local function update()
-                            local color = self.get()
-                            button:FindFirstChild("ImageLabel").ImageColor3 = color
-                            button:FindFirstChild("Layer").ImageColor3 = tint(color)
-                            content:FindFirstChild("FinalColor").ImageColor3 = color
-                            content:FindFirstChild("PaletteColor").ImageColor3 = Color3.fromHSV(h, s, 1)
-                            content:FindFirstChild("SaturationColor").ImageColor3 = Color3.fromHSV(0, 0, v)
-                            local v2 = v < 0.5 and 1 or 0
-                            ImageLabel:FindFirstChild("ImageLabel").ImageColor3 = Color3.fromHSV(0, 0, v2)
-                            if not self.eventBlock then
-                                self.event:Fire(color)
-                            end
-                        end
-
-                        local Entered1, Entered2 = false, false
-                        palette.MouseEnter:Connect(function()
-                            Entered1 = true
-                        end)
-                        palette.MouseLeave:Connect(function()
-                            Entered1 = false
-                        end)
-                        saturation.MouseEnter:Connect(function()
-                            Entered2 = true
-                        end)
-                        saturation.MouseLeave:Connect(function()
-                            Entered2 = false
-                        end)
-
-                        mouse.InputBegan:Connect(function()
-                            if Entered1 and findBrowsingTopMost() == colorPicker then
-                                spawn(function()
-                                    colorpicking = true
-                                    while mouse.held do -- palette
-                                        local p = getMouse()
-                                        local x1 = math.clamp(p.X - palette.AbsolutePosition.X, 0, palette.AbsoluteSize.X)
-                                        local v1 = x1 / palette.AbsoluteSize.X
-                                        local x2 = math.clamp(p.Y - palette.AbsolutePosition.Y, 0, palette.AbsoluteSize.Y)
-                                        local v2 = x2 / palette.AbsoluteSize.Y
-                                        h = 1 - v1
-                                        s = 1 - v2
-
-                                        local sv1 = math.clamp(v1, 0, (palette.AbsoluteSize.X - 6) / palette.AbsoluteSize.X)
-                                        local sv2 = math.clamp(v2, 0, (palette.AbsoluteSize.Y - 6) / palette.AbsoluteSize.Y)
-                                        resizeTween(paletteIndicator, { Position = UDim2.new(sv1, 0, sv2, 0) }, options.animation)
-
-                                        update()
-                                        RunService.Heartbeat:Wait()
-                                    end
-                                end)
-                            end
-                            if Entered2 and findBrowsingTopMost() == colorPicker then
-                                spawn(function()
-                                    colorpicking = true
-                                    while mouse.held do -- saturation
-                                        local p = getMouse()
-                                        local x1 = math.clamp(p.Y - saturation.AbsolutePosition.Y, 0, saturation.AbsoluteSize.Y)
-                                        local v1 = x1 / saturation.AbsoluteSize.Y
-                                        v = 1 - v1
-
-                                        local sv1 = math.clamp(v1, 0, (palette.AbsoluteSize.Y - 2) / palette.AbsoluteSize.Y)
-                                        resizeTween(saturationIndicator, { Position = UDim2.new(0, 0, sv1, 0) }, options.animation)
-
-                                        update()
-                                        RunService.Heartbeat:Wait()
-                                    end
-                                end)
-                            end
-                        end)
-
-                        mouse.InputEnded:Connect(function()
-                            colorpicking = false
-                        end)
-
-                        function self.set(color)
-                            local h2, s2, v2 = rgbtohsv(color)
-                            h = h2
-                            s = s2
-                            v = v2
-
-                            local hx = math.clamp(1 - h, 0, (palette.AbsoluteSize.X - 6) / palette.AbsoluteSize.X)
-                            local sx = math.clamp(1 - s, 0, (palette.AbsoluteSize.Y - 6) / palette.AbsoluteSize.Y)
-                            local vx = math.clamp(1 - v, 0, (saturation.AbsoluteSize.Y - 2) / saturation.AbsoluteSize.Y)
-                            resizeTween(paletteIndicator, { Position = UDim2.new(hx, 0, sx, 0) }, options.animation)
-                            resizeTween(saturationIndicator, { Position = UDim2.new(0, 0, vx, 0) }, options.animation)
-
-                            update()
-                        end
-
-                        update()
-                    end
-
-                    function self.setPosition(position)
-                        colorPicker.Position = position
-                    end
-
-                    function self:Destroy()
-                        colorPickerButton:Destroy()
-                        colorPicker:Destroy()
-                    end
-
-                    self.self = colorPickerButton
-                    if colorOptions.color ~= Color3.new(1, 0, 0) then
-                        self.set(colorOptions.color)
-                    end
-                    self.close()
+                function types.switch(switchOptions) -- Kept other elements for completeness
+                    local self = { on = false }
+                    switchOptions = settings.new({ text = "New Switch", on = false, color = options.color, rounding = options.rounding, animation = options.animation }).handle(switchOptions)
+                    self.on, self.eventBlock = switchOptions.on, false
+                    local switch, button, text = new("Switch"), switch:FindFirstChild("Button"), switch:FindFirstChild("Text")
+                    switch.Parent = items
+                    local check, ImageLabel, layer = button:FindFirstChild("Check"), button:FindFirstChild("ImageLabel"), button:FindFirstChild("Layer")
+                    ImageLabel.ImageColor3, layer.ImageColor3, ImageLabel.SliceScale, layer.SliceScale = switchOptions.color, tint(switchOptions.color), switchOptions.rounding / 100, switchOptions.rounding / 100
+                    text:GetPropertyChangedSignal("Text"):Connect(function() switch.Size = UDim2.new(0, 28 + text.TextBounds.X, 0, 20) end)
+                    text.Text, check.ImageTransparency = switchOptions.text, self.on and 0 or 1
+                    button.MouseButton1Click:Connect(function() self.set(not self.on) end)
+                    function self.set(boolean) if (not not boolean) == self.on then return end; self.on = not not boolean; resizeTween(check, { ImageTransparency = self.on and 0 or 1 }, switchOptions.animation); if not self.eventBlock then self.event:Fire(self.on) end end
+                    function self.setColor(color) ImageLabel.ImageColor3 = color; Layer.ImageColor3 = tint(color) end
+                    function self:Destroy() switch:Destroy() end
+                    self.self, self.event = switch, event.new()
                     return self
                 end
-
-                function types.dropdown(dropdownOptions)
+                function types.slider(sliderOptions)
                     local self = { }
-                    self.isopen = true
-                    self.visible = false
-                    self.selected = nil
-                    self.event = event.new()
-                    self.eventBlock = false
-
-                    dropdownOptions = settings.new({
-                        text = "New Dropdown",
-                        size = 150,
-                        color = Color3.fromRGB(32, 59, 97),
-                        rounding = options.rounding,
-                        selectioncolor = Color3.fromRGB(32, 59, 97),
-                    }).handle(dropdownOptions)
-
-                    local dropdownButton = new("Dropdown")
-                    local dropdownWindow = new("DropdownWindow")
-                    dropdownWindow.Parent = ScreenGui
-                    dropdownWindow.Visible = self.visible
-                    dragger.new(dropdownWindow)
-                    dropdownButton.Parent = items
-
-                    local text = dropdownButton:FindFirstChild("Text")
-                    local outer = dropdownButton:FindFirstChild("Outer")
-                    local inner = outer:FindFirstChild("Inner")
-                    inner.ImageColor3 = dropdownOptions.color
-                    outer.SliceScale = dropdownOptions.rounding / 100
-                    inner.SliceScale = dropdownOptions.rounding / 100
-                    inner:FindFirstChild("Value").Text = "[...]"
-
-                    text.Text = dropdownOptions.text
-                    dropdownWindow:FindFirstChild("Title").Text = dropdownOptions.text
-                    outer.Size = UDim2.new(0, dropdownOptions.size, 0, 20)
-                    text.Position = UDim2.new(0, dropdownOptions.size + 8, 0, 0)
-
-                    inner.MouseButton1Click:Connect(function()
-                        self.visible = not self.visible
-                        dropdownWindow.Visible = self.visible
-                        if self.visible then
-                            dropdownWindow.Position = UDim2.new(0, dropdownButton.AbsolutePosition.X + dropdownButton.AbsoluteSize.X, 0, dropdownButton.AbsolutePosition.Y)
-                            self.open()
-                            setTopMost(dropdownWindow)
-                        end
+                    sliderOptions = settings.new({ text = "New Slider", size = 150, min = 0, max = 100, value = 0, color = options.color, barcolor = bleach(options.color), rounding = options.rounding, animation = options.animation, }).handle(sliderOptions)
+                    self.value, self.event, self.eventBlock = sliderOptions.value, event.new(), false
+                    local slider, text, outer, inner = new("Slider"), slider:FindFirstChild("Text"), slider:FindFirstChild("Outer"), outer:FindFirstChild("Inner")
+                    slider.Parent = items
+                    local _slider, value = inner:FindFirstChild("Slider"), inner:FindFirstChild("Value")
+                    inner.ClipsDescendants, outer.SliceScale, inner.SliceScale = true, sliderOptions.rounding / 100, sliderOptions.rounding / 100
+                    inner.ImageColor3, _slider.BackgroundColor3 = sliderOptions.color, sliderOptions.barcolor
+                    function self.setColor(color) inner.ImageColor3 = color; _slider.BackgroundColor3 = bleach(color) end
+                    text.Text, outer.Size, text.Position = sliderOptions.text, UDim2.new(0, sliderOptions.size, 0, 20), UDim2.new(0, sliderOptions.size + 8, 0, 0)
+                    slider.Size = UDim2.new(0, sliderOptions.size + 8 + text.TextBounds.X, 0, 20)
+                    function self.set(n)
+                        n = math.clamp(n, math.min(sliderOptions.min, sliderOptions.max), math.max(sliderOptions.min, sliderOptions.max))
+                        if self.value ~= n then if not self.eventBlock then self.event:Fire(n) end end; self.value = n
+                        value.Text = string.format("%.2f", n); local d = math.abs(sliderOptions.max - sliderOptions.min)
+                        resizeTween(_slider, { Position = UDim2.new((n - sliderOptions.min) / d, -2.5, 0, 0) }, sliderOptions.animation)
+                    end; self.set(self.value)
+                    local inside = false; inner.MouseEnter:Connect(function() inside = true end); inner.MouseLeave:Connect(function() inside = false end)
+                    mouse.InputBegan:Connect(function()
+                        task.spawn(function()
+                            if inside and isTopMost(main) then
+                                while mouse.held do sliding = true; local x = math.clamp((getMouse().X - inner.AbsolutePosition.X), 0, sliderOptions.size); local m = sliderOptions.size / math.abs(sliderOptions.max - sliderOptions.min); self.set((x / m) + sliderOptions.min); RunService.Heartbeat:Wait() end
+                            end; sliding = false
+                        end)
                     end)
-
-                    dropdownWindow:FindFirstChild("Expand").MouseButton1Click:Connect(function()
-                        if self.isopen then
-                            self.close()
-                        else
-                            self.open()
-                        end
-                    end)
-
-                    local dropdownCache = { }
-                    function self.close()
-                        if not self.isopen then return end
-                        self.isopen = false
-
-                        resizeTween(dropdownWindow:FindFirstChild("Expand"), { Rotation = 0 }, options.animation)
-                        dropdownCache.content_size = 200
-                        dropdownCache.tabs_size = tabs.Size.Y.Offset
-                        resizeTween(dropdownWindow:FindFirstChild("Content"), { Size = UDim2.new(1, 0, 0, 0) }, options.animation)
-                    end
-
-                    function self.open()
-                        if self.isopen then return end
-                        self.isopen = true
-
-                        resizeTween(dropdownWindow:FindFirstChild("Expand"), { Rotation = 90 }, options.animation)
-                        resizeTween(dropdownWindow:FindFirstChild("Content"), { Size = UDim2.new(1, 0, 0, dropdownCache.content_size) }, options.animation)
-                    end
-
-                    function dropdownCache.update_layers(y)
-                        dropdownWindow:FindFirstChild("Shadow").Position = UDim2.new(0, options.shadow, 0, options.shadow)
-                        dropdownWindow:FindFirstChild("Shadow").Size = UDim2.new(1, 0, 0, y)
-                        dropdownWindow:FindFirstChild("Shadow").SliceScale = options.rounding / 100
-                        dropdownWindow:FindFirstChild("Layer").Size = UDim2.new(1, 0, 0, y)
-                        dropdownWindow:FindFirstChild("Layer").SliceScale = options.rounding / 100
-                    end dropdownCache.update_layers(dropdownWindow.AbsoluteSize.Y + dropdownWindow:FindFirstChild("Content").AbsoluteSize.Y)
-
-                    dropdownWindow:FindFirstChild("Content"):GetPropertyChangedSignal("Size"):Connect(function()
-                        dropdownCache.update_layers(main.AbsoluteSize.Y + dropdownWindow:FindFirstChild("Content").AbsoluteSize.Y)
-                    end)
-
-                    local dropdownItems = dropdownWindow:FindFirstChild("Content"):FindFirstChild("Items")
-                    local function updateCanvas()
-                        local XY = countSize(dropdownItems)
-                        if XY then
-                            dropdownItems.CanvasSize = UDim2.new(0, 0, 0, XY.Y)
-                        end
-                    end
-
-                    dropdownItems.ScrollBarImageColor3 = Color3.new()
-                    dropdownItems.ChildAdded:Connect(updateCanvas)
-                    dropdownItems.ChildRemoved:Connect(updateCanvas)
-
-                    local dropdownObjects = { }
-                    function self.new(name)
-                        local dropdownObject = { }
-                        dropdownObject.selected = false
-                        dropdownObject.name = name
-                        assert(rawget(dropdownObjects, name) == nil, string.format("object already exists in dropdown '%s'", dropdownOptions.text))
-                        rawset(dropdownObjects, name, dropdownObject)
-
-                        local dropdownOption = new("DropdownOption")
-                        dropdownObject.object = dropdownOption
-                        local content = dropdownWindow:FindFirstChild("Content")
-                        dropdownOption.Parent = dropdownItems
-                        dropdownOption.Text = "  " .. name
-                        dropdownOption.TextColor3 = Color3.fromRGB(178, 178, 178)
-                        dropdownOption.MouseButton1Click:Connect(function()
-                            if findBrowsingTopMost() == dropdownWindow then
-                                dropdownObject:Select()
-                            end
-                        end)
-
-                        function dropdownObject.Select()
-                            self.selected = name
-                            for i, v in next, dropdownObjects do
-                                v.selected = false
-                                resizeTween(v.object, { TextColor3 = Color3.fromRGB(178, 178, 178) }, 0.1)
-                                resizeTween(v.object:GetChildren()[1], { ImageColor3 = Color3.fromRGB(42, 44, 46) }, 0.1)
-                            end
-                            dropdownObjects[name].selected = true
-                            resizeTween(dropdownOption, { TextColor3 = Color3.new(1, 1, 1) }, 0.1)
-                            resizeTween(dropdownOption:GetChildren()[1], { ImageColor3 = dropdownOptions.selectioncolor }, 0.1)
-                            inner:FindFirstChild("Value").Text = string.format("[ %s ]", name)
-                            dropdownWindow:FindFirstChild("Content"):FindFirstChild("Selected").Text = string.format("[ %s ]", name)
-                            if not self.eventBlock then
-                                self.event:Fire(name)
-                            end
-                        end
-
-                        function dropdownObject.Destroy()
-                            if rawget(dropdownObject, name) then
-                                inner:FindFirstChild("Value").Text = "[...]"
-                                dropdownWindow:FindFirstChild("Content"):FindFirstChild("Selected").Text = "[...]"
-                            end
-                            self.selected = nil
-                            rawset(dropdownObject, name, nil)
-                        end
-
-                        return dropdownObject
-                    end
-
-                    function self.search(key)
-                        for name, dropdownObject in next, dropdownObjects do
-                            dropdownObject.object.Parent = dropdownWindow:FindFirstChild("Cache")
-                            if dropdownObject.name:match(key) then
-                                dropdownObject.object.Parent = dropdownItems
-                            end
-                        end
-                    end
-
-                    do -- search bar
-                        local TextBox = dropdownWindow:FindFirstChild("Content"):FindFirstChild("Search"):FindFirstChild("Outer"):FindFirstChild("Inner"):FindFirstChild("TextBox")
-                        local inTextBox = false
-                        TextBox.MouseEnter:Connect(function()
-                            inTextBox = true
-                        end)
-                        TextBox.MouseLeave:Connect(function()
-                            inTextBox = false
-                        end)
-
-                        local lastTick = tick()
-                        local lastTickN = 1
-                        local text = ""
-                        local canSearch = false
-                        local shift = false
-                        local backspace = false
-                        local function updateTextBox()
-                            lastTick = tick()
-                            lastTickN = 1
-                            self.search(text)
-                        end
-
-                        mouse.InputBegan:Connect(function()
-                            if findBrowsingTopMost() == dropdownWindow then
-                                canSearch = inTextBox
-                            else
-                                canSearch = false
-                            end
-                            if canSearch then
-                                TextBox.TextColor3 = Color3.new(1, 1, 1)
-                                spawn(function()
-                                    while canSearch do
-                                        TextBox.Text = text .. (lastTickN == 1 and "|" or "")
-                                        if (tick() - lastTick) >= 0.5 then
-                                            lastTick = tick()
-                                            lastTickN = 1 - lastTickN
-                                        end
-                                        RunService.Heartbeat:Wait()
-                                    end
-                                    lastTickN = 0
-                                    TextBox.Text = text .. (lastTickN == 1 and "|" or "")
-                                    TextBox.TextColor3 = Color3.fromRGB(178, 178, 178)
-                                    if text == "" then
-                                        TextBox.Text = "Search ..."
-                                    end
-                                end)
-                            end
-                        end)
-
-                        UserInputService.InputBegan:Connect(function(inputObject)
-                            local keycode = inputObject.KeyCode
-                            if keycode == Enum.KeyCode.LeftShift then
-                                shift = true
-                            end
-                            if canSearch then
-                                if keycode == Enum.KeyCode.Backspace then
-                                    backspace = true
-                                    text = text:sub(1, -2)
-                                    updateTextBox()
-
-                                    local backspaceTick = tick()
-                                    local backspaceN = 0.5
-                                    spawn(function()
-                                        while backspace do
-                                            if (tick() - backspaceTick) >= backspaceN then
-                                                backspaceN = 0.05
-                                                backspaceTick = tick()
-                                                text = text:sub(1, -2)
-                                                updateTextBox()
-                                            end
-                                            RunService.Heartbeat:Wait()
-                                        end
-                                        backspaceN = 0.5
-                                    end)
-                                elseif keycode == Enum.KeyCode.Space then
-                                    text = text .. " "
-                                    updateTextBox()
-                                end
-                                if betweenOpenInterval(keycode.Value, 48, 57) then -- 0-9
-                                    local name = rawget({ Zero = 0, One = 1, Two = 2, Three = 3, Four = 4, Five = 5, Six = 6, Seven = 7, Eight = 8, Nine = 9 }, keycode.Name)
-                                    text = text .. name
-                                    updateTextBox()
-                                end
-                                if betweenOpenInterval(keycode.Value, 97, 122) then -- A-Z
-                                    local name = (not shift) and keycode.Name:lower() or keycode.Name
-                                    text = text .. name
-                                    updateTextBox()
-                                end
-                            end
-                        end)
-                        UserInputService.InputEnded:Connect(function(inputObject)
-                            if inputObject.KeyCode == Enum.KeyCode.LeftShift then
-                                shift = false
-                            elseif inputObject.KeyCode == Enum.KeyCode.Backspace then
-                                backspace = false
-                            end
-                        end)
-                    end
-
-                    function self.setPosition(position)
-                        dropdownWindow.Position = position
-                    end
-
-                    function self:Destroy()
-                        dropdownButton:Destroy()
-                        dropdownWindow:Destroy()
-                    end
-
-                    self.self = dropdownButton
-                    self.close()
-                    return self
-                end
-
-                function types.dock(dockOptions)
-                    local self = { }
-
-                    dockOptions = settings.new({
-                    }).handle(dockOptions)
-
-                    local dock = new("Dock")
-                    dock.Parent = items
-
-                    dock.ChildAdded:Connect(function()
-                        local size = countSize(dock, true).X
-                        dock.Size = UDim2.new(0, size, 0, 22)
-                        updateCanvas()
-                    end)
-
-                    function self.new(type, typeOptions)
-                        assert(typeof(type) == "string", "expected string as #1 argument")
-                        type = type:lower()
-                        assert(type ~= "folder", "illegal type")
-
-                        local p = rawget(types, type)
-                        assert(p, "invalid type")
-                        local o = p(typeOptions)
-                        o.type = type
-                        o.self.Parent = self.self
-
-                        return o
-                    end
-
-                    self.updated = event.new()
-                    dock.ChildAdded:Connect(function() self.updated:Fire() end)
-                    dock.ChildRemoved:Connect(function() self.updated:Fire() end)
-
-                    function self:Destroy()
-                        dock:Destroy()
-                    end
-
-                    self.options = dockOptions
-                    self.self = dock
-                    return self
-                end
-
-                function types.folder(folderOptions)
-                    local self = { }
-                    self.isopen = false
-
-                    folderOptions = settings.new({
-                        text = "New Folder",
-                        isopen = false,
-                        color = options.color,
-                        rounding = options.rounding,
-                        animation = options.animation,
-                    }).handle(folderOptions)
-                    self.isopen = folderOptions.isopen
-
-                    local folder = new("Folder")
-                    folder.Parent = items
-
-                    local _folder = folder:FindFirstChild("Folder")
-                    local folderItems = folder:FindFirstChild("Items")
-                    _folder.SliceScale = folderOptions.rounding / 100
-                    _folder.ImageColor3 = folderOptions.color
-
-                    function self.setColor(color)
-                        _folder.ImageColor3 = color
-                    end
-
-                    function self.getColor()
-                        return _folder.ImageColor3
-                    end
-
-                    local title = _folder:FindFirstChild("Title")
-                    local expand = _folder:FindFirstChild("Expand")
-                    title.Text = folderOptions.text
-
-                    function self.close()
-                        resizeTween(folder, { Size = UDim2.new(1, 0, 0, 20) }, folderOptions.animation)
-                        resizeTween(expand, { Rotation = 0 }, folderOptions.animation)
-                        self.isopen = false
-                    end
-
-                    function self.open()
-                        local size = countSize(folderItems, true).X
-                        resizeTween(folder, { Size = UDim2.new(1, 0, 0, 20 + countSize(folderItems).Y + 2) }, folderOptions.animation)
-                        resizeTween(expand, { Rotation = 90 }, folderOptions.animation)
-                        self.isopen = true
-                    end
-
-                    function self.switch()
-                        if self.isopen then
-                            self.close()
-                        else
-                            self.open()
-                        end
-                    end
-
-                    expand.MouseButton1Click:Connect(function()
-                        self.switch()
-                    end)
-
-                    local folderCache = { }
-                    function self.new(type, typeOptions)
-                        assert(typeof(type) == "string", "expected string as #1 argument")
-                        type = type:lower()
-                        local p = rawget(types, type)
-                        assert(p, "invalid type")
-                        local o = p(typeOptions)
-                        table.insert(folderCache, o)
-                        o.type = type
-                        o.self.Parent = folderItems
-
-                        if self.isopen then
-                            self.open()
-                        end
-
-                        if o.type == "folder" then
-                            o.updated:Connect(function()
-                                if self.isopen then
-                                    self.open()
-                                end
-                            end)
-                        end
-
-                        if o.type == "dock" then
-                            o.updated:Connect(function()
-                                if self.isopen then
-                                    self.open()
-                                end
-                            end)
-                        end
-
-                        return o
-                    end
-
-                    self.updated = folder:GetPropertyChangedSignal("Size")
-
-                    function self:Destroy()
-                        for i, v in next, folderCache do
-                            v:Destroy()
-                        end
-                        folder:Destroy()
-                    end
-
-                    self.close()
-                    if self.isopen then
-                        self.open()
-                    end
-                    self.options = folderOptions
-                    self.self = folder
-                    return self
+                    function self:Destroy() slider:Destroy() end
+                    self.self = slider; return self
                 end
             end
 
             function self.new(type, typeOptions)
-                assert(typeof(type) == "string", "expected string as #1 argument")
                 type = type:lower()
-
-                local p = rawget(types, type)
-                assert(p, "invalid type")
-                local o = p(typeOptions)
-                o.type = type
-
-                if o.type == "folder" then
-                    o.updated:Connect(updateCanvas)
-                end
-
-                return setmetatable(o, {
-                    __index = function(self, idx)
-                        return rawget(rawget(self, "event"), idx)
-                    end,
-                    __newindex = function()end,
-                })
+                local p = rawget(types, type); assert(p, "invalid type")
+                local o = p(typeOptions); o.type = type
+                if o.type == "folder" then o.updated:Connect(updateCanvas) end
+                return setmetatable(o, { __index = function(s, idx) return rawget(rawget(s, "event"), idx) end, __newindex = function()end })
             end
 
             function self.show()
-                for i, v in next, tabbuttons:GetChildren() do
-                    if not v:IsA("UIListLayout") then
-                        resizeTween(v, { TextColor3 = Color3.new(0.4, 0.4, 0.4) }, options.animation)
-                    end
-                end
-                for i, v in next, content:GetChildren() do
-                    if v.Name == "Tab" then
-                        v.Visible = false
-                    end
-                end
-                resizeTween(tabbutton, { TextColor3 = Color3.new(1, 1, 1) }, options.animation)
-                tab.Visible = true
+                for _, v in pairs(tabbuttons:GetChildren()) do if not v:IsA("UIListLayout") then resizeTween(v, { TextColor3 = Color3.new(0.4, 0.4, 0.4) }, options.animation) end end
+                for _, v in pairs(content:GetChildren()) do if v.Name == "Tab" then v.Visible = false end end
+                resizeTween(tabbutton, { TextColor3 = Color3.new(1, 1, 1) }, options.animation); tab.Visible = true
             end
-
             self.show()
             return self
         end
 
         function self.close()
-            if not self.isopen then return end
-            self.isopen = false
-
+            if not self.isopen then return end; self.isopen = false
             resizeTween(expand, { Rotation = 0 }, options.animation)
-            cache.content_size = content.Size.Y.Offset
-            cache.tabs_size = tabs.Size.Y.Offset
+            cache.content_size, cache.tabs_size = content.Size.Y.Offset, tabs.Size.Y.Offset
             resizeTween(content, { Size = UDim2.new(1, 0, 0, 0) }, options.animation)
             resizeTween(tabs, { Size = UDim2.new(1, 0, 0, 0) }, options.animation)
         end
-
         function self.open()
-            if self.isopen then return end
-            self.isopen = true
-
+            if self.isopen then return end; self.isopen = true
             resizeTween(expand, { Rotation = 90 }, options.animation)
             resizeTween(content, { Size = UDim2.new(1, 0, 0, cache.content_size) }, options.animation)
             resizeTween(tabs, { Size = UDim2.new(1, 0, 0, cache.tabs_size) }, options.animation)
         end
+        function self.setPosition(pos) main.Position = pos end
+        local old_anim = options.animation; options.animation = 0; self.close(); options.animation = old_anim
 
-        function self.setPosition(pos)
-            main.Position = pos
-        end
-
-        do -- Start closed, then open
-            local old = options.animation
-            options.animation = 0
-            self.close()
-            options.animation = old
-        end
-
+        self.self = main -- Expose the main frame
         return self
     end,
 }
 
+local Serpent = {}
+local Serpent_Window = { __index = Serpent_Window }
+local Serpent_Tab = { __index = Serpent_Tab }
+
+function Serpent.Window(options)
+    local self = setmetatable({}, Serpent_Window)
+    self.core = CoreLibrary.new(options)
+    self.tabs = {}
+    return self
+end
+
+function Serpent_Window:Tab(options)
+    if type(options) == "string" then options = { text = options } end
+    local coreTab = self.core:new(options)
+    local tab = setmetatable({ core = coreTab, window = self }, Serpent_Tab)
+    table.insert(self.tabs, tab)
+    if #self.tabs == 1 then tab:Show() end
+    return tab
+end
+
+function Serpent_Tab:Button(options, callback)
+    if type(options) == "string" then options = { text = options } end
+    local button = self.core.new(self.core, "button", options)
+    if callback then button.event:Connect(callback) end
+    return button
+end
+
+function Serpent_Tab:Label(options)
+    if type(options) == "string" then options = { text = options } end
+    return self.core.new(self.core, "label", options)
+end
+
+function Serpent_Tab:Switch(options, callback)
+    if type(options) == "string" then options = { text = options } end
+    local switch = self.core.new(self.core, "switch", options)
+    if callback then switch.event:Connect(callback) end
+    return switch
+end
+
+function Serpent_Tab:Slider(options, callback)
+    if type(options) == "string" then options = { text = options } end
+    local slider = self.core.new(self.core, "slider", options)
+    if callback then slider.event:Connect(callback) end
+    return slider
+end
+
+function Serpent_Tab:TextBox(options)
+    return self.core.new(self.core, "textbox", options)
+end
+
+function Serpent_Tab:Show()
+    self.core.show(self.core)
+end
+
 do -- window history zindex
     ScreenGui.ChildAdded:Connect(function(window)
-        local content = window:FindFirstChild("Content")
-        if content then
-            window.MouseEnter:Connect(function()
-                mouseCache[window] = true
-            end)
-            content.MouseEnter:Connect(function()
-                browsingWindow[window] = true
-            end)
-            window.MouseLeave:Connect(function()
-                mouseCache[window] = false
-            end)
-            content.MouseLeave:Connect(function()
-                browsingWindow[window] = false
-            end)
-
+        if window:IsA("ImageLabel") and window:FindFirstChild("Content") then
+            window.MouseEnter:Connect(function() mouseCache[window] = true end)
+            window:FindFirstChild("Content").MouseEnter:Connect(function() browsingWindow[window] = true end)
+            window.MouseLeave:Connect(function() mouseCache[window] = false end)
+            window:FindFirstChild("Content").MouseLeave:Connect(function() browsingWindow[window] = false end)
+            
             cacheWindowHistory(window)
-            for i, v in next, windowHistory do
-                windowHistory[i] = windowHistory[i] + 1
-            end
+            for i in pairs(windowHistory) do windowHistory[i] = windowHistory[i] + 1 end
             windowHistory[window] = 1
+            updateWindowHistory()
+        end
+    end)
+    
+    ScreenGui.ChildRemoved:Connect(function(window)
+        if windowHistory[window] then
+            local removedZ = windowHistory[window]
+            windowHistory[window] = nil
+            windowCache[window] = nil
+            mouseCache[window] = nil
+            browsingWindow[window] = nil
+            for i, z in pairs(windowHistory) do
+                if z > removedZ then windowHistory[i] = z - 1 end
+            end
             updateWindowHistory()
         end
     end)
 
     mouse.InputBegan:Connect(function()
         task.wait()
-        if (not colorpicking) and (not sliding) and (not resizing) then
+        if not (colorpicking or sliding or resizing) then
             local lastZIndex, focused = math.huge
-            for i, v in next, mouseCache do
-                if v and windowHistory[i] < lastZIndex then
-                    lastZIndex = windowHistory[i]
-                    focused = i
+            for i, v in pairs(mouseCache) do
+                if v and windowHistory[i] and windowHistory[i] < lastZIndex then
+                    lastZIndex, focused = windowHistory[i], i
                 end
             end
-            if focused then
-                setTopMost(focused)
-            end
+            if focused then setTopMost(focused) end
         end
     end)
 end
 
-return library
+return Serpent
