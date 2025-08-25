@@ -1158,7 +1158,7 @@ do -- Load items
     TextBoxInner.BackgroundTransparency = 1.000
     TextBoxInner.Position = UDim2.new(0, 2, 0, 2)
     TextBoxInner.Size = UDim2.new(1, -4, 1, -4)
-    TextBoxInner.ImageColor3 = Color3.fromRGB(32, 59, 97)
+    TextBoxInner.BackgroundColor3 = Color3.fromRGB(32, 59, 97)
     TextBoxInner.BorderSizePixel = 0
     TextBoxInner.ScrollBarThickness = 6
 
