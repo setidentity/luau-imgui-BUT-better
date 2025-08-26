@@ -1,15 +1,12 @@
 --[[
 	IMPROVEMENTS & FIXES:
-		[X] Reworked UI element creation to use a cloning/preset model instead of mass Instance.new() calls.
-			This provides a massive performance and stability improvement.
-		[X] Replaced busy-wait loops (while mouse.held) with a robust event-based system (RunService.RenderStepped).
-			This prevents input loops from getting stuck and provides smoother interactions.
-		[X] Corrected mouse position calculations by using GuiService:GetGuiInset() instead of a hard-coded offset.
-			Ensures UI works correctly on all devices and with different screen configurations.
-		[X] Replaced unsafe pcalls with proper checks (e.g., IsA("GuiObject")) for better error handling.
+		[X] Corrected error where Image properties were assigned to a ScrollingFrame.
+		[X] Reworked UI element creation to use a cloning/preset model.
+		[X] Replaced busy-wait loops with a robust event-based system (RunService.RenderStepped).
+		[X] Corrected mouse position calculations by using GuiService:GetGuiInset().
+		[X] Replaced unsafe pcalls with proper checks (e.g., IsA("GuiObject")).
 		[X] Added textbox element with optional syntax highlighting.
 		[X] Added a fully functional resizable window toggle.
-		[X] Cleaned up code, improved variable scoping, and added comments for clarity.
 --]]
 
 -- Wait for the game and player to be fully loaded.
@@ -830,20 +827,19 @@ do -- Load UI element presets
 	TextBoxOuter.ScaleType = Enum.ScaleType.Slice
 	TextBoxOuter.SliceCenter = Rect.new(100, 100, 100, 100)
 	TextBoxOuter.SliceScale = 0.050
+    
+    -- [[ ****** FIX IS HERE ****** ]]
 	local TextBoxInner = Instance.new("ScrollingFrame")
 	TextBoxInner.Name = "Inner"
 	TextBoxInner.Parent = TextBoxOuter
-	TextBoxInner.BackgroundTransparency = 1.000
+	TextBoxInner.BackgroundTransparency = 0 -- Make background visible
 	TextBoxInner.Position = UDim2.new(0, 2, 0, 2)
 	TextBoxInner.Size = UDim2.new(1, -4, 1, -4)
-	TextBoxInner.BackgroundColor3 = Color3.fromRGB(32, 59, 97)
-	TextBoxInner.Image = "rbxassetid://3570695787"
-	TextBoxInner.ImageColor3 = Color3.fromRGB(32, 59, 97)
-	TextBoxInner.ScaleType = Enum.ScaleType.Slice
-	TextBoxInner.SliceCenter = Rect.new(100, 100, 100, 100)
-	TextBoxInner.SliceScale = 0.050
+	TextBoxInner.BackgroundColor3 = Color3.fromRGB(32, 59, 97) -- Set background color
 	TextBoxInner.BorderSizePixel = 0
 	TextBoxInner.ScrollBarThickness = 6
+    -- [[ ****** END FIX ****** ]]
+    
 	local UIPadding = Instance.new("UIPadding")
 	UIPadding.Parent = TextBoxInner
 	UIPadding.PaddingLeft = UDim.new(0, 5)
@@ -1511,7 +1507,7 @@ local library = {
 				local actualTextBox = inner:FindFirstChild("ActualTextBox")
 				
 				outer.SliceScale = textboxOptions.rounding / 100
-				inner.ImageColor3 = textboxOptions.color
+				inner.BackgroundColor3 = textboxOptions.color
 				actualTextBox.Text = textboxOptions.text
 
 				function self.setText(text)
@@ -1641,7 +1637,44 @@ local library = {
 				self.self = folder
 				return self
 			end
+   
+            function types.dock(dockOptions)
+				local self = { event = event.new() }
+                
+                dockOptions = settings.new({}).handle(dockOptions)
+                
+                local dock = new("Dock")
+                dock.Parent = items
 
+				local listLayout = dock:FindFirstChildOfClass("UIListLayout")
+                
+                local function updateDockSize()
+                    task.wait()
+                    local newSize = countSize(dock, true)
+                    dock.Size = UDim2.fromOffset(newSize.X - listLayout.Padding.Offset, newSize.Y)
+					updateCanvas()
+                end
+
+                function self.new(type, typeOptions)
+                    assert(type ~= "folder" and type ~= "dock", "Cannot place folders or docks inside a dock.")
+                    local constructor = types[type:lower()]
+                    assert(constructor, "Invalid element type for dock: "..type)
+                    
+                    local element = constructor(typeOptions)
+                    element.self.Parent = dock
+                    
+					updateDockSize()
+                    return element
+                end
+                
+				dock.ChildRemoved:Connect(updateDockSize)
+
+				function self:Destroy() dock:Destroy() end
+				
+                self.self = dock
+                return self
+			end
+   
 			-- Assign types to tab self table.
 			for typeName, constructor in pairs(types) do
 				tabSelf[typeName] = constructor
@@ -1743,4 +1776,4 @@ do -- window history zindex
 	end)
 end
 
-return library
+return library```
