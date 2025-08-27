@@ -1,4 +1,8 @@
-local arceus = arceus or nil
+
+
+local serpent = serpent or nil
+local serpenticonmain=getcustomasset("serpent/assets/icon.png")
+
 local unavailable = function(fake)
 	return function(...)
 		internalUtils:Notify("This feature cannot be used on the current apk version")
@@ -44,19 +48,19 @@ local setfpscap = setfpscap or unavailable(nil)
 local getfpscap = getfpscap or unavailable(60)
 local getfpsmax = getfpsmax or unavailable(60)
 
-local makearceusfolder = arceus and clonefunction(arceus.makearceusfolder);
-local writearceusfile = arceus and clonefunction(arceus.writearceusfile);
-local listarceusfiles = arceus and clonefunction(arceus.listarceusfiles);
-local isarceusfolder = arceus and clonefunction(arceus.isarceusfolder);
-local readarceusfile = arceus and clonefunction(arceus.readarceusfile);
-local isarceusfile = arceus and clonefunction(arceus.isarceusfile);
-local isv2device = (arceus and clonefunction(arceus.is_v2)) or function()
+local makeserpentfolder = serpent and clonefunction(serpent.makeserpentfolder);
+local writeserpentfile = serpent and clonefunction(serpent.writeserpentfile);
+local listserpentfiles = serpent and clonefunction(serpent.listserpentfiles);
+local isserpentfolder = serpent and clonefunction(serpent.isserpentfolder);
+local readserpentfile = serpent and clonefunction(serpent.readserpentfile);
+local isserpentfile = serpent and clonefunction(serpent.isserpentfile);
+local isv2device = (serpent and clonefunction(serpent.is_v2)) or function()
 	return false 
 end
 
-getgenv().arceus = nil
+getgenv().serpent = nil
 
-arceus_libs = {
+serpent_libs = {
 	data = {
 		handled_page_dragging = {},
 	},
@@ -72,60 +76,60 @@ arceus_libs = {
 		},
 
 		pauseFromRendering = function(id: number)
-			arceus_libs.renderer.data.paused[id] = true
+			serpent_libs.renderer.data.paused[id] = true
 		end,
 
 		resumeFromRendering = function(id: number)
-			arceus_libs.renderer.data.paused[id] = nil
+			serpent_libs.renderer.data.paused[id] = nil
 		end,
 
 		removeFromRendering = function(id: number)		
-			if arceus_libs.renderer.data.functions[id] then			
-				arceus_libs.renderer.data.to_remove[id] = true
+			if serpent_libs.renderer.data.functions[id] then			
+				serpent_libs.renderer.data.to_remove[id] = true
 			end
 		end,
 
 		pushToRendering = function(funct)
-			arceus_libs.renderer.data.id_counter += 1
-			local new_id = "r" .. arceus_libs.renderer.data.id_counter
+			serpent_libs.renderer.data.id_counter += 1
+			local new_id = "r" .. serpent_libs.renderer.data.id_counter
 
-			arceus_libs.renderer.data.functions[new_id] = funct
+			serpent_libs.renderer.data.functions[new_id] = funct
 
 			return new_id
 		end,
 
 		startRendering = function()
-			if arceus_libs.renderer.data.connection then
+			if serpent_libs.renderer.data.connection then
 				return
 			end
 
 			local RUN_SERVICE = cloneref(game:GetService("RunService"))
-			arceus_libs.renderer.data.connection = RUN_SERVICE.RenderStepped:Connect(function(delta)
+			serpent_libs.renderer.data.connection = RUN_SERVICE.RenderStepped:Connect(function(delta)
 				pcall(function()
-					for id, v in pairs(arceus_libs.renderer.data.functions) do
-						if not arceus_libs.renderer.data.paused[id] then
+					for id, v in pairs(serpent_libs.renderer.data.functions) do
+						if not serpent_libs.renderer.data.paused[id] then
 							v(delta, id)
 						end
 					end
 
 					local removed = false
-					for id, v in pairs(arceus_libs.renderer.data.to_remove) do
-						arceus_libs.renderer.data.functions[id] = nil
-						arceus_libs.renderer.data.to_remove[id] = nil
+					for id, v in pairs(serpent_libs.renderer.data.to_remove) do
+						serpent_libs.renderer.data.functions[id] = nil
+						serpent_libs.renderer.data.to_remove[id] = nil
 						removed = true
 					end
 
 					if removed then
-						arceus_libs.renderer.data.removedFromRendering:Fire()
+						serpent_libs.renderer.data.removedFromRendering:Fire()
 					end
 				end)
 			end)
 		end,
 
 		stopRenddering = function()
-			if arceus_libs.renderer.data.connection then
-				arceus_libs.renderer.data.connection:Disconnect()
-				arceus_libs.renderer.data.connection = nil
+			if serpent_libs.renderer.data.connection then
+				serpent_libs.renderer.data.connection:Disconnect()
+				serpent_libs.renderer.data.connection = nil
 			end
 		end,
 	},
@@ -135,7 +139,7 @@ arceus_libs = {
 			local lastMousePos, dragging, startPos, viewportSize
 			local USER_INPUT_SERVICE = cloneref(game:GetService("UserInputService"))
 
-			arceus_libs.data.handled_page_dragging[object] = true
+			serpent_libs.data.handled_page_dragging[object] = true
 			object.Draggable = false
 			object.Active = true
 
@@ -145,7 +149,7 @@ arceus_libs = {
 				end
 
 				if not object then
-					arceus_libs.renderer.removeFromRendering(renderId)
+					serpent_libs.renderer.removeFromRendering(renderId)
 				end
 
 				local camera = game.Workspace.CurrentCamera
@@ -192,11 +196,11 @@ arceus_libs = {
 				end
 			end)
 
-			return arceus_libs.renderer.pushToRendering(Update)
+			return serpent_libs.renderer.pushToRendering(Update)
 		end,
 
 		isDraggable = function(object: GuiObject)
-			return arceus_libs.data.handled_page_dragging[object] or object.Draggable
+			return serpent_libs.data.handled_page_dragging[object] or object.Draggable
 		end
 	},
 
@@ -210,7 +214,7 @@ arceus_libs = {
 					return false
 				end
 
-				return math.abs((lastPos - newPos).Magnitude) > arceus_libs.buttons.data.drag_min
+				return math.abs((lastPos - newPos).Magnitude) > serpent_libs.buttons.data.drag_min
 			end,
 		},
 
@@ -237,11 +241,11 @@ arceus_libs = {
 							end
 						end)
 
-						task.wait(arceus_libs.buttons.data.long_click_time + 0.05)
+						task.wait(serpent_libs.buttons.data.long_click_time + 0.05)
 
 						if not exit then
 							exit = true
-							if arceus_libs.input.isDraggable(button) and arceus_libs.buttons.data.has_been_dragged(lastPos, button.AbsolutePosition) then
+							if serpent_libs.input.isDraggable(button) and serpent_libs.buttons.data.has_been_dragged(lastPos, button.AbsolutePosition) then
 								return
 							end
 
@@ -252,7 +256,7 @@ arceus_libs = {
 			end)
 
 			button.MouseButton1Up:Connect(function()
-				if arceus_libs.input.isDraggable(button) and arceus_libs.buttons.data.has_been_dragged(lastPos, button.AbsolutePosition) then
+				if serpent_libs.input.isDraggable(button) and serpent_libs.buttons.data.has_been_dragged(lastPos, button.AbsolutePosition) then
 					return
 				end
 
@@ -262,7 +266,7 @@ arceus_libs = {
 				end
 
 				local clickTime = os.clock() - lastPress
-				if lastPress and clickTime >= arceus_libs.buttons.data.long_click_time then
+				if lastPress and clickTime >= serpent_libs.buttons.data.long_click_time then
 					longClick:Fire(button, clickTime)
 				else
 					shortClick:Fire(button, clickTime)
@@ -716,8 +720,8 @@ do
 	end
 
 	local function loadScriptCache()
-		if isarceusfile and isarceusfile("data/internalScriptCache.json") then
-			local s, r = pcall(httpService.JSONDecode, httpService, readarceusfile("data/internalScriptCache.json"));
+		if isserpentfile and isserpentfile("data/internalScriptCache.json") then
+			local s, r = pcall(httpService.JSONDecode, httpService, readserpentfile("data/internalScriptCache.json"));
 			if s and type(r) == "table" then
 				local accumulation = 0;
 				local cache = {};
@@ -749,12 +753,12 @@ do
 	end
 
 	local function saveScriptCache()
-		if writearceusfile then
+		if writeserpentfile then
 			local cache = tableUtils:DeepCopy(savedScripts.cache);
 			for i, v in cache do
 				v.onAutoExecuteToggled = nil;
 			end
-			writearceusfile("data/internalScriptCache.json", httpService:JSONEncode(cache));
+			writeserpentfile("data/internalScriptCache.json", httpService:JSONEncode(cache));
 		end
 	end
 
@@ -857,8 +861,8 @@ do
 	local userSettings = {};
 
 	local function saveUserSettings()
-		if writearceusfile then
-			writearceusfile("data/internalSettings.json", httpService:JSONEncode(tableUtils:DeepCopy(settingsCache)));
+		if writeserpentfile then
+			writeserpentfile("data/internalSettings.json", httpService:JSONEncode(tableUtils:DeepCopy(settingsCache)));
 		end
 	end
 
@@ -885,12 +889,12 @@ do
 	end
 
 	function userSettings:Initialize()
-		if isarceusfolder and not isarceusfolder("data") then
-			makearceusfolder("data");
+		if isserpentfolder and not isserpentfolder("data") then
+			makeserpentfolder("data");
 		end
 
-		if isarceusfile and isarceusfile("data/internalSettings.json") then
-			local succ, res = pcall(httpService.JSONDecode, httpService, readarceusfile("data/internalSettings.json"));
+		if isserpentfile and isserpentfile("data/internalSettings.json") then
+			local succ, res = pcall(httpService.JSONDecode, httpService, readserpentfile("data/internalSettings.json"));
 			if succ then
 				tableUtils:DeepOverwrite(settingsCache, res);
 			else
@@ -948,8 +952,8 @@ do
 	end
 
 	local function loadTabCache()
-		if isarceusfile and isarceusfile("data/internalTabs.json") then
-			local s, r = pcall(httpService.JSONDecode, httpService, readarceusfile("data/internalTabs.json"));
+		if isserpentfile and isserpentfile("data/internalTabs.json") then
+			local s, r = pcall(httpService.JSONDecode, httpService, readserpentfile("data/internalTabs.json"));
 			if s and type(r) == "table" then
 				local accumulation = 0;
 				local cache = {};
@@ -1035,8 +1039,8 @@ do
 	end
 
 	function tabSystem:Save()
-		if writearceusfile then
-			writearceusfile("data/internalTabs.json", httpService:JSONEncode(tableUtils:DeepCopy(self.cache)));
+		if writeserpentfile then
+			writeserpentfile("data/internalTabs.json", httpService:JSONEncode(tableUtils:DeepCopy(self.cache)));
 		end
 	end
 
@@ -3959,10 +3963,10 @@ do
 		tabSystem:Initialize();
 		savedScripts:Initialize();
 
-		if userSettings.cache.executor.autoExecute and isarceusfolder and listarceusfiles and readarceusfile then
-			if isarceusfolder("Autoexec") then
-				for i, v in listarceusfiles("Autoexec") do
-					executecode(readarceusfile(v));
+		if userSettings.cache.executor.autoExecute and isserpentfolder and listserpentfiles and readserpentfile then
+			if isserpentfolder("Autoexec") then
+				for i, v in listserpentfiles("Autoexec") do
+					executecode(readserpentfile(v));
 				end
 			elseif rconsolewarn then
 				rconsolewarn("Autoexecution folder has not been found! Make sure to garant storage permissions.")
@@ -4292,7 +4296,7 @@ do
 					AnchorPoint = Vector2.new(0.5, 0.5),
 					BackgroundTransparency = 1, 
 					BorderSizePixel = 0, 
-					Image = "rbxassetid://11558559086", 
+					Image = serpenticonmain, 
 					Name = "internalIcon2", 
 					Position = UDim2.new(0.5, 0 ,0.5, 0), 
 					Size = UDim2.new(1,0,1,0),
@@ -4338,7 +4342,7 @@ do
 				instanceUtils:Create("ImageLabel", { 
 					BackgroundTransparency = 1, 
 					BorderSizePixel = 0, 
-					Image = "rbxassetid://11558559086", 
+					Image = serpenticonmain, 
 					Name = "internalIcon", 
 					Position = UDim2.new(0, 20, 0, 30), 
 					Size = UDim2.new(0, 36, 0, 36),
@@ -4526,8 +4530,8 @@ do
 
 		updateText()
 
-		arceus_libs.input.handleCustomDrag(bar.floatingIcon)
-		arceus_libs.buttons.holdable(bar.floatingIcon).ShortClick.Event:Connect(function()
+		serpent_libs.input.handleCustomDrag(bar.floatingIcon)
+		serpent_libs.buttons.holdable(bar.floatingIcon).ShortClick.Event:Connect(function()
 			if userSettings.cache.executor.showParticles then
 				local ScreenGui = bar.Parent
 				local particleCount = 30
@@ -5919,5 +5923,5 @@ do
 	end);
 end
 
-arceus_libs.renderer.startRendering()
+serpent_libs.renderer.startRendering()
 framework.init(); 
