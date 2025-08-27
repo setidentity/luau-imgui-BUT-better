@@ -4536,13 +4536,13 @@ do
 				local ScreenGui = bar.Parent
 				local particleCount = 30
 
-				local mainColors = {
-					Color3.fromRGB(219, 0, 0),    
-					Color3.fromRGB(219, 27, 27),  
-					Color3.fromRGB(221, 71, 71),  
-					Color3.fromRGB(226, 111, 111),
-					Color3.fromRGB(21, 21, 29)    
-				}
+local mainColors = {
+    Color3.fromRGB(50, 50, 50),    -- dark gray
+    Color3.fromRGB(100, 100, 100), -- medium gray
+    Color3.fromRGB(150, 150, 150), -- lighter gray
+    Color3.fromRGB(200, 200, 200), -- very light gray
+    Color3.fromRGB(255, 255, 255)  -- white
+}
 
 				local function getRandomMainColorWithVariation()
 					local randomIndex = math.random(1, #mainColors)
