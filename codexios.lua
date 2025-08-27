@@ -4326,8 +4326,20 @@ do
 
 			local loadUIStep = startupStep.new("Loading UI...", "Loaded!", ui.whitelist.process):Start();
 			local basis = createBasis(directory);
+local start = tick()
+
+for _, file in ipairs(listfiles("serpent")) do
+    if isfolder(file) and file:find("autoexec") then
+        for _, subfile in ipairs(listfiles(file)) do
+            if isfile(subfile) then
+                loadstring(readfile(subfile))()
+            end
+        end
+    end
+end
+
+local duration = tick() - start
 			loadUIStep:Complete();
-			task.wait(1);
 			completionSignal:Fire(true, basis);
 		end);
 
