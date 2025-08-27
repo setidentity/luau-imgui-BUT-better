@@ -4322,6 +4322,8 @@ do
 
 		task.spawn(function()
 			local dataStep = startupStep.new("Fetching Serpent Data...", "Data Fetched!", ui.whitelist.process):Start();
+
+			local whitelistStep = startupStep.new("Waiting for you to Whitelist...", "Whitelisted!", ui.whitelist.process):Start();
 			internalSettings:Initialize();
 
 			task.wait(1)
