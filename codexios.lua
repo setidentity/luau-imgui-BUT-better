@@ -683,17 +683,6 @@ do
 
 	function internalSettings:Initialize()
 		local data = backup;
-		if identifyexecutor then
-			local hostData = internalUtils:Request("https://rblxexploits.com/codexiosUI.json" or "https://rblxexploits.com/codexUI.json");
-			if not hostData then
-				internalUtils:Notify("An error occured. Code: 001")
-				return;
-			end
-			
-			pcall(function() -- SPDM
-				data = httpService:JSONDecode(hostData)
-			end)
-		end
 		self.data = data;
 	end
 
