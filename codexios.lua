@@ -1309,7 +1309,7 @@ do
 	framework.components.base.textButton = (function(overwriteProps: {any}, children: {any}): Instance
 		return instanceUtils:Create("TextButton", tableUtils:DeepOverwrite({
 			AutomaticSize = Enum.AutomaticSize.X,
-			BackgroundColor3 = Color3.fromRGB(235, 69, 69),
+			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold),
 			Size = UDim2.new(0, 0, 0, 32),
 			TextColor3 = Color3.new(1, 1, 1),
@@ -2161,13 +2161,13 @@ do
 					}),
 					instanceUtils:Create("UIStroke", { 
 						ApplyStrokeMode = Enum.ApplyStrokeMode.Border, 
-						Color = scriptData.autoExecute and Color3.fromRGB(235, 69, 69) or Color3.fromRGB(58, 58, 74), 
+						Color = scriptData.autoExecute and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(58, 58, 74), 
 						Name = "stroke", 
 						Thickness = 2
 					}),
 					instanceUtils:Create("Frame", { 
 						AnchorPoint = Vector2.new(0.5, 0.5), 
-						BackgroundColor3 = scriptData.autoExecute and Color3.fromRGB(235, 69, 69) or Color3.fromRGB(58, 58, 74), 
+						BackgroundColor3 = scriptData.autoExecute and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(58, 58, 74), 
 						BorderColor3 = Color3.fromHex("000000"), 
 						BorderSizePixel = 0, 
 						Name = "dot", 
@@ -2244,11 +2244,11 @@ do
 
 	function savedScript:ToggleAutomaticExecution(state: boolean)
 		instanceUtils:Tween(self.instance.autoExecute.indicator.dot, 0.2, {
-			BackgroundColor3 = state and Color3.fromRGB(235, 69, 69) or Color3.fromHex("3a3a4a"),
+			BackgroundColor3 = state and Color3.fromRGB(255, 255, 255) or Color3.fromHex("3a3a4a"),
 			Position = UDim2.new(0.5, state and 9 or -9, 0.5, 0)
 		});
 		instanceUtils:Tween(self.instance.autoExecute.indicator.stroke, 0.2, {
-			Color = state and Color3.fromRGB(235, 69, 69) or Color3.fromHex("3a3a4a")
+			Color = state and Color3.fromRGB(255, 255, 255) or Color3.fromHex("3a3a4a")
 		});
 	end
 
@@ -2504,7 +2504,7 @@ do
 		self.selected = button;
 		map[button].Visible = true;
 		instanceUtils:Tween(self.selected, 0.2, {
-			BackgroundColor3 = Color3.fromRGB(235, 69, 69),
+			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			TextColor3 = Color3.fromRGB(255, 255, 255)
 		});
 	end
@@ -3145,11 +3145,11 @@ do
 
 	function toggle:Set(state: boolean)
 		instanceUtils:Tween(self.instance.indicator.dot, 0.2, {
-			BackgroundColor3 = state and Color3.fromRGB(235, 69, 69) or Color3.fromHex("3a3a4a"),
+			BackgroundColor3 = state and Color3.fromRGB(255, 255, 255) or Color3.fromHex("3a3a4a"),
 			Position = UDim2.new(0.5, state and 9 or -9, 0.5, 0)
 		});
 		instanceUtils:Tween(self.instance.indicator.stroke, 0.2, {
-			Color = state and Color3.fromRGB(235, 69, 69) or Color3.fromHex("3a3a4a")
+			Color = state and Color3.fromRGB(255, 255, 255) or Color3.fromHex("3a3a4a")
 		});
 		if self.callback then
 			self.callback(state);
@@ -3726,7 +3726,7 @@ do
 		local newMap = map[tab];
 		newMap.frame.Visible = true;
 		instanceUtils:Tween(newMap.btn, 0.2, {
-			BackgroundColor3 = Color3.fromRGB(235, 69, 69),
+			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			TextColor3 = Color3.fromRGB(255, 255, 255)
 		});
 	end
@@ -3818,7 +3818,7 @@ do
 			instanceUtils:Create("ImageLabel", {
 				BackgroundTransparency = 1,
 				Image = "rbxassetid://14840862230",
-				ImageColor3 = Color3.fromRGB(235, 69, 69),
+				ImageColor3 = Color3.fromRGB(255, 255, 255),
 				ImageTransparency = 1,
 				Name = "icon",
 				Size = UDim2.new(0, 22, 0, 22)
@@ -5826,7 +5826,7 @@ do
 			});
 
 			editorButton("Execute", "rbxassetid://14808225296", {
-				BackgroundColor3 = Color3.fromRGB(235, 69, 69),
+				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 				MouseButton1Click = function()
 					internalUtils:Notify("Editor Executed!")
 					internalUtils:Execute(self.text);
