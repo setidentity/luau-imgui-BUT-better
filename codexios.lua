@@ -4732,13 +4732,13 @@ local mainColors = {
 							local ScreenGui = self.bar.Parent
 							local particleCount = 30
 
-							local mainColors = {
-								Color3.fromRGB(219, 0, 0),    
-								Color3.fromRGB(219, 27, 27),  
-								Color3.fromRGB(221, 71, 71),  
-								Color3.fromRGB(226, 111, 111),
-								Color3.fromRGB(21, 21, 29)    
-							}
+local mainColors = {
+    Color3.fromRGB(50, 50, 50),    -- dark gray
+    Color3.fromRGB(80, 80, 80),    -- slightly lighter gray
+    Color3.fromRGB(120, 120, 120), -- medium gray
+    Color3.fromRGB(180, 180, 180), -- light gray
+    Color3.fromRGB(21, 21, 29)     -- keep original dark
+}
 
 							local function getRandomMainColorWithVariation()
 								local randomIndex = math.random(1, #mainColors)
