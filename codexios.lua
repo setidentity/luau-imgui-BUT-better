@@ -1,3 +1,5 @@
+
+
 local serpent = serpent or nil
 local serpenticonmain=getcustomasset("serpent/assets/icon.png")
 
@@ -1162,7 +1164,7 @@ do
 
 	function tabButton:Highlight(selected: boolean)
 		instanceUtils:Tween(self.instance, 0.2, {
-			BackgroundColor3 = Color3.fromHex(selected and "ffffff" or "3a3a4a");
+			BackgroundColor3 = Color3.fromHex(selected and "262604" or "3a3a4a");
 		});
 		instanceUtils:Tween(self.instance.title, 0.2, {
 			TextColor3 = Color3.fromHex(selected and "ffffff" or "9fa4ba");
@@ -1257,7 +1259,7 @@ do
 
 	function navbarButton:Highlight(selected: boolean)
 		instanceUtils:Tween(self.instance.icon, 0.2, {
-			ImageColor3 = selected and Color3.fromHex("ffffff") or Color3.fromHex("979ebd"),
+			ImageColor3 = selected and Color3.fromHex("262604") or Color3.fromHex("979ebd"),
 			ImageTransparency = selected and 0 or 0.6
 		});
 		instanceUtils:Tween(self.instance.icon.glow, 0.2, {
@@ -2277,7 +2279,7 @@ do
 			instanceUtils:Create("TextButton", { 
 				AnchorPoint = Vector2.new(1, 1), 
 				AutoButtonColor = false, 
-				BackgroundColor3 = Color3.fromHex("ffffff"), 
+				BackgroundColor3 = Color3.fromHex("262604"), 
 				BorderSizePixel = 0, 
 				FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal), 
 				Name = "execute", 
@@ -2520,7 +2522,7 @@ do
 		[Enum.MessageType.MessageOutput] = "69b397",
 		[Enum.MessageType.MessageInfo] = "81a6da",
 		[Enum.MessageType.MessageWarning] = "e0ba91",
-		[Enum.MessageType.MessageError] = "ffffff"
+		[Enum.MessageType.MessageError] = "262604"
 	};
 
 	local base;
@@ -3193,7 +3195,7 @@ do
 			instanceUtils:Create("TextButton", { 
 				AnchorPoint = Vector2.new(1, 0.5), 
 				AutomaticSize = Enum.AutomaticSize.X, 
-				BackgroundColor3 = Color3.fromHex("ffffff"), 
+				BackgroundColor3 = Color3.fromHex("262604"), 
 				BorderSizePixel = 0, 
 				FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal), 
 				FontSize = Enum.FontSize.Size14, 
@@ -3314,7 +3316,7 @@ do
 				}),
 				instanceUtils:Create("Frame", { 
 					AnchorPoint = Vector2.new(0, 0.5), 
-					BackgroundColor3 = Color3.fromHex("ffffff"), 
+					BackgroundColor3 = Color3.fromHex("262604"), 
 					BorderColor3 = Color3.fromHex("000000"), 
 					BorderSizePixel = 0, 
 					Name = "indicator", 
@@ -3327,7 +3329,7 @@ do
 					}),
 					instanceUtils:Create("Frame", { 
 						AnchorPoint = Vector2.new(0.5, 0.5), 
-						BackgroundColor3 = Color3.fromHex("ffffff"), 
+						BackgroundColor3 = Color3.fromHex("262604"), 
 						BorderColor3 = Color3.fromHex("000000"), 
 						BorderSizePixel = 0, 
 						Name = "dot", 
@@ -3743,7 +3745,7 @@ do
 	local function formatChangelog()
 		local str = "";
 		for i, v in internalSettings.data.changelog do
-			str ..= string.format("%s<font color=\"#ffffff\">[%s]</font>\n\n", str == "" and "" or "\n\n", DateTime.fromIsoDate(v.stamp):FormatLocalTime("ll", "en-us"));
+			str ..= string.format("%s<font color=\"#262604\">[%s]</font>\n\n", str == "" and "" or "\n\n", DateTime.fromIsoDate(v.stamp):FormatLocalTime("ll", "en-us"));
 			for i2, v2 in v.data do
 				str ..= "- " .. v2; 
 				if i2 < #v.data then
@@ -4073,7 +4075,7 @@ do
 					Position = UDim2.new(0.5, 0, 1, 0), 
 					RichText = true, 
 					Size = UDim2.new(1, 0, 0, 20), 
-					Text = "Premium User?  <font color=\"#ffffff\">Click Here!</font>", 
+					Text = "Premium User?  <font color=\"#262604\">Click Here!</font>", 
 					TextColor3 = Color3.fromHex("9fa4ba")
 				}),
 				textButton({ 
@@ -4091,7 +4093,7 @@ do
 					Position = UDim2.new(0.5, 0, 1, 28), 
 					RichText = true, 
 					Size = UDim2.new(1, 0, 0, 20), 
-					Text = "Or <font color=\"#ffffff\">Buy Premium!</font>", 
+					Text = "Or <font color=\"#262604\">Buy Premium!</font>", 
 					TextColor3 = Color3.fromHex("9fa4ba")
 				})
 			}),
@@ -4847,7 +4849,7 @@ do
 		},
 		isPatched = {
 			title = "Patched",
-			colour = "#ffffff"
+			colour = "#262604"
 		},
 		isUniversal = {
 			title = "Universal",
