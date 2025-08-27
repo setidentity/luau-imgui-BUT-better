@@ -599,7 +599,7 @@ do
 	--  Serpent
 	function utils:Notify(text: string)
 		cloneref(game:GetService("StarterGui")):SetCore("SendNotification", {
-			Title = "serpent " .. (isiosdevice() and "iOS" or "pc"),
+			Title = "serpent v1",
 			Text = text
 		});
 	end
@@ -4170,7 +4170,7 @@ do
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				Name = "title",
 				Position = UDim2.new(0.5, 0, 0.2, -20),
-				Text = "serpent " .. (isiosdevice() and "iOS" or "pc"),
+				Text = Title = "serpent v1",
 				TextSize = 24
 			}),
 			textLabel({
@@ -4504,7 +4504,7 @@ do
 					FontSize = Enum.FontSize.Size18, 
 					Name = "title", 
 					Position = UDim2.new(0, 78, 0, 38), 
-					Text = "serpent " .. (isiosdevice() and "iOS" or "pc"),
+					Text = Title = "serpent v1",
 					TextColor3 = Color3.fromHex("ffffff"), 
 					TextSize = 16, 
 					TextTransparency = 1,
