@@ -410,11 +410,9 @@ do
 	local dynamicParent;
 
 	if gethui then
-		dynamicParent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-	elseif isRunning then
-		dynamicParent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")-- or cloneref(game:GetService("CoreGui"));
+		dynamicParent = gethui()
 	else
-		dynamicParent = cloneref(game:GetService("StarterGui"));
+		dynamicParent = game.CoreGui
 	end
 
 	local utils = {};
