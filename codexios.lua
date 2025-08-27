@@ -1120,7 +1120,7 @@ do
 			}),
 			instanceUtils:Create("TextLabel", { 
 				AnchorPoint = Vector2.new(0.5, 0.5), 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -1162,13 +1162,13 @@ do
 
 	function tabButton:Highlight(selected: boolean)
 		instanceUtils:Tween(self.instance, 0.2, {
-			BackgroundColor3 = Color3.fromHex(selected and "262604" or "3a3a4a");
+			BackgroundColor3 = Color3.fromHex(selected and "ffffff" or "3a3a4a");
 		});
 		instanceUtils:Tween(self.instance.title, 0.2, {
-			TextColor3 = Color3.fromHex(selected and "262604" or "9fa4ba");
+			TextColor3 = Color3.fromHex(selected and "ffffff" or "9fa4ba");
 		});
 		instanceUtils:Tween(self.instance.close, 0.2, {
-			ImageColor3 = Color3.fromHex(selected and "262604" or "9fa4ba");
+			ImageColor3 = Color3.fromHex(selected and "ffffff" or "9fa4ba");
 		});
 	end
 
@@ -1227,7 +1227,7 @@ do
 				Name = "text", 
 				Position = UDim2.new(0, 70, 0.5, 0), 
 				Text = title, 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 12, 
 				TextTransparency = 0.2, 
 				TextXAlignment = Enum.TextXAlignment.Left,
@@ -1257,7 +1257,7 @@ do
 
 	function navbarButton:Highlight(selected: boolean)
 		instanceUtils:Tween(self.instance.icon, 0.2, {
-			ImageColor3 = selected and Color3.fromHex("262604") or Color3.fromHex("979ebd"),
+			ImageColor3 = selected and Color3.fromHex("ffffff") or Color3.fromHex("979ebd"),
 			ImageTransparency = selected and 0 or 0.6
 		});
 		instanceUtils:Tween(self.instance.icon.glow, 0.2, {
@@ -1309,7 +1309,7 @@ do
 	framework.components.base.textButton = (function(overwriteProps: {any}, children: {any}): Instance
 		return instanceUtils:Create("TextButton", tableUtils:DeepOverwrite({
 			AutomaticSize = Enum.AutomaticSize.X,
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+			BackgroundColor3 = Color3.fromRGB(38, 38, 41),
 			FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold),
 			Size = UDim2.new(0, 0, 0, 32),
 			TextColor3 = Color3.new(1, 1, 1),
@@ -1412,7 +1412,7 @@ do
 				Position = UDim2.new(0, 30, 0, 20), 
 				Size = UDim2.new(1, -232, 0, 0), 
 				Text = "Selected Script:", 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 16, 
 				TextTruncate = Enum.TextTruncate.AtEnd, 
 				TextXAlignment = Enum.TextXAlignment.Left, 
@@ -1421,7 +1421,7 @@ do
 			instanceUtils:Create("Frame", { 
 				AnchorPoint = Vector2.new(0.5, 1), 
 				AutomaticSize = Enum.AutomaticSize.Y, 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -1446,7 +1446,7 @@ do
 					Name = "execute", 
 					Size = UDim2.new(0, 200, 0, 50), 
 					Text = "Execute", 
-					TextColor3 = Color3.fromHex("262604"), 
+					TextColor3 = Color3.fromHex("ffffff"), 
 					TextSize = 14
 				}, {
 					instanceUtils:Create("UICorner", { 
@@ -1464,7 +1464,7 @@ do
 					Name = "loadToEditor", 
 					Size = UDim2.new(0, 200, 0, 50), 
 					Text = "Load to Editor", 
-					TextColor3 = Color3.fromHex("262604"), 
+					TextColor3 = Color3.fromHex("ffffff"), 
 					TextSize = 14
 				}, {
 					instanceUtils:Create("UICorner", { 
@@ -1482,7 +1482,7 @@ do
 					Name = "saveScript", 
 					Size = UDim2.new(0, 200, 0, 50), 
 					Text = "Save Script", 
-					TextColor3 = Color3.fromHex("262604"), 
+					TextColor3 = Color3.fromHex("ffffff"), 
 					TextSize = 14
 				}, {
 					instanceUtils:Create("UICorner", { 
@@ -1500,7 +1500,7 @@ do
 					Name = "cancel", 
 					Size = UDim2.new(0, 200, 0, 50), 
 					Text = "Cancel", 
-					TextColor3 = Color3.fromHex("262604"), 
+					TextColor3 = Color3.fromHex("ffffff"), 
 					TextSize = 14
 				}, {
 					instanceUtils:Create("UICorner", { 
@@ -1511,7 +1511,7 @@ do
 			}),
 			instanceUtils:Create("ImageLabel", { 
 				AnchorPoint = Vector2.new(1, 0), 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
 				Image = "", 
@@ -1539,7 +1539,7 @@ do
 				Position = UDim2.new(0, 30, 0, 40), 
 				Size = UDim2.new(1, -232, 0, 0), 
 				Text = "", 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 14, 
 				TextTruncate = Enum.TextTruncate.AtEnd, 
 				TextXAlignment = Enum.TextXAlignment.Left, 
@@ -1555,7 +1555,7 @@ do
 				RichText = true, 
 				Size = UDim2.new(1, -232, 0, 0), 
 				Text = "<font weight=\"bold\">Views:</font>", 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 14, 
 				TextTruncate = Enum.TextTruncate.AtEnd, 
 				TextXAlignment = Enum.TextXAlignment.Left, 
@@ -1571,7 +1571,7 @@ do
 				RichText = true, 
 				Size = UDim2.new(1, -232, 0, 0), 
 				Text = "<font weight=\"bold\">Updated:</font>", 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 14, 
 				TextTruncate = Enum.TextTruncate.AtEnd, 
 				TextXAlignment = Enum.TextXAlignment.Left, 
@@ -1677,7 +1677,7 @@ do
 	local function toggleItemSelection(item: TextButton, selected: boolean)
 		instanceUtils:Tween(item, 0.25, {
 			BackgroundTransparency = selected and 0 or 1,
-			TextColor3 = Color3.fromHex(selected and "262604" or "9fa4ba")
+			TextColor3 = Color3.fromHex(selected and "ffffff" or "9fa4ba")
 		});
 	end
 
@@ -1705,7 +1705,7 @@ do
 				Active = true, 
 				AnchorPoint = Vector2.new(1, 0.5), 
 				AutomaticCanvasSize = Enum.AutomaticSize.Y, 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -1820,7 +1820,7 @@ do
 			instanceUtils:Create("Frame", { 
 				AnchorPoint = Vector2.new(0.5, 1), 
 				AutomaticSize = Enum.AutomaticSize.Y, 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -1845,7 +1845,7 @@ do
 					Name = "saveScript", 
 					Size = UDim2.new(0, 200, 0, 50), 
 					Text = "Save Script", 
-					TextColor3 = Color3.fromHex("262604"), 
+					TextColor3 = Color3.fromHex("ffffff"), 
 					TextSize = 14
 				}, {
 					instanceUtils:Create("UICorner", { 
@@ -1863,7 +1863,7 @@ do
 					Name = "cancel", 
 					Size = UDim2.new(0, 200, 0, 50), 
 					Text = "Cancel", 
-					TextColor3 = Color3.fromHex("262604"), 
+					TextColor3 = Color3.fromHex("ffffff"), 
 					TextSize = 14
 				}, {
 					instanceUtils:Create("UICorner", { 
@@ -1882,7 +1882,7 @@ do
 				Position = UDim2.new(0.5, 0, 0, 40), 
 				Size = UDim2.new(1, -60, 0, 0), 
 				Text = "Script 1", 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 14, 
 				TextTruncate = Enum.TextTruncate.AtEnd, 
 				TextXAlignment = Enum.TextXAlignment.Left, 
@@ -1898,7 +1898,7 @@ do
 				Position = UDim2.new(0.5, 0, 0, 20), 
 				Size = UDim2.new(1, -60, 0, 0), 
 				Text = "Current Tab:", 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 16, 
 				TextTruncate = Enum.TextTruncate.AtEnd, 
 				TextXAlignment = Enum.TextXAlignment.Left, 
@@ -2064,7 +2064,7 @@ do
 			instanceUtils:Create("TextLabel", { 
 				AnchorPoint = Vector2.new(0.5, 1), 
 				AutomaticSize = Enum.AutomaticSize.Y, 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -2074,7 +2074,7 @@ do
 				Position = UDim2.new(0.5, 0, 0.5, -2), 
 				Size = UDim2.new(1, -32, 0, 0), 
 				Text = scriptData.title, 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 16, 
 				TextWrap = true, 
 				TextWrapped = true, 
@@ -2083,7 +2083,7 @@ do
 			instanceUtils:Create("Frame", { 
 				AnchorPoint = Vector2.new(1, 1), 
 				AutomaticSize = Enum.AutomaticSize.X, 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -2116,7 +2116,7 @@ do
 			instanceUtils:Create("TextButton", { 
 				AnchorPoint = Vector2.new(1, 0), 
 				AutoButtonColor = false, 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -2130,7 +2130,7 @@ do
 				TextSize = 14
 			}, {
 				instanceUtils:Create("TextLabel", { 
-					BackgroundColor3 = Color3.fromHex("262604"), 
+					BackgroundColor3 = Color3.fromHex("ffffff"), 
 					BackgroundTransparency = 1, 
 					BorderColor3 = Color3.fromHex("000000"), 
 					BorderSizePixel = 0, 
@@ -2147,7 +2147,7 @@ do
 				}),
 				instanceUtils:Create("Frame", { 
 					AnchorPoint = Vector2.new(1, 0.5), 
-					BackgroundColor3 = Color3.fromHex("262604"), 
+					BackgroundColor3 = Color3.fromHex("ffffff"), 
 					BackgroundTransparency = 1, 
 					BorderColor3 = Color3.fromHex("000000"), 
 					BorderSizePixel = 0, 
@@ -2161,13 +2161,13 @@ do
 					}),
 					instanceUtils:Create("UIStroke", { 
 						ApplyStrokeMode = Enum.ApplyStrokeMode.Border, 
-						Color = scriptData.autoExecute and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(58, 58, 74), 
+						Color = scriptData.autoExecute and Color3.fromRGB(38, 38, 41) or Color3.fromRGB(58, 58, 74), 
 						Name = "stroke", 
 						Thickness = 2
 					}),
 					instanceUtils:Create("Frame", { 
 						AnchorPoint = Vector2.new(0.5, 0.5), 
-						BackgroundColor3 = scriptData.autoExecute and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(58, 58, 74), 
+						BackgroundColor3 = scriptData.autoExecute and Color3.fromRGB(38, 38, 41) or Color3.fromRGB(58, 58, 74), 
 						BorderColor3 = Color3.fromHex("000000"), 
 						BorderSizePixel = 0, 
 						Name = "dot", 
@@ -2184,7 +2184,7 @@ do
 			instanceUtils:Create("TextLabel", { 
 				AnchorPoint = Vector2.new(0.5, 0), 
 				AutomaticSize = Enum.AutomaticSize.Y, 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -2244,11 +2244,11 @@ do
 
 	function savedScript:ToggleAutomaticExecution(state: boolean)
 		instanceUtils:Tween(self.instance.autoExecute.indicator.dot, 0.2, {
-			BackgroundColor3 = state and Color3.fromRGB(255, 255, 255) or Color3.fromHex("3a3a4a"),
+			BackgroundColor3 = state and Color3.fromRGB(38, 38, 41) or Color3.fromHex("3a3a4a"),
 			Position = UDim2.new(0.5, state and 9 or -9, 0.5, 0)
 		});
 		instanceUtils:Tween(self.instance.autoExecute.indicator.stroke, 0.2, {
-			Color = state and Color3.fromRGB(255, 255, 255) or Color3.fromHex("3a3a4a")
+			Color = state and Color3.fromRGB(38, 38, 41) or Color3.fromHex("3a3a4a")
 		});
 	end
 
@@ -2277,7 +2277,7 @@ do
 			instanceUtils:Create("TextButton", { 
 				AnchorPoint = Vector2.new(1, 1), 
 				AutoButtonColor = false, 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BorderSizePixel = 0, 
 				FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal), 
 				Name = "execute", 
@@ -2308,7 +2308,7 @@ do
 				Position = UDim2.new(0.5, 0, 0, 14), 
 				Size = UDim2.new(1, -28, 0, 0), 
 				Text = builtInScript.title, 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 16, 
 				TextTruncate = Enum.TextTruncate.AtEnd, 
 				TextXAlignment = Enum.TextXAlignment.Left, 
@@ -2504,7 +2504,7 @@ do
 		self.selected = button;
 		map[button].Visible = true;
 		instanceUtils:Tween(self.selected, 0.2, {
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+			BackgroundColor3 = Color3.fromRGB(38, 38, 41),
 			TextColor3 = Color3.fromRGB(255, 255, 255)
 		});
 	end
@@ -2520,7 +2520,7 @@ do
 		[Enum.MessageType.MessageOutput] = "69b397",
 		[Enum.MessageType.MessageInfo] = "81a6da",
 		[Enum.MessageType.MessageWarning] = "e0ba91",
-		[Enum.MessageType.MessageError] = "262604"
+		[Enum.MessageType.MessageError] = "ffffff"
 	};
 
 	local base;
@@ -2540,7 +2540,7 @@ do
 				Active = true, 
 				AnchorPoint = Vector2.new(0.5, 0), 
 				AutomaticCanvasSize = Enum.AutomaticSize.XY, 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -2559,7 +2559,7 @@ do
 			}),
 			instanceUtils:Create("Frame", { 
 				AnchorPoint = Vector2.new(1, 1), 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -2986,7 +2986,7 @@ do
 
 	local function createSeparator(parent: Instance): Instance
 		return instanceUtils:Create("Frame", { 
-			BackgroundColor3 = Color3.fromHex("262604"), 
+			BackgroundColor3 = Color3.fromHex("ffffff"), 
 			BackgroundTransparency = 1, 
 			BorderColor3 = Color3.fromHex("000000"), 
 			BorderSizePixel = 0, 
@@ -3037,7 +3037,7 @@ do
 	local function createToggle(title: string, parent: Instance): Instance
 		return instanceUtils:Create("TextButton", { 
 			AutoButtonColor = false, 
-			BackgroundColor3 = Color3.fromHex("262604"), 
+			BackgroundColor3 = Color3.fromHex("ffffff"), 
 			BackgroundTransparency = 1, 
 			BorderColor3 = Color3.fromHex("000000"), 
 			BorderSizePixel = 0, 
@@ -3051,7 +3051,7 @@ do
 			TextSize = 14
 		}, {
 			instanceUtils:Create("TextLabel", { 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -3060,7 +3060,7 @@ do
 				Name = "text", 
 				Size = UDim2.new(1, 0, 0, 36), 
 				Text = title, 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 16, 
 				TextWrap = true, 
 				TextWrapped = true, 
@@ -3068,7 +3068,7 @@ do
 			}),
 			instanceUtils:Create("Frame", { 
 				AnchorPoint = Vector2.new(1, 0.5), 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -3145,11 +3145,11 @@ do
 
 	function toggle:Set(state: boolean)
 		instanceUtils:Tween(self.instance.indicator.dot, 0.2, {
-			BackgroundColor3 = state and Color3.fromRGB(255, 255, 255) or Color3.fromHex("3a3a4a"),
+			BackgroundColor3 = state and Color3.fromRGB(38, 38, 41) or Color3.fromHex("3a3a4a"),
 			Position = UDim2.new(0.5, state and 9 or -9, 0.5, 0)
 		});
 		instanceUtils:Tween(self.instance.indicator.stroke, 0.2, {
-			Color = state and Color3.fromRGB(255, 255, 255) or Color3.fromHex("3a3a4a")
+			Color = state and Color3.fromRGB(38, 38, 41) or Color3.fromHex("3a3a4a")
 		});
 		if self.callback then
 			self.callback(state);
@@ -3166,7 +3166,7 @@ do
 
 	local function createButton(title: string, parent: Instance): Instance
 		return instanceUtils:Create("Frame", { 
-			BackgroundColor3 = Color3.fromHex("262604"), 
+			BackgroundColor3 = Color3.fromHex("ffffff"), 
 			BackgroundTransparency = 1, 
 			BorderColor3 = Color3.fromHex("000000"), 
 			BorderSizePixel = 0, 
@@ -3175,7 +3175,7 @@ do
 			Size = UDim2.new(1, 0, 0, 36)
 		}, {
 			instanceUtils:Create("TextLabel", { 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -3184,7 +3184,7 @@ do
 				Name = "text", 
 				Size = UDim2.new(1, 0, 1, 0), 
 				Text = title, 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 16, 
 				TextWrap = true, 
 				TextWrapped = true, 
@@ -3193,7 +3193,7 @@ do
 			instanceUtils:Create("TextButton", { 
 				AnchorPoint = Vector2.new(1, 0.5), 
 				AutomaticSize = Enum.AutomaticSize.X, 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BorderSizePixel = 0, 
 				FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal), 
 				FontSize = Enum.FontSize.Size14, 
@@ -3201,7 +3201,7 @@ do
 				Position = UDim2.new(1, 0, 0.5, 0), 
 				Size = UDim2.new(0, 0, 0, 32), 
 				Text = "Click Here!", 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 14
 			}, {
 				instanceUtils:Create("UICorner", { 
@@ -3248,7 +3248,7 @@ do
 
 	local function createSlider(title: string, parent: Instance): Instance
 		return instanceUtils:Create("Frame", { 
-			BackgroundColor3 = Color3.fromHex("262604"), 
+			BackgroundColor3 = Color3.fromHex("ffffff"), 
 			BackgroundTransparency = 1, 
 			BorderColor3 = Color3.fromHex("000000"), 
 			BorderSizePixel = 0, 
@@ -3257,7 +3257,7 @@ do
 			Size = UDim2.new(1, 0, 0, 60)
 		}, {
 			instanceUtils:Create("TextLabel", { 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -3266,7 +3266,7 @@ do
 				Name = "text", 
 				Size = UDim2.new(1, 0, 0, 36), 
 				Text = title, 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 16, 
 				TextWrap = true, 
 				TextWrapped = true, 
@@ -3286,7 +3286,7 @@ do
 				Position = UDim2.new(1, 0, 0, 0), 
 				Size = UDim2.new(0, 0, 0, 36), 
 				Text = "", 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 14
 			}, {
 				instanceUtils:Create("UICorner", { 
@@ -3314,7 +3314,7 @@ do
 				}),
 				instanceUtils:Create("Frame", { 
 					AnchorPoint = Vector2.new(0, 0.5), 
-					BackgroundColor3 = Color3.fromHex("262604"), 
+					BackgroundColor3 = Color3.fromHex("ffffff"), 
 					BorderColor3 = Color3.fromHex("000000"), 
 					BorderSizePixel = 0, 
 					Name = "indicator", 
@@ -3327,7 +3327,7 @@ do
 					}),
 					instanceUtils:Create("Frame", { 
 						AnchorPoint = Vector2.new(0.5, 0.5), 
-						BackgroundColor3 = Color3.fromHex("262604"), 
+						BackgroundColor3 = Color3.fromHex("ffffff"), 
 						BorderColor3 = Color3.fromHex("000000"), 
 						BorderSizePixel = 0, 
 						Name = "dot", 
@@ -3440,7 +3440,7 @@ do
 	local function createDropdown(title: string, default: string, parent: Instance): Instance
 		return instanceUtils:Create("Frame", { 
 			Active = true, 
-			BackgroundColor3 = Color3.fromHex("262604"), 
+			BackgroundColor3 = Color3.fromHex("ffffff"), 
 			BackgroundTransparency = 1, 
 			BorderColor3 = Color3.fromHex("000000"), 
 			BorderSizePixel = 0, 
@@ -3450,7 +3450,7 @@ do
 			Size = UDim2.new(1, 0, 0, 36)
 		}, {
 			instanceUtils:Create("TextLabel", { 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -3459,7 +3459,7 @@ do
 				Name = "text", 
 				Size = UDim2.new(1, 0, 0, 36), 
 				Text = title, 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 16, 
 				TextWrap = true, 
 				TextWrapped = true, 
@@ -3468,7 +3468,7 @@ do
 			instanceUtils:Create("TextButton", { 
 				Active = false, 
 				AnchorPoint = Vector2.new(1, 0.5), 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -3496,7 +3496,7 @@ do
 				instanceUtils:Create("TextLabel", { 
 					AnchorPoint = Vector2.new(0, 0.5), 
 					AutomaticSize = Enum.AutomaticSize.X, 
-					BackgroundColor3 = Color3.fromHex("262604"), 
+					BackgroundColor3 = Color3.fromHex("ffffff"), 
 					BackgroundTransparency = 1, 
 					BorderColor3 = Color3.fromHex("000000"), 
 					BorderSizePixel = 0, 
@@ -3512,7 +3512,7 @@ do
 				}),
 				instanceUtils:Create("ImageLabel", { 
 					AnchorPoint = Vector2.new(1, 0.5), 
-					BackgroundColor3 = Color3.fromHex("262604"), 
+					BackgroundColor3 = Color3.fromHex("ffffff"), 
 					BackgroundTransparency = 1, 
 					BorderColor3 = Color3.fromHex("000000"), 
 					BorderSizePixel = 0, 
@@ -3726,7 +3726,7 @@ do
 		local newMap = map[tab];
 		newMap.frame.Visible = true;
 		instanceUtils:Tween(newMap.btn, 0.2, {
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+			BackgroundColor3 = Color3.fromRGB(38, 38, 41),
 			TextColor3 = Color3.fromRGB(255, 255, 255)
 		});
 	end
@@ -3743,7 +3743,7 @@ do
 	local function formatChangelog()
 		local str = "";
 		for i, v in internalSettings.data.changelog do
-			str ..= string.format("%s<font color=\"#262604\">[%s]</font>\n\n", str == "" and "" or "\n\n", DateTime.fromIsoDate(v.stamp):FormatLocalTime("ll", "en-us"));
+			str ..= string.format("%s<font color=\"#ffffff\">[%s]</font>\n\n", str == "" and "" or "\n\n", DateTime.fromIsoDate(v.stamp):FormatLocalTime("ll", "en-us"));
 			for i2, v2 in v.data do
 				str ..= "- " .. v2; 
 				if i2 < #v.data then
@@ -3818,7 +3818,7 @@ do
 			instanceUtils:Create("ImageLabel", {
 				BackgroundTransparency = 1,
 				Image = "rbxassetid://14840862230",
-				ImageColor3 = Color3.fromRGB(255, 255, 255),
+				ImageColor3 = Color3.fromRGB(38, 38, 41),
 				ImageTransparency = 1,
 				Name = "icon",
 				Size = UDim2.new(0, 22, 0, 22)
@@ -3994,7 +3994,7 @@ do
 			instanceUtils:Create("ImageButton", { 
 				AnchorPoint = Vector2.new(1, 0.5), 
 				AutoButtonColor = false, 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -4073,7 +4073,7 @@ do
 					Position = UDim2.new(0.5, 0, 1, 0), 
 					RichText = true, 
 					Size = UDim2.new(1, 0, 0, 20), 
-					Text = "Premium User?  <font color=\"#262604\">Click Here!</font>", 
+					Text = "Premium User?  <font color=\"#ffffff\">Click Here!</font>", 
 					TextColor3 = Color3.fromHex("9fa4ba")
 				}),
 				textButton({ 
@@ -4091,13 +4091,13 @@ do
 					Position = UDim2.new(0.5, 0, 1, 28), 
 					RichText = true, 
 					Size = UDim2.new(1, 0, 0, 20), 
-					Text = "Or <font color=\"#262604\">Buy Premium!</font>", 
+					Text = "Or <font color=\"#ffffff\">Buy Premium!</font>", 
 					TextColor3 = Color3.fromHex("9fa4ba")
 				})
 			}),
 			instanceUtils:Create("Frame", { 
 				AnchorPoint = Vector2.new(0.5, 0), 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -4353,7 +4353,7 @@ do
 					Name = "title", 
 					Position = UDim2.new(0, 78, 0, 38), 
 					Text = "internal " .. (isv2device() and "v2" or "v1"),
-					TextColor3 = Color3.fromHex("262604"), 
+					TextColor3 = Color3.fromHex("ffffff"), 
 					TextSize = 16, 
 					TextTransparency = 1,
 					TextXAlignment = Enum.TextXAlignment.Left, 
@@ -4847,7 +4847,7 @@ do
 		},
 		isPatched = {
 			title = "Patched",
-			colour = "#262604"
+			colour = "#ffffff"
 		},
 		isUniversal = {
 			title = "Universal",
@@ -4868,7 +4868,7 @@ do
 			Name = data.title, 
 			Size = UDim2.new(0, 0, 0, 30), 
 			Text = data.title, 
-			TextColor3 = Color3.fromHex("262604"), 
+			TextColor3 = Color3.fromHex("ffffff"), 
 			TextSize = 14
 		}, {
 			instanceUtils:Create("UICorner", { 
@@ -4911,7 +4911,7 @@ do
 				Position = UDim2.new(0.5, 0, 0, 48), 
 				Size = UDim2.new(1, -28, 0, 0), 
 				Text = scriptResult.title, 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 16, 
 				TextTruncate = Enum.TextTruncate.AtEnd, 
 				TextXAlignment = Enum.TextXAlignment.Left, 
@@ -4944,7 +4944,7 @@ do
 				Position = UDim2.new(1, -10, 0, 10), 
 				Size = UDim2.new(0, 0, 0, 30), 
 				Text = viewCount, 
-				TextColor3 = Color3.fromHex("262604"), 
+				TextColor3 = Color3.fromHex("ffffff"), 
 				TextSize = 14
 			}, {
 				instanceUtils:Create("UICorner", { 
@@ -4960,7 +4960,7 @@ do
 			instanceUtils:Create("ScrollingFrame", { 
 				Active = true, 
 				AutomaticCanvasSize = Enum.AutomaticSize.X, 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -5070,7 +5070,7 @@ do
 					Position = UDim2.new(0.5, 0, 0.5, 0), 
 					Size = UDim2.new(1, 0, 1, 0), 
 					Text = "", 
-					TextColor3 = Color3.fromHex("262604"), 
+					TextColor3 = Color3.fromHex("ffffff"), 
 					TextSize = 14, 
 					TextTruncate = Enum.TextTruncate.AtEnd, 
 					TextXAlignment = Enum.TextXAlignment.Left
@@ -5615,7 +5615,7 @@ do
 		end
 
 		if not currentCursor then
-			currentCursor = insertHighlight(position, cursorSize, "|", "#262604")
+			currentCursor = insertHighlight(position, cursorSize, "|", "#FFFFFF")
 		end
 
 		currentCursor.ZIndex = 3
@@ -5711,7 +5711,7 @@ do
 					Name = "lineNumbers", 
 					Size = UDim2.new(0, 30, 0, 0), 
 					Text = "1", 
-					TextColor3 = Color3.fromHex("262604"), 
+					TextColor3 = Color3.fromHex("ffffff"), 
 					TextSize = 16, 
 					TextTransparency = 0.7, 
 					TextXAlignment = Enum.TextXAlignment.Right, 
@@ -5729,7 +5729,7 @@ do
 					Position = UDim2.new(0, 40, 0, 0), 
 					Size = UDim2.new(1, -40, 1, 0), 
 					Text = "", 
-					TextColor3 = Color3.fromHex("262604"), 
+					TextColor3 = Color3.fromHex("ffffff"), 
 					TextSize = 16, 
 					TextTransparency = 1, 
 					TextTruncate = Enum.TextTruncate.AtEnd, 
@@ -5739,7 +5739,7 @@ do
 			}),
 			instanceUtils:Create("Frame", { 
 				AnchorPoint = Vector2.new(1, 1), 
-				BackgroundColor3 = Color3.fromHex("262604"), 
+				BackgroundColor3 = Color3.fromHex("ffffff"), 
 				BackgroundTransparency = 1, 
 				BorderColor3 = Color3.fromHex("000000"), 
 				BorderSizePixel = 0, 
@@ -5826,7 +5826,7 @@ do
 			});
 
 			editorButton("Execute", "rbxassetid://14808225296", {
-				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+				BackgroundColor3 = Color3.fromRGB(38, 38, 41),
 				MouseButton1Click = function()
 					internalUtils:Notify("Editor Executed!")
 					internalUtils:Execute(self.text);
