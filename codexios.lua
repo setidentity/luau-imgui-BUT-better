@@ -1,6 +1,6 @@
--- v00ccx EDITED
+-- | SPDM | Global definitions
 
-local serpent = serpent or nil
+local arceus = arceus or nil
 local unavailable = function(fake)
 	return function(...)
 		internalUtils:Notify("This feature cannot be used on the current apk version")
@@ -46,19 +46,19 @@ local setfpscap = setfpscap or unavailable(nil)
 local getfpscap = getfpscap or unavailable(60)
 local getfpsmax = getfpsmax or unavailable(60)
 
-local makeserpentfolder = serpent and clonefunction(serpent.makeserpentfolder);
-local writeserpentfile = serpent and clonefunction(serpent.writeserpentfile);
-local listserpentfiles = serpent and clonefunction(serpent.listserpentfiles);
-local isserpentfolder = serpent and clonefunction(serpent.isserpentfolder);
-local readserpentfile = serpent and clonefunction(serpent.readserpentfile);
-local isserpentfile = serpent and clonefunction(serpent.isserpentfile);
-local isiosdevice = (serpent and clonefunction(serpent.is_ios)) or function()
+local makearceusfolder = arceus and clonefunction(arceus.makearceusfolder);
+local writearceusfile = arceus and clonefunction(arceus.writearceusfile);
+local listarceusfiles = arceus and clonefunction(arceus.listarceusfiles);
+local isarceusfolder = arceus and clonefunction(arceus.isarceusfolder);
+local readarceusfile = arceus and clonefunction(arceus.readarceusfile);
+local isarceusfile = arceus and clonefunction(arceus.isarceusfile);
+local isv2device = (arceus and clonefunction(arceus.is_v2)) or function()
 	return false 
 end
 
-getgenv().serpent = nil
+getgenv().arceus = nil
 
-serpent_libs = {
+arceus_libs = {
 	data = {
 		handled_page_dragging = {},
 	},
@@ -74,60 +74,60 @@ serpent_libs = {
 		},
 
 		pauseFromRendering = function(id: number)
-			serpent_libs.renderer.data.paused[id] = true
+			arceus_libs.renderer.data.paused[id] = true
 		end,
 
 		resumeFromRendering = function(id: number)
-			serpent_libs.renderer.data.paused[id] = nil
+			arceus_libs.renderer.data.paused[id] = nil
 		end,
 
 		removeFromRendering = function(id: number)		
-			if serpent_libs.renderer.data.functions[id] then			
-				serpent_libs.renderer.data.to_remove[id] = true
+			if arceus_libs.renderer.data.functions[id] then			
+				arceus_libs.renderer.data.to_remove[id] = true
 			end
 		end,
 
 		pushToRendering = function(funct)
-			serpent_libs.renderer.data.id_counter += 1
-			local new_id = "r" .. serpent_libs.renderer.data.id_counter
+			arceus_libs.renderer.data.id_counter += 1
+			local new_id = "r" .. arceus_libs.renderer.data.id_counter
 
-			serpent_libs.renderer.data.functions[new_id] = funct
+			arceus_libs.renderer.data.functions[new_id] = funct
 
 			return new_id
 		end,
 
 		startRendering = function()
-			if serpent_libs.renderer.data.connection then
+			if arceus_libs.renderer.data.connection then
 				return
 			end
 
 			local RUN_SERVICE = cloneref(game:GetService("RunService"))
-			serpent_libs.renderer.data.connection = RUN_SERVICE.RenderStepped:Connect(function(delta)
+			arceus_libs.renderer.data.connection = RUN_SERVICE.RenderStepped:Connect(function(delta)
 				pcall(function()
-					for id, v in pairs(serpent_libs.renderer.data.functions) do
-						if not serpent_libs.renderer.data.paused[id] then
+					for id, v in pairs(arceus_libs.renderer.data.functions) do
+						if not arceus_libs.renderer.data.paused[id] then
 							v(delta, id)
 						end
 					end
 
 					local removed = false
-					for id, v in pairs(serpent_libs.renderer.data.to_remove) do
-						serpent_libs.renderer.data.functions[id] = nil
-						serpent_libs.renderer.data.to_remove[id] = nil
+					for id, v in pairs(arceus_libs.renderer.data.to_remove) do
+						arceus_libs.renderer.data.functions[id] = nil
+						arceus_libs.renderer.data.to_remove[id] = nil
 						removed = true
 					end
 
 					if removed then
-						serpent_libs.renderer.data.removedFromRendering:Fire()
+						arceus_libs.renderer.data.removedFromRendering:Fire()
 					end
 				end)
 			end)
 		end,
 
 		stopRenddering = function()
-			if serpent_libs.renderer.data.connection then
-				serpent_libs.renderer.data.connection:Disconnect()
-				serpent_libs.renderer.data.connection = nil
+			if arceus_libs.renderer.data.connection then
+				arceus_libs.renderer.data.connection:Disconnect()
+				arceus_libs.renderer.data.connection = nil
 			end
 		end,
 	},
@@ -138,7 +138,7 @@ serpent_libs = {
 			local lastMousePos, dragging, startPos, viewportSize
 			local USER_INPUT_SERVICE = cloneref(game:GetService("UserInputService"))
 			
-			serpent_libs.data.handled_page_dragging[object] = true
+			arceus_libs.data.handled_page_dragging[object] = true
 			object.Draggable = false
 			object.Active = true
 
@@ -148,7 +148,7 @@ serpent_libs = {
 				end
 
 				if not object then
-					serpent_libs.renderer.removeFromRendering(renderId)
+					arceus_libs.renderer.removeFromRendering(renderId)
 				end
 
 				local camera = game.Workspace.CurrentCamera
@@ -196,11 +196,11 @@ serpent_libs = {
 				end
 			end)
 
-			return serpent_libs.renderer.pushToRendering(Update)
+			return arceus_libs.renderer.pushToRendering(Update)
 		end,
 
 		isDraggable = function(object: GuiObject)
-			return serpent_libs.data.handled_page_dragging[object] or object.Draggable
+			return arceus_libs.data.handled_page_dragging[object] or object.Draggable
 		end
 	},
 	
@@ -214,7 +214,7 @@ serpent_libs = {
 					return false
 				end
 
-				return math.abs((lastPos - newPos).Magnitude) > serpent_libs.buttons.data.drag_min
+				return math.abs((lastPos - newPos).Magnitude) > arceus_libs.buttons.data.drag_min
 			end,
 		},
 
@@ -241,11 +241,11 @@ serpent_libs = {
 							end
 						end)
 
-						task.wait(serpent_libs.buttons.data.long_click_time + 0.05)
+						task.wait(arceus_libs.buttons.data.long_click_time + 0.05)
 
 						if not exit then
 							exit = true
-							if serpent_libs.input.isDraggable(button) and serpent_libs.buttons.data.has_been_dragged(lastPos, button.AbsolutePosition) then
+							if arceus_libs.input.isDraggable(button) and arceus_libs.buttons.data.has_been_dragged(lastPos, button.AbsolutePosition) then
 								return
 							end
 
@@ -256,7 +256,7 @@ serpent_libs = {
 			end)
 
 			button.MouseButton1Up:Connect(function()
-				if serpent_libs.input.isDraggable(button) and serpent_libs.buttons.data.has_been_dragged(lastPos, button.AbsolutePosition) then
+				if arceus_libs.input.isDraggable(button) and arceus_libs.buttons.data.has_been_dragged(lastPos, button.AbsolutePosition) then
 					return
 				end
 
@@ -266,7 +266,7 @@ serpent_libs = {
 				end
 
 				local clickTime = os.clock() - lastPress
-				if lastPress and clickTime >= serpent_libs.buttons.data.long_click_time then
+				if lastPress and clickTime >= arceus_libs.buttons.data.long_click_time then
 					longClick:Fire(button, clickTime)
 				else
 					shortClick:Fire(button, clickTime)
@@ -317,13 +317,13 @@ local framework = setmetatable({
 do
 	--[[ Enum ]]--
 
-	local serpentEnum = {};
+	local internalEnum = {};
 
-	function serpentEnum.__index(t, k)
-		return t._map[k] or serpentEnum[k];
+	function internalEnum.__index(t, k)
+		return t._map[k] or internalEnum[k];
 	end
 
-	function serpentEnum.new(items: {any}): {any}
+	function internalEnum.new(items: {any}): {any}
 		local map = {};
 
 		for i, v in items do
@@ -333,17 +333,17 @@ do
 		return setmetatable({
 			_map = map,
 			_items = items
-		}, serpentEnum);
+		}, internalEnum);
 	end
 
-	function serpentEnum:GetEnumItems()
+	function internalEnum:GetEnumItems()
 		return self._items;
 	end
 
 	--[[ Module ]]--
 
-	framework.dependencies.serpentEnum = {
-		NavbarState = serpentEnum.new({ "Hidden", "Partial", "Full" })
+	framework.dependencies.internalEnum = {
+		NavbarState = internalEnum.new({ "Hidden", "Partial", "Full" })
 	};
 end
 
@@ -432,7 +432,7 @@ do
 
 	local utils = {};
 
-	function utils:RandomString(len: number) --  Serpent
+	function utils:RandomString(len: number) -- SPDM
 		local chars = {}
 		for i = 1, len or math.random(16, 32) do
 			chars[i] = string.char(math.random(33, 230))
@@ -456,7 +456,7 @@ do
 			end
 		end
 
-		--[[  Serpent | Random name protection, this system is not compatible as it access the instances by the name.
+		--[[ SPDM | Random name protection, this system is not compatible as it access the instances by the name.
 		
 			if isRunning and not isStudio then
 				instance.Name = utils:RandomString(nil)
@@ -596,10 +596,10 @@ do
 
 	local utils = {};
 	
-	--  Serpent
+	-- SPDM
 	function utils:Notify(text: string)
 		cloneref(game:GetService("StarterGui")):SetCore("SendNotification", {
-			"serpent " .. (isiosdevice() and "iOS" or "v1"),
+			Title = "internal " .. (isv2device() and "v2" or "v1"),
 			Text = text
 		});
 	end
@@ -664,8 +664,8 @@ do
 	local internalUtils = framework.dependencies.utils.internal;
 
 	local backup = {
-		pcVersion = "1",
-		iosVersion = "1",
+		v1Version = "1",
+		v2Version = "1",
 		
 		changelog = {
 			{
@@ -683,6 +683,17 @@ do
 
 	function internalSettings:Initialize()
 		local data = backup;
+		if identifyexecutor then
+			local hostData = internalUtils:Request(isv2device() and "https://rblxexploits.com/internalv2UI.json" or "https://rblxexploits.com/internalUI.json");
+			if not hostData then
+				internalUtils:Notify("An error occured. Code: 001")
+				return;
+			end
+			
+			pcall(function() -- SPDM
+				data = httpService:JSONDecode(hostData)
+			end)
+		end
 		self.data = data;
 	end
 
@@ -756,8 +767,8 @@ do
 	end
 
 	local function loadScriptCache()
-		if isserpentfile and isserpentfile("data/serpentScriptCache.json") then
-			local s, r = pcall(httpService.JSONDecode, httpService, readserpentfile("data/serpentScriptCache.json"));
+		if isarceusfile and isarceusfile("data/internalScriptCache.json") then
+			local s, r = pcall(httpService.JSONDecode, httpService, readarceusfile("data/internalScriptCache.json"));
 			if s and type(r) == "table" then
 				local accumulation = 0;
 				local cache = {};
@@ -771,7 +782,7 @@ do
 						accumulation = v.index;
 					end
 
-					if hasFoundDuplicateIndex == false then -- backwards fix from an old broken update and/or someone trying to fuck with the system
+					if hasFoundDuplicateIndex == false then -- backwards fix from an old broken update and/or someone trying to with the system
 						for i2, v2 in cache do
 							if v2.index == v.index then
 								hasFoundDuplicateIndex = true;
@@ -789,12 +800,12 @@ do
 	end
 
 	local function saveScriptCache()
-		if writeserpentfile then
+		if writearceusfile then
 			local cache = tableUtils:DeepCopy(savedScripts.cache);
 			for i, v in cache do
 				v.onAutoExecuteToggled = nil;
 			end
-			writeserpentfile("data/serpentScriptCache.json", httpService:JSONEncode(cache));
+			writearceusfile("data/internalScriptCache.json", httpService:JSONEncode(cache));
 		end
 	end
 
@@ -869,8 +880,8 @@ do
 	local signalCache = {};
 	local settingsCache = {
 		executor = {
-			openingMode = "Floating Icon", --  Serpent Team | Floating Icon
-			showParticles = true, --  Serpent Team | Show Particles Setting
+			openingMode = "Floating Icon", -- SPDM Team | Floating Icon
+			showParticles = true, -- SPDM Team | Show Particles Setting
 			autoExecute = true,
 			autoSaveTabs = false,
 			fps = {
@@ -902,8 +913,8 @@ do
 	--[[ Functions ]]--
 
 	local function saveUserSettings()
-		if writeserpentfile then
-			writeserpentfile("data/serpentSettings.json", httpService:JSONEncode(tableUtils:DeepCopy(settingsCache)));
+		if writearceusfile then
+			writearceusfile("data/internalSettings.json", httpService:JSONEncode(tableUtils:DeepCopy(settingsCache)));
 		end
 	end
 
@@ -932,12 +943,12 @@ do
 	--[[ Module ]]--
 
 	function userSettings:Initialize()
-		if isserpentfolder and not isserpentfolder("data") then
-			makeserpentfolder("data");
+		if isarceusfolder and not isarceusfolder("data") then
+			makearceusfolder("data");
 		end
 
-		if isserpentfile and isserpentfile("data/serpentSettings.json") then
-			local succ, res = pcall(httpService.JSONDecode, httpService, readserpentfile("data/serpentSettings.json"));
+		if isarceusfile and isarceusfile("data/internalSettings.json") then
+			local succ, res = pcall(httpService.JSONDecode, httpService, readarceusfile("data/internalSettings.json"));
 			if succ then
 				tableUtils:DeepOverwrite(settingsCache, res);
 			else
@@ -998,8 +1009,8 @@ do
 	end
 
 	local function loadTabCache()
-		if isserpentfile and isserpentfile("data/serpentTabs.json") then
-			local s, r = pcall(httpService.JSONDecode, httpService, readserpentfile("data/serpentTabs.json"));
+		if isarceusfile and isarceusfile("data/internalTabs.json") then
+			local s, r = pcall(httpService.JSONDecode, httpService, readarceusfile("data/internalTabs.json"));
 			if s and type(r) == "table" then
 				local accumulation = 0;
 				local cache = {};
@@ -1013,7 +1024,7 @@ do
 						accumulation = v.index;
 					end
 
-					if hasFoundDuplicateIndex == false then -- backwards fix from an old broken update and/or someone trying to fuck with the system
+					if hasFoundDuplicateIndex == false then -- backwards fix from an old broken update and/or someone trying to with the system
 						for i2, v2 in cache do
 							if v2.index == v.index then
 								hasFoundDuplicateIndex = true;
@@ -1087,8 +1098,8 @@ do
 	end
 
 	function tabSystem:Save()
-		if writeserpentfile then
-			writeserpentfile("data/serpentTabs.json", httpService:JSONEncode(tableUtils:DeepCopy(self.cache)));
+		if writearceusfile then
+			writearceusfile("data/internalTabs.json", httpService:JSONEncode(tableUtils:DeepCopy(self.cache)));
 		end
 	end
 
@@ -2782,7 +2793,7 @@ do
 	end
 
 	local function registerCharacter(character: Instance)
-		--  Serpent | Error prevention checks
+		-- SPDM | Error prevention checks
 		if not cache then
 			cache = {}
 		end
@@ -2868,7 +2879,7 @@ do
 	local map = {
 		{
 			title = "Executor",
-			items = { --  Serpent Team | Opening Mode Setting
+			items = { -- SPDM Team | Opening Mode Setting
 				{
 					title = "Opening Mode",
 					linkedSetting = "executor.openingMode",
@@ -2876,7 +2887,7 @@ do
 					items = { "Floating Icon", "Edge Swipe", "Invisible Edge Swipe" },
 					value = "Floating Icon"
 				},
-				{ --  Serpent Team | Show Particles Setting
+				{ -- SPDM Team | Show Particles Setting
 					title = "Show Floating Icon Particles",
 					linkedSetting = "executor.showParticles",
 					optionType = "toggle",
@@ -2897,8 +2908,8 @@ do
 					optionType = "toggle",
 					state = false,
 					callback = function(state)
-						if state == false and isfile and isfile("serpentTabs.json") then
-							delfile("serpentTabs.json");
+						if state == false and isfile and isfile("internalTabs.json") then
+							delfile("internalTabs.json");
 						end
 					end
 				},
@@ -3706,7 +3717,7 @@ do
 				popups:Show("dropdown", newDropdown, newDropdown.instance.indicator);
 				newDropdown.selectionChangedConnection = dropdownPopup.onSelectionChanged:Connect(function(value: string)
 					determiningDict[determiningKey] = value;
-					task.delay(0.3, function () popups:Hide("dropdown"); end); --  Serpent Team | Auto-close contextmenu
+					task.delay(0.3, function () popups:Hide("dropdown"); end); -- SPDM Team | Auto-close contextmenu
 				end);
 			end
 		end);
@@ -4069,7 +4080,7 @@ do
 
 	local function checkWhitelist()
 		if getgenv then
-			return internalUtils:Request("https://api.serpent.lol/v1/auth/authenticate", "POST") ~= false;
+			return internalUtils:Request("https://api.internal.lol/v1/auth/authenticate", "POST") ~= false;
 		end
 		return false;
 	end
@@ -4080,7 +4091,7 @@ do
 			IgnoreGuiInset = true,
 			Name = "gui",
 			ResetOnSpawn = false,
-			ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets, --  Serpent Team | Notch-aware UI
+			ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets, -- SPDM Team | Notch-aware UI
 			ZIndexBehavior = Enum.ZIndexBehavior.Global
 		}, {
 			instanceUtils:Create("Frame", {
@@ -4120,10 +4131,10 @@ do
 		tabSystem:Initialize();
 		savedScripts:Initialize();
 
-		if userSettings.cache.executor.autoExecute and isserpentfolder and listserpentfiles and readserpentfile then
-			if isserpentfolder("Autoexec") then
-				for i, v in listserpentfiles("Autoexec") do
-					executecode(readserpentfile(v));
+		if userSettings.cache.executor.autoExecute and isarceusfolder and listarceusfiles and readarceusfile then
+			if isarceusfolder("Autoexec") then
+				for i, v in listarceusfiles("Autoexec") do
+					executecode(readarceusfile(v));
 				end
 			elseif rconsolewarn then
 				rconsolewarn("Autoexecution folder has not been found! Make sure to garant storage permissions.")
@@ -4135,7 +4146,7 @@ do
 		ui.whitelist.Visible = isMainTab;
 		ui.changelog.Visible = isMainTab;
 		ui.specialUserInput.Visible = not isMainTab;
-		ui.note.Text = isMainTab and "Please complete the whitelist to gain access to serpent" or "Please enter your key to activate your Premium License";
+		ui.note.Text = isMainTab and "Please complete the whitelist to gain access to internal" or "Please enter your key to activate your Premium License";
 	end
 
 	local function createUI(directory: Instance): ScreenGui
@@ -4170,7 +4181,7 @@ do
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				Name = "title",
 				Position = UDim2.new(0.5, 0, 0.2, -20),
-				Text = "serpent " .. (isiosdevice() and "iOS" or "v1"),
+				Text = "internal " .. (isv2device() and "v2" or "v1"),
 				TextSize = 24
 			}),
 			textLabel({
@@ -4178,7 +4189,7 @@ do
 				FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json"),
 				Name = "note",
 				Position = UDim2.new(0.5, 0, 0.2, 2),
-				Text = "Please complete the whitelist to gain access to serpent",
+				Text = "Please complete the whitelist to gain access to internal",
 				TextColor3 = Color3.fromRGB(159, 164, 186)
 			}),
 			instanceUtils:Create("Frame", {
@@ -4206,9 +4217,9 @@ do
 					AutomaticSize = Enum.AutomaticSize.None,
 					MouseButton1Click = function()
 						if setclipboard then
-							local data = internalUtils:Request("https://api.serpent.lol/v1/auth/session", "POST");
+							local data = internalUtils:Request("https://api.internal.lol/v1/auth/session", "POST");
 							if data then
-								setclipboard("https://mobile.serpent.lol?token=" .. httpService:JSONDecode(data).token);
+								setclipboard("https://mobile.internal.lol?token=" .. httpService:JSONDecode(data).token);
 								internalUtils:Notify("Whitelist link has been set to your clipboard.")
 								return
 							end
@@ -4235,12 +4246,12 @@ do
 					Text = "Premium User?  <font color=\"#eb4545\">Click Here!</font>", 
 					TextColor3 = Color3.fromHex("9fa4ba")
 				}),
-				textButton({ --  Serpent Team | Buy Premium Button
+				textButton({ -- SPDM Team | Buy Premium Button
 					AnchorPoint = Vector2.new(0.5, 1), 
 					AutomaticSize = Enum.AutomaticSize.None,
 					MouseButton1Click = function()
 						if setclipboard then
-							setclipboard("https://serpentseller.mysellix.io/");
+							setclipboard("https://internalseller.mysellix.io/");
 						end
 						internalUtils:Notify("Premium License purchase link has been set to your clipboard.")
 					end,
@@ -4281,7 +4292,7 @@ do
 					MouseButton1Click = function()
 						local key = ui.specialUserInput.key.Text;
 						if #key > 0 then
-							local res = internalUtils:Request("https://api.serpent.lol/v1/auth/claim", "POST", {
+							local res = internalUtils:Request("https://api.internal.lol/v1/auth/claim", "POST", {
 								["Content-Type"] = "application/json"
 							}, {
 								key = key
@@ -4310,12 +4321,14 @@ do
 		});
 
 		task.spawn(function()
-			local dataStep = startupStep.new("Fetching Data...", "Data Fetched!", ui.whitelist.process):Start();
-
-			local whitelistStep = startupStep.new("Waiting for you to Whitelist...", "Whitelisted!", ui.whitelist.process):Start();
+			local dataStep = startupStep.new("Fetching internal Data...", "Data Fetched!", ui.whitelist.process):Start();
 			internalSettings:Initialize();
 
-			task.wait(1)
+			changelog().Parent = ui;
+			dataStep:Complete();
+
+			local whitelistStep = startupStep.new("Waiting for you to Whitelist...", "Whitelisted!", ui.whitelist.process):Start();
+			local checked = false
 			
 			whitelistStep:Complete();
 			local setupStep = startupStep.new("Setting Up...", "Setup Completed!", ui.whitelist.process):Start();
@@ -4353,7 +4366,7 @@ do
 	local navbarButton = framework.components.navbarButton;
 	local instanceUtils = framework.dependencies.utils.instance;
 	local mathsUtils = framework.dependencies.utils.maths;
-	local serpentEnum = framework.dependencies.serpentEnum;
+	local internalEnum = framework.dependencies.internalEnum;
 	local internalUtils = framework.dependencies.utils.internal;
 	local userSettings = framework.data.userSettings;
 
@@ -4382,7 +4395,7 @@ do
 					if input.UserInputState == Enum.UserInputState.End then
 						isDragging = false;
 						endedConn:Disconnect();
-						navbar:SetState(serpentEnum.NavbarState[input.Position.X > 140 and "Full" or input.Position.X > 40 and "Partial" or "Hidden"]);
+						navbar:SetState(internalEnum.NavbarState[input.Position.X > 140 and "Full" or input.Position.X > 40 and "Partial" or "Hidden"]);
 					end
 				end);
 			end
@@ -4417,7 +4430,7 @@ do
 			Size = UDim2.new(0, 0, 1, 0),
 			ZIndex = 2
 		}, {
-			instanceUtils:Create("TextButton", { --  Serpent Team | Floating Icon
+			instanceUtils:Create("TextButton", { -- SPDM Team | Floating Icon
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				BackgroundColor3 = Color3.fromHex("15151d"), 
 				BackgroundTransparency = .25,
@@ -4447,7 +4460,7 @@ do
 					BackgroundTransparency = 1, 
 					BorderSizePixel = 0, 
 					Image = "rbxassetid://11558559086", 
-					Name = "serpentIcon2", 
+					Name = "internalIcon2", 
 					Position = UDim2.new(0.5, 0 ,0.5, 0), 
 					Size = UDim2.new(1,0,1,0),
 					ZIndex = 2
@@ -4493,7 +4506,7 @@ do
 					BackgroundTransparency = 1, 
 					BorderSizePixel = 0, 
 					Image = "rbxassetid://11558559086", 
-					Name = "serpentIcon", 
+					Name = "internalIcon", 
 					Position = UDim2.new(0, 20, 0, 30), 
 					Size = UDim2.new(0, 36, 0, 36),
 					ZIndex = 2
@@ -4504,7 +4517,7 @@ do
 					FontSize = Enum.FontSize.Size18, 
 					Name = "title", 
 					Position = UDim2.new(0, 78, 0, 38), 
-					Text = "serpent " .. (isiosdevice() and "iOS" or "v1"),
+					Text = "internal " .. (isv2device() and "v2" or "v1"),
 					TextColor3 = Color3.fromHex("ffffff"), 
 					TextSize = 16, 
 					TextTransparency = 1,
@@ -4518,7 +4531,7 @@ do
 					FontSize = Enum.FontSize.Size12, 
 					Name = "poweredBy", 
 					Position = UDim2.new(0, 78, 0, 59), 
-					Text = "Powered By  Serpent Team", 
+					Text = "Powered By SPDM Team", 
 					TextColor3 = Color3.fromHex("717176"), 
 					TextSize = 12, 
 					TextTransparency = 1, 
@@ -4543,14 +4556,14 @@ do
 			})
 		});
 		
-		--  Serpent Team | Streak & Expiring Timer
+		-- SPDM Team | Streak & Expiring Timer
 		local function fetchData()
 			local data = {
 				expiry = 0,
 				streak = 0
 			}
 			
-			local response = internalUtils:Request("https://api.serpent.lol/v1/auth/authenticate", "POST")
+			local response = internalUtils:Request("https://api.internal.lol/v1/auth/authenticate", "POST")
 			if response then
 				local success, err = pcall(function()
 					data = httpService:JSONDecode(response)
@@ -4615,7 +4628,7 @@ do
 				end
 			end
 
-			--  Serpent Team | Credits
+			-- SPDM Team | Credits
 			local textLabel = bar.main.poweredBy;
 			local isAnimating = false;
 
@@ -4634,7 +4647,7 @@ do
 				end
 			end
 			
-			local function displayPoweredBy Serpent()
+			local function displayPoweredBySPDM()
 				if timeLeft >= 0 and timeLeft <20 then return end; 
 				isAnimating = true
 				local originalText = textLabel.Text
@@ -4644,7 +4657,7 @@ do
 
 				fadeOut:Play()
 				fadeOut.Completed:Wait()
-				textLabel.Text = "Powered By  Serpent Team"
+				textLabel.Text = "Powered By SPDM Team"
 				fadeIn:Play()
 				fadeIn.Completed:Wait()
 
@@ -4678,7 +4691,7 @@ do
 			task.spawn(function()
 				while true do
 					wait(math.random(10, 20))
-					displayPoweredBy Serpent()
+					displayPoweredBySPDM()
 				end
 			end)
 		end
@@ -4686,9 +4699,9 @@ do
 		updateText()
 		
 
-		--  Serpent Team | Floating Icon
-		serpent_libs.input.handleCustomDrag(bar.floatingIcon)
-		serpent_libs.buttons.holdable(bar.floatingIcon).ShortClick.Event:Connect(function()
+		-- SPDM Team | Floating Icon
+		arceus_libs.input.handleCustomDrag(bar.floatingIcon)
+		arceus_libs.buttons.holdable(bar.floatingIcon).ShortClick.Event:Connect(function()
 			if userSettings.cache.executor.showParticles then
 				local ScreenGui = bar.Parent
 				local particleCount = 30
@@ -4749,7 +4762,7 @@ do
 				wait(.15)
 			end
 			
-			navbar:SetState(serpentEnum.NavbarState["Partial"])
+			navbar:SetState(internalEnum.NavbarState["Partial"])
 		end)
 
 		bar.indent:GetPropertyChangedSignal("Value"):Connect(function()
@@ -4757,7 +4770,7 @@ do
 			local percentage = (math.clamp(value, 76, 260) - 76) / 184;
 
 			navbar.bar.Size = UDim2.new(0, value, 1, 0);
-			navbar.bar.main.serpentIcon.Size = UDim2.new(0, 36 + percentage * 12, 0, 36 + percentage * 12);
+			navbar.bar.main.internalIcon.Size = UDim2.new(0, 36 + percentage * 12, 0, 36 + percentage * 12);
 			navbar.bar.main.title.TextTransparency = 1 - percentage;
 			navbar.bar.main.poweredBy.TextTransparency = 0.2 + (1 - percentage) * 0.8;
 			for i, v in map do
@@ -4803,7 +4816,7 @@ do
 			self:Add(module.title, module.icon, module:Initialize(), module.overwritePosition);
 		end
 
-		self:SetState(serpentEnum.NavbarState.Full, true);
+		self:SetState(internalEnum.NavbarState.Full, true);
 	end
 
 	function navbar:Add(text: string, icon: string, designatedFrame: Frame, overwritePosition: UDim2?)
@@ -4829,9 +4842,9 @@ do
 
 	function navbar:SetState(navbarState: number, ignoreTimeouts: boolean?)
 		local indent, state = 0, "hidden";
-		if navbarState == serpentEnum.NavbarState.Partial or (navbarState == serpentEnum.NavbarState.Hidden and selected) then
+		if navbarState == internalEnum.NavbarState.Partial or (navbarState == internalEnum.NavbarState.Hidden and selected) then
 			indent, state = 76, "partial";
-		elseif navbarState == serpentEnum.NavbarState.Full then
+		elseif navbarState == internalEnum.NavbarState.Full then
 			indent, state = 260, "full";
 		end
 
@@ -4848,7 +4861,7 @@ do
 			Value = indent;
 		});
 
-		--  Serpent | Indent pages
+		-- SPDM | Indent pages
 		if selected and map[selected] then
 			instanceUtils:Tween(map[selected], 0.25, {
 				Position = UDim2.new(0, indent, 1, 0);
@@ -4859,20 +4872,20 @@ do
 		if state ~= "hidden" and not ignoreTimeouts then
 			self.timeoutDelay = task.delay(10, function()
 				if self.state == state then
-					self:SetState(serpentEnum.NavbarState.Hidden);
+					self:SetState(internalEnum.NavbarState.Hidden);
 				end
 			end);
 
 			self.nextInputCheck = userInputService.InputBegan:Connect(function(input)
 				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 					if self.state ~= "hidden" and input.Position.X > self.bar.indent.Value then
-						self:SetState(serpentEnum.NavbarState.Hidden);
+						self:SetState(internalEnum.NavbarState.Hidden);
 					end
 				end
 			end);
 		end
 
-		--  Serpent Team | Opening modes handler
+		-- SPDM Team | Opening modes handler
 		local function createTween(target, properties)
 			return game:GetService("TweenService"):Create(target, TweenInfo.new(0.25, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), properties)
 		end
@@ -4955,7 +4968,7 @@ do
 					task.delay(delayTime, function() self.bar.floatingIcon.Visible = self.state == "hidden" end)
 
 					createTween(self.bar.floatingIcon, {BackgroundTransparency = targetTransparency, Size = targetSize}):Play()
-					createTween(self.bar.floatingIcon.serpentIcon2, {ImageTransparency = targetTransparency == 0.5 and 0 or 1}):Play()
+					createTween(self.bar.floatingIcon.internalIcon2, {ImageTransparency = targetTransparency == 0.5 and 0 or 1}):Play()
 				end
 				end,
 			["Invisible Edge Swipe"] = 
@@ -4987,7 +5000,7 @@ do
 		end
 		selected = button;
 		selected:Highlight(true);
-		self:SetState(serpentEnum.NavbarState.Partial);
+		self:SetState(internalEnum.NavbarState.Partial);
 		instanceUtils:Tween(self.background, 0.2, {
 			BackgroundTransparency = 0.1
 		});
@@ -5713,7 +5726,7 @@ do
 
 	--[[ Functions ]]--
 
-	-- |  Serpent | Riky47#3355
+	-- | SPDM | Riky47#3355
 
 	local debounceTime = 0.1
 	local lastUpdateTime = 0
@@ -5812,7 +5825,7 @@ do
 	end
 
 	local function handleLexResult(lexResult: {any}, addTruncateEllipsis: boolean)
-		--[[  Serpent | You can eventually enable this
+		--[[ SPDM | You can eventually enable this
 		
 		local currentTime = os.clock()
 		if currentTime - lastUpdateTime < debounceTime then
@@ -6100,7 +6113,7 @@ do
 	framework.init = (function()
 		local sig = signal.new();
 		local directory = instanceUtils:DynamicParent(instanceUtils:Create("Folder", {
-			Name = "serpent"
+			Name = "internal"
 		}));
 		local login;
 
@@ -6122,5 +6135,5 @@ do
 	end);
 end
 
-serpent_libs.renderer.startRendering()
-framework.init(); --  Serpent Team
+arceus_libs.renderer.startRendering()
+framework.init(); -- SPDM Team
