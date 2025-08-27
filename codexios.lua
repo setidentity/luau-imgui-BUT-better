@@ -1,5 +1,3 @@
--- | SPDM | Global definitions
-
 local arceus = arceus or nil
 local unavailable = function(fake)
 	return function(...)
@@ -62,7 +60,7 @@ arceus_libs = {
 	data = {
 		handled_page_dragging = {},
 	},
-	
+
 	renderer = {
 		data = {
 			removedFromRendering = Instance.new("BindableEvent"),
@@ -131,13 +129,12 @@ arceus_libs = {
 			end
 		end,
 	},
-	
-	
+
 	input = {
 		handleCustomDrag = function(object: GuiObject)
 			local lastMousePos, dragging, startPos, viewportSize
 			local USER_INPUT_SERVICE = cloneref(game:GetService("UserInputService"))
-			
+
 			arceus_libs.data.handled_page_dragging[object] = true
 			object.Draggable = false
 			object.Active = true
@@ -165,7 +162,6 @@ arceus_libs = {
 				local size = object.AbsoluteSize
 				local pos = object.Position
 
-				-- Clamp the position within the screen boundaries
 				local xOffsize = size.X - (size.X * anchor.X) - viewportSize.Y * 0.1
 				local yOffsize = size.Y - (size.Y * anchor.Y) - viewportSize.Y * 0.1
 
@@ -183,7 +179,7 @@ arceus_libs = {
 					local pos = object.Position
 					dragging = true
 
-					startPos = UDim2.fromOffset(pos.X.Scale * viewportSize.X + pos.X.Offset, pos.Y.Scale * viewportSize.Y + pos.Y.Offset) --object.Position
+					startPos = UDim2.fromOffset(pos.X.Scale * viewportSize.X + pos.X.Offset, pos.Y.Scale * viewportSize.Y + pos.Y.Offset) 
 					object.Position = startPos
 
 					lastMousePos = USER_INPUT_SERVICE:GetMouseLocation()
@@ -203,7 +199,7 @@ arceus_libs = {
 			return arceus_libs.data.handled_page_dragging[object] or object.Draggable
 		end
 	},
-	
+
 	buttons = {
 		data = {
 			drag_min = 15,
@@ -282,8 +278,6 @@ arceus_libs = {
 	}
 }
 
--- |
-
 local framework = setmetatable({
 	dependencies = {
 		utils = {}
@@ -315,7 +309,6 @@ local framework = setmetatable({
 });
 
 do
-	--[[ Enum ]]--
 
 	local internalEnum = {};
 
@@ -340,15 +333,12 @@ do
 		return self._items;
 	end
 
-	--[[ Module ]]--
-
 	framework.dependencies.internalEnum = {
 		NavbarState = internalEnum.new({ "Hidden", "Partial", "Full" })
 	};
 end
 
 do
-	--[[ Connection ]]--
 
 	local connection = {};
 	connection.__index = connection;
@@ -363,8 +353,6 @@ do
 	function connection:Disconnect()
 		self._signal[self] = nil;
 	end
-
-	--[[ Signal ]]--
 
 	local signal = {};
 	signal.__index = signal;
@@ -410,15 +398,12 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local runService = cloneref(game:GetService("RunService"));
 	local tweenService = cloneref(game:GetService("TweenService"));
 
 	local isRunning, isStudio = runService:IsRunning(), runService:IsStudio();
 	local dynamicParent;
-
-	--[[ Setup ]]--
 
 	if gethui then
 		dynamicParent = gethui();
@@ -428,11 +413,9 @@ do
 		dynamicParent = cloneref(game:GetService("StarterGui"));
 	end
 
-	--[[ Module ]]--
-
 	local utils = {};
 
-	function utils:RandomString(len: number) -- SPDM
+	function utils:RandomString(len: number) 
 		local chars = {}
 		for i = 1, len or math.random(16, 32) do
 			chars[i] = string.char(math.random(33, 230))
@@ -456,13 +439,6 @@ do
 			end
 		end
 
-		--[[ SPDM | Random name protection, this system is not compatible as it access the instances by the name.
-		
-			if isRunning and not isStudio then
-				instance.Name = utils:RandomString(nil)
-			end
-		]]
-
 		instance.Parent = properties.Parent;
 		return instance;
 	end
@@ -482,7 +458,6 @@ do
 end
 
 do
-	--[[ Module ]]--
 
 	local utils = {};
 
@@ -502,7 +477,6 @@ do
 end
 
 do
-	--[[ Module ]]--
 
 	local utils = {};
 
@@ -550,13 +524,10 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local denominations = {
 		"K", "M", "B", "T", "q", "Q", "s", "S", "O", "N", "d", "U", "D"
 	};
-
-	--[[ Module ]]--
 
 	local utils = {};
 
@@ -586,17 +557,12 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local httpService = cloneref(game:GetService("HttpService"));
 	local httpRequest = request or http_request or (syn and syn.request);
 
-
-	--[[ Module ]]--
-
 	local utils = {};
-	
-	-- SPDM
+
 	function utils:Notify(text: string)
 		cloneref(game:GetService("StarterGui")):SetCore("SendNotification", {
 			Title = "internal " .. (isv2device() and "v2" or "v1"),
@@ -611,28 +577,28 @@ do
 			Headers = headers,
 			Body = type(body) == "table" and httpService:JSONEncode(body) or body
 		});
-		
+
 		if s == false or r.Success == false or r.StatusCode ~= 200 then
 			if not r.StatusCode then
 				return false
 			end
-			
+
 			if r.StatusCode >= 500 then
 				utils:Notify("The remote server is experiencing issues, try again later.")
-				
+
 			elseif r.StatusCode >= 400 and s and r and r.Body then
 				local success, data = pcall(function()
 					return httpService:JSONDecode(r.Body)
 				end)
-				
+
 				if success and data and data.userFacingMessage then
 					utils:Notify(data.userFacingMessage)
 				end
 			end
-			
+
 			return false;
 		end
-		
+
 		return r.Body;
 	end
 
@@ -657,7 +623,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local httpService = cloneref(game:GetService("HttpService"));
 
@@ -666,7 +631,7 @@ do
 	local backup = {
 		v1Version = "1",
 		v2Version = "1",
-		
+
 		changelog = {
 			{
 				stamp = "2023-01-01T00:00:00Z",
@@ -676,8 +641,6 @@ do
 			}
 		}
 	};
-
-	--[[ Module ]]--
 
 	local internalSettings = {};
 
@@ -731,7 +694,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local signal = framework.dependencies.signal;
 	local internalUtils = framework.dependencies.utils.internal;
@@ -745,8 +707,6 @@ do
 		onScriptAdded = signal.new(),
 		onScriptRemoved = signal.new()
 	};
-
-	--[[ Functions ]]--
 
 	local function reassignIndexes(cache: {any})
 		for i, v in cache do
@@ -771,7 +731,7 @@ do
 						accumulation = v.index;
 					end
 
-					if hasFoundDuplicateIndex == false then -- backwards fix from an old broken update and/or someone trying to with the system
+					if hasFoundDuplicateIndex == false then 
 						for i2, v2 in cache do
 							if v2.index == v.index then
 								hasFoundDuplicateIndex = true;
@@ -797,8 +757,6 @@ do
 			writearceusfile("data/internalScriptCache.json", httpService:JSONEncode(cache));
 		end
 	end
-
-	--[[ Module ]]--
 
 	function savedScripts:Initialize()
 		loadScriptCache();
@@ -859,7 +817,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local httpService = cloneref(game:GetService("HttpService"));
 
@@ -869,8 +826,8 @@ do
 	local signalCache = {};
 	local settingsCache = {
 		executor = {
-			openingMode = "Floating Icon", -- SPDM Team | Floating Icon
-			showParticles = true, -- SPDM Team | Show Particles Setting
+			openingMode = "Floating Icon", 
+			showParticles = true, 
 			autoExecute = true,
 			autoSaveTabs = false,
 			fps = {
@@ -899,8 +856,6 @@ do
 
 	local userSettings = {};
 
-	--[[ Functions ]]--
-
 	local function saveUserSettings()
 		if writearceusfile then
 			writearceusfile("data/internalSettings.json", httpService:JSONEncode(tableUtils:DeepCopy(settingsCache)));
@@ -928,8 +883,6 @@ do
 			end
 		});
 	end
-
-	--[[ Module ]]--
 
 	function userSettings:Initialize()
 		if isarceusfolder and not isarceusfolder("data") then
@@ -966,7 +919,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local signal = framework.dependencies.signal;
 	local tableUtils = framework.dependencies.utils.table;
@@ -987,8 +939,6 @@ do
 		onTabRemoved = signal.new(),
 		onTabSelected = signal.new()
 	};
-
-	--[[ Functions ]]--
 
 	local function reassignIndexes(cache: {any})
 		for i, v in cache do
@@ -1013,7 +963,7 @@ do
 						accumulation = v.index;
 					end
 
-					if hasFoundDuplicateIndex == false then -- backwards fix from an old broken update and/or someone trying to with the system
+					if hasFoundDuplicateIndex == false then 
 						for i2, v2 in cache do
 							if v2.index == v.index then
 								hasFoundDuplicateIndex = true;
@@ -1028,8 +978,6 @@ do
 			end
 		end
 	end
-
-	--[[ Module ]]--
 
 	function tabSystem:Initialize()
 		loadTabCache();
@@ -1096,13 +1044,10 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local instanceUtils = framework.dependencies.utils.instance;
 	local stringUtils = framework.dependencies.utils.string;
 	local tableUtils = framework.dependencies.utils.table;
-
-	--[[ Module ]]--
 
 	framework.components.editorButton = (function(title: string, icon: string, overwriteProps: {any}?, foreground: Color3?): Instance
 		return instanceUtils:Create("TextButton", tableUtils:DeepOverwrite({ 
@@ -1134,15 +1079,12 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local instanceUtils = framework.dependencies.utils.instance;
 	local stringUtils = framework.dependencies.utils.string;
 	local tabSystem;
 
 	local textService = cloneref(game:GetService("TextService"));
-
-	--[[ Functions ]]--
 
 	local function createButton(title: string): Instance
 		return instanceUtils:Create("TextButton", { 
@@ -1193,8 +1135,6 @@ do
 		});
 	end
 
-	--[[ Module ]]--
-
 	local tabButton = {};
 	tabButton.__index = tabButton;
 
@@ -1238,12 +1178,9 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local instanceUtils = framework.dependencies.utils.instance;
 	local stringUtils = framework.dependencies.utils.string;
-
-	--[[ Functions ]]--
 
 	local function createButton(title: string, icon: string): Instance
 		return instanceUtils:Create("TextButton", { 
@@ -1307,8 +1244,6 @@ do
 		});
 	end
 
-	--[[ Module ]]--
-
 	local navbarButton = {};
 	navbarButton.__index = navbarButton;
 
@@ -1332,12 +1267,9 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local instanceUtils = framework.dependencies.utils.instance;
 	local tableUtils = framework.dependencies.utils.table;
-
-	--[[ Module ]]--
 
 	framework.components.base.textBox = (function(overwriteProps: {any}, children: {any}): Instance
 		return instanceUtils:Create("TextBox", tableUtils:DeepOverwrite({
@@ -1368,12 +1300,9 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local instanceUtils = framework.dependencies.utils.instance;
 	local tableUtils = framework.dependencies.utils.table;
-
-	--[[ Module ]]--
 
 	framework.components.base.textButton = (function(overwriteProps: {any}, children: {any}): Instance
 		return instanceUtils:Create("TextButton", tableUtils:DeepOverwrite({
@@ -1402,12 +1331,9 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local instanceUtils = framework.dependencies.utils.instance;
 	local tableUtils = framework.dependencies.utils.table;
-
-	--[[ Module ]]--
 
 	framework.components.base.background = (function(overwriteProps: {any}?, children: {any}?): Instance
 		return instanceUtils:Create("Frame", tableUtils:DeepOverwrite({
@@ -1424,12 +1350,9 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local instanceUtils = framework.dependencies.utils.instance;
 	local tableUtils = framework.dependencies.utils.table;
-
-	--[[ Module ]]--
 
 	framework.components.base.textLabel = (function(overwriteProps: {any}, children: {any}): Instance
 		return instanceUtils:Create("TextLabel", tableUtils:DeepOverwrite({
@@ -1448,7 +1371,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local savedScripts = framework.data.savedScripts;
 	local instanceUtils = framework.dependencies.utils.instance;
@@ -1457,8 +1379,6 @@ do
 	local tabSystem;
 
 	local globalScriptSelection = {};
-
-	--[[ Functions ]]--
 
 	local function createUI(directory: Instance): Instance
 		local base = instanceUtils:Create("Frame", { 
@@ -1686,8 +1606,6 @@ do
 		return base;
 	end
 
-	--[[ Module ]]--
-
 	function globalScriptSelection:CreateUI(gui: ScreenGui)
 		if self.frame == nil then
 			self.frame = createUI(gui);
@@ -1711,7 +1629,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local userSettings = framework.data.userSettings;
 	local signal = framework.dependencies.signal;
@@ -1726,8 +1643,6 @@ do
 		onDropdownChanged = signal.new(),
 		onSelectionChanged = signal.new()
 	};
-
-	--[[ Functions ]]--
 
 	local function createItem(title: string)
 		return instanceUtils:Create("TextButton", { 
@@ -1818,8 +1733,6 @@ do
 		end
 	end
 
-	--[[ Module ]]--
-
 	function dropdown:CreateUI(gui: ScreenGui)
 		if self.frame == nil then
 			self.frame = createUI(gui);
@@ -1875,14 +1788,11 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local savedScripts = framework.data.savedScripts;
 	local instanceUtils = framework.dependencies.utils.instance;
 
 	local saveCurrentTab = {};
-
-	--[[ Functions ]]--
 
 	local function createUI(directory: Instance): Instance
 		local base = instanceUtils:Create("Frame", { 
@@ -2079,8 +1989,6 @@ do
 		return base;
 	end
 
-	--[[ Module ]]--
-
 	function saveCurrentTab:CreateUI(gui: ScreenGui)
 		if self.frame == nil then
 			self.frame = createUI(gui);
@@ -2102,7 +2010,6 @@ do
 end
 
 do
-	--[[ Module ]]--
 
 	local popups = {
 		cache = {}
@@ -2133,7 +2040,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local textButton = framework.components.base.textButton;
 	local savedScripts = framework.data.savedScripts;
@@ -2141,8 +2047,6 @@ do
 	local internalUtils = framework.dependencies.utils.internal;
 	local stringUtils = framework.dependencies.utils.string;
 	local tabSystem;
-
-	--[[ Functions ]]--
 
 	local function createSavedScript(scriptData: {any}): Instance
 		return instanceUtils:Create("Frame", { 
@@ -2297,8 +2201,6 @@ do
 		});
 	end
 
-	--[[ Module ]]--
-
 	local savedScript = {};
 	savedScript.__index = savedScript;
 
@@ -2352,13 +2254,10 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local instanceUtils = framework.dependencies.utils.instance;
 	local internalUtils = framework.dependencies.utils.internal;
 	local stringUtils = framework.dependencies.utils.string;
-
-	--[[ Module ]]--
 
 	framework.pages.localScripts.builtInScript = (function(builtInScript: {any})
 		local base = instanceUtils:Create("ImageLabel", { 
@@ -2441,7 +2340,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local savedScripts = framework.data.savedScripts;
 	local textButton = framework.components.base.textButton;
@@ -2451,8 +2349,6 @@ do
 
 	local map = {};
 	local savedScriptMap = {};
-
-	--[[ Functions ]]--
 
 	local function createUI(directory: Instance): Instance
 		return instanceUtils:Create("Frame", { 
@@ -2545,8 +2441,6 @@ do
 		});
 	end
 
-	--[[ Module ]]--
-
 	local localScripts = {
 		title = "Local Scripts",
 		icon = "rbxassetid://11558196718",
@@ -2617,7 +2511,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local instanceUtils = framework.dependencies.utils.instance;
 
@@ -2629,8 +2522,6 @@ do
 	};
 
 	local base;
-
-	--[[ Functions ]]--
 
 	local function createUI(directory: Instance): Instance
 		return instanceUtils:Create("Frame", { 
@@ -2736,8 +2627,6 @@ do
 		});
 	end
 
-	--[[ Module ]]--
-
 	local console = {
 		title = "Console",
 		icon = "rbxassetid://15761117362"
@@ -2755,7 +2644,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local internalUtils = framework.dependencies.utils.internal;
 	local userSettings = framework.data.userSettings;
@@ -2771,8 +2659,6 @@ do
 	local connections = {};
 	local threads = {};
 
-	--[[ Functions ]]--
-
 	local function getFlagFromLink(link: string)
 		local value = cache;
 		for i, v in string.split(link, ".") do
@@ -2782,11 +2668,11 @@ do
 	end
 
 	local function registerCharacter(character: Instance)
-		-- SPDM | Error prevention checks
+
 		if not cache then
 			cache = {}
 		end
-		
+
 		if not cache.player then
 			cache.player = {}
 		end
@@ -2859,16 +2745,12 @@ do
 		end
 	end
 
-	--[[ Setup ]]--
-
 	player.CharacterAdded:Connect(registerCharacter);
-
-	--[[ Module ]]--
 
 	local map = {
 		{
 			title = "Executor",
-			items = { -- SPDM Team | Opening Mode Setting
+			items = { 
 				{
 					title = "Opening Mode",
 					linkedSetting = "executor.openingMode",
@@ -2876,7 +2758,7 @@ do
 					items = { "Floating Icon", "Edge Swipe", "Invisible Edge Swipe" },
 					value = "Floating Icon"
 				},
-				{ -- SPDM Team | Show Particles Setting
+				{ 
 					title = "Show Floating Icon Particles",
 					linkedSetting = "executor.showParticles",
 					optionType = "toggle",
@@ -3071,8 +2953,6 @@ do
 		}
 	};
 
-	--[[ Module ]]--
-
 	local layoutMap = {
 		map = map
 	};
@@ -3099,11 +2979,8 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local instanceUtils = framework.dependencies.utils.instance;
-
-	--[[ Functions ]]--
 
 	local function createSeparator(parent: Instance): Instance
 		return instanceUtils:Create("Frame", { 
@@ -3137,8 +3014,6 @@ do
 		});
 	end
 
-	--[[ Module ]]--
-
 	local separator = {};
 	separator.__index = separator;
 
@@ -3152,13 +3027,10 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local userSettings = framework.data.userSettings;
 	local instanceUtils = framework.dependencies.utils.instance;
 	local stringUtils = framework.dependencies.utils.string;
-
-	--[[ Functions ]]--
 
 	local function createToggle(title: string, parent: Instance): Instance
 		return instanceUtils:Create("TextButton", { 
@@ -3241,8 +3113,6 @@ do
 		return dict, key;
 	end
 
-	--[[ Module ]]--
-
 	local toggle = {};
 	toggle.__index = toggle;
 
@@ -3288,12 +3158,9 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local instanceUtils = framework.dependencies.utils.instance;
 	local stringUtils = framework.dependencies.utils.string;
-
-	--[[ Functions ]]--
 
 	local function createButton(title: string, parent: Instance): Instance
 		return instanceUtils:Create("Frame", { 
@@ -3348,8 +3215,6 @@ do
 		});
 	end
 
-	--[[ Module ]]--
-
 	local button = {};
 	button.__index = button;
 
@@ -3372,15 +3237,12 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local userSettings = framework.data.userSettings;
 	local instanceUtils = framework.dependencies.utils.instance;
 	local stringUtils = framework.dependencies.utils.string;
 
 	local userInputService = cloneref(game:GetService("UserInputService"));
-
-	--[[ Functions ]]--
 
 	local function createSlider(title: string, parent: Instance): Instance
 		return instanceUtils:Create("Frame", { 
@@ -3496,8 +3358,6 @@ do
 		return math.round(input * bracket) / bracket;
 	end
 
-	--[[ Module ]]--
-
 	local slider = {
 		isDragging = false
 	};
@@ -3566,7 +3426,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local userSettings = framework.data.userSettings;
 	local instanceUtils = framework.dependencies.utils.instance;
@@ -3575,8 +3434,6 @@ do
 	local popups = framework.popups.popups;
 
 	local textService = cloneref(game:GetService("TextService"));
-
-	--[[ Functions ]]--
 
 	local function createDropdown(title: string, default: string, parent: Instance): Instance
 		return instanceUtils:Create("Frame", { 
@@ -3678,8 +3535,6 @@ do
 		return dict, key;
 	end
 
-	--[[ Module ]]--
-
 	local dropdown = {};
 	dropdown.__index = dropdown;
 
@@ -3706,7 +3561,7 @@ do
 				popups:Show("dropdown", newDropdown, newDropdown.instance.indicator);
 				newDropdown.selectionChangedConnection = dropdownPopup.onSelectionChanged:Connect(function(value: string)
 					determiningDict[determiningKey] = value;
-					task.delay(0.3, function () popups:Hide("dropdown"); end); -- SPDM Team | Auto-close contextmenu
+					task.delay(0.3, function () popups:Hide("dropdown"); end); 
 				end);
 			end
 		end);
@@ -3740,7 +3595,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local textButton = framework.components.base.textButton;
 	local instanceUtils = framework.dependencies.utils.instance;
@@ -3748,8 +3602,6 @@ do
 	local layoutMap = framework.pages.exploitSettings.layoutMap;
 
 	local map = {};
-
-	--[[ Functions ]]--
 
 	local function createUI(directory: Instance): Instance
 		return instanceUtils:Create("Frame", { 
@@ -3808,8 +3660,6 @@ do
 			})
 		});
 	end
-
-	--[[ Module ]]--
 
 	local exploitSettings = {
 		title = "Settings",
@@ -3883,20 +3733,17 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local textLabel = framework.components.base.textLabel;
 	local internalSettings = framework.data.internalSettings;
 	local instanceUtils = framework.dependencies.utils.instance;
-
-	--[[ Functions ]]--
 
 	local function formatChangelog()
 		local str = "";
 		for i, v in internalSettings.data.changelog do
 			str ..= string.format("%s<font color=\"#eb4545\">[%s]</font>\n\n", str == "" and "" or "\n\n", DateTime.fromIsoDate(v.stamp):FormatLocalTime("ll", "en-us"));
 			for i2, v2 in v.data do
-				str ..= "- " .. v2; -- "â€¢ " ..
+				str ..= "- " .. v2; 
 				if i2 < #v.data then
 					str ..= "\n";
 				end
@@ -3904,8 +3751,6 @@ do
 		end
 		return str;
 	end
-
-	--[[ Module ]]--
 
 	framework.pages.startup.changelog = (function()
 		return instanceUtils:Create("Frame", {
@@ -3949,14 +3794,11 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local textLabel = framework.components.base.textLabel;
 	local instanceUtils = framework.dependencies.utils.instance;
 
 	local stepCount = 0;
-
-	--[[ Module ]]--
 
 	local startupStep = {};
 	startupStep.__index = startupStep;
@@ -4045,7 +3887,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local background = framework.components.base.background;
 	local textBox = framework.components.base.textBox;
@@ -4065,8 +3906,6 @@ do
 	local completionSignal;
 	local ui;
 
-	--[[ Functions ]]--
-
 	local function checkWhitelist()
 		if getgenv then
 			return internalUtils:Request("https://api.internal.lol/v1/auth/authenticate", "POST") ~= false;
@@ -4080,7 +3919,7 @@ do
 			IgnoreGuiInset = true,
 			Name = "gui",
 			ResetOnSpawn = false,
-			ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets, -- SPDM Team | Notch-aware UI
+			ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets, 
 			ZIndexBehavior = Enum.ZIndexBehavior.Global
 		}, {
 			instanceUtils:Create("Frame", {
@@ -4140,7 +3979,7 @@ do
 
 	local function createUI(directory: Instance): ScreenGui
 		local closed = false
-		
+
 		ui = instanceUtils:Create("ScreenGui", {
 			IgnoreGuiInset = true,
 			Name = "startup",
@@ -4235,7 +4074,7 @@ do
 					Text = "Premium User?  <font color=\"#eb4545\">Click Here!</font>", 
 					TextColor3 = Color3.fromHex("9fa4ba")
 				}),
-				textButton({ -- SPDM Team | Buy Premium Button
+				textButton({ 
 					AnchorPoint = Vector2.new(0.5, 1), 
 					AutomaticSize = Enum.AutomaticSize.None,
 					MouseButton1Click = function()
@@ -4318,7 +4157,7 @@ do
 
 			local whitelistStep = startupStep.new("Waiting for you to Whitelist...", "Whitelisted!", ui.whitelist.process):Start();
 			local checked = false
-			
+
 			whitelistStep:Complete();
 			local setupStep = startupStep.new("Setting Up...", "Setup Completed!", ui.whitelist.process):Start();
 			doSetup();
@@ -4346,8 +4185,6 @@ local duration = tick() - start
 		return ui;
 	end
 
-	--[[ Module ]]--
-
 	framework.pages.startup.startup = (function(directory: Instance, signal: {any}): ScreenGui
 		completionSignal = signal;
 
@@ -4362,7 +4199,6 @@ local duration = tick() - start
 end
 
 do
-	--[[ Variables ]]--
 
 	local navbarButton = framework.components.navbarButton;
 	local instanceUtils = framework.dependencies.utils.instance;
@@ -4381,8 +4217,6 @@ do
 
 	local map = {};
 	local selected;
-
-	--[[ Functions ]]--
 
 	local function setupDragBar(dragBar: TextButton, indent: NumberValue)
 		local isDragging = false;
@@ -4410,7 +4244,6 @@ do
 					Value = offset
 				});
 
-				-- Indent pages
 				if selected and map[selected] then
 					instanceUtils:Tween(map[selected], 0.25, {
 						Position = UDim2.new(0, offset, 1, 0);
@@ -4423,7 +4256,6 @@ do
 
 	local function createNavbar(gui: ScreenGui): Instance
 
-
 		local bar = instanceUtils:Create("Frame", {
 			BackgroundTransparency = 1,
 			Name = "navbar",
@@ -4431,7 +4263,7 @@ do
 			Size = UDim2.new(0, 0, 1, 0),
 			ZIndex = 2
 		}, {
-			instanceUtils:Create("TextButton", { -- SPDM Team | Floating Icon
+			instanceUtils:Create("TextButton", { 
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				BackgroundColor3 = Color3.fromHex("15151d"), 
 				BackgroundTransparency = .25,
@@ -4532,7 +4364,7 @@ do
 					FontSize = Enum.FontSize.Size12, 
 					Name = "poweredBy", 
 					Position = UDim2.new(0, 78, 0, 59), 
-					Text = "Powered By SPDM Team", 
+					Text = "made by serpent team", 
 					TextColor3 = Color3.fromHex("717176"), 
 					TextSize = 12, 
 					TextTransparency = 1, 
@@ -4556,14 +4388,13 @@ do
 				})
 			})
 		});
-		
-		-- SPDM Team | Streak & Expiring Timer
+
 		local function fetchData()
 			local data = {
 				expiry = 0,
 				streak = 0
 			}
-			
+
 			local response = internalUtils:Request("https://api.internal.lol/v1/auth/authenticate", "POST")
 			if response then
 				local success, err = pcall(function()
@@ -4582,7 +4413,7 @@ do
 		local function updateText()
 			local expiryTime, streak = fetchData()
 			local keyless = false
-			
+
 			local function getTimeLeft()
 				return expiryTime - os.time()
 			end
@@ -4629,7 +4460,6 @@ do
 				end
 			end
 
-			-- SPDM Team | Credits
 			local textLabel = bar.main.poweredBy;
 			local isAnimating = false;
 
@@ -4647,8 +4477,8 @@ do
 					textLabel.Text = streakText
 				end
 			end
-			
-			local function displayPoweredBySPDM()
+
+			local function idk()
 				if timeLeft >= 0 and timeLeft <20 then return end; 
 				isAnimating = true
 				local originalText = textLabel.Text
@@ -4658,7 +4488,7 @@ do
 
 				fadeOut:Play()
 				fadeOut.Completed:Wait()
-				textLabel.Text = "Powered By SPDM Team"
+				textLabel.Text = "idk what to put here"
 				fadeIn:Play()
 				fadeIn.Completed:Wait()
 
@@ -4667,15 +4497,12 @@ do
 				fadeOut:Play()
 				fadeOut.Completed:Wait()
 
-
 				isAnimating = false
 				updateFunction()
 				fadeIn:Play()
 				fadeIn.Completed:Wait()
 
 			end
-			
-
 
 			updateFunction()
 
@@ -4688,33 +4515,31 @@ do
 					end
 				end)
 			end
-			
+
 			task.spawn(function()
 				while true do
 					wait(math.random(10, 20))
-					displayPoweredBySPDM()
+					idk()
 				end
 			end)
 		end
 
 		updateText()
-		
 
-		-- SPDM Team | Floating Icon
 		arceus_libs.input.handleCustomDrag(bar.floatingIcon)
 		arceus_libs.buttons.holdable(bar.floatingIcon).ShortClick.Event:Connect(function()
 			if userSettings.cache.executor.showParticles then
 				local ScreenGui = bar.Parent
 				local particleCount = 30
-				
+
 				local mainColors = {
-					Color3.fromRGB(219, 0, 0),    -- #DB0000
-					Color3.fromRGB(219, 27, 27),  -- #DB1B1B
-					Color3.fromRGB(221, 71, 71),  -- #DD4747
-					Color3.fromRGB(226, 111, 111),-- #E26F6F 
-					Color3.fromRGB(21, 21, 29)    -- #15151D
+					Color3.fromRGB(219, 0, 0),    
+					Color3.fromRGB(219, 27, 27),  
+					Color3.fromRGB(221, 71, 71),  
+					Color3.fromRGB(226, 111, 111),
+					Color3.fromRGB(21, 21, 29)    
 				}
-				
+
 				local function getRandomMainColorWithVariation()
 					local randomIndex = math.random(1, #mainColors)
 					return mainColors[randomIndex]
@@ -4744,7 +4569,6 @@ do
 					particle.Position = UDim2.new(0, newPositionX, 0, newPositionY)
 					particle.AnchorPoint = Vector2.new(0.5, 0.5)
 
-
 					local tween = tweenService:Create(particle, TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true), {BackgroundTransparency = 0})
 					tween:Play()
 
@@ -4762,7 +4586,7 @@ do
 
 				wait(.15)
 			end
-			
+
 			navbar:SetState(internalEnum.NavbarState["Partial"])
 		end)
 
@@ -4804,8 +4628,6 @@ do
 			})
 		});
 	end
-
-	--[[ Module ]]--
 
 	function navbar:Initialize(directory: Instance)
 		self.bar = createNavbar(directory.gui);
@@ -4854,7 +4676,7 @@ do
 		end
 		if self.nextInputCheck then
 			self.nextInputCheck:Disconnect();
-			pcall(task.cancel, self.timeoutDelay); -- if this is called from self.timeoutDelay itself, it will error. Cba to do a proper check. It'll be dead immediately after anyways
+			pcall(task.cancel, self.timeoutDelay); 
 		end
 
 		self.state = state;
@@ -4862,7 +4684,6 @@ do
 			Value = indent;
 		});
 
-		-- SPDM | Indent pages
 		if selected and map[selected] then
 			instanceUtils:Tween(map[selected], 0.25, {
 				Position = UDim2.new(0, indent, 1, 0);
@@ -4886,7 +4707,6 @@ do
 			end);
 		end
 
-		-- SPDM Team | Opening modes handler
 		local function createTween(target, properties)
 			return game:GetService("TweenService"):Create(target, TweenInfo.new(0.25, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), properties)
 		end
@@ -4909,11 +4729,11 @@ do
 							local particleCount = 30
 
 							local mainColors = {
-								Color3.fromRGB(219, 0, 0),    -- #DB0000
-								Color3.fromRGB(219, 27, 27),  -- #DB1B1B
-								Color3.fromRGB(221, 71, 71),  -- #DD4747
-								Color3.fromRGB(226, 111, 111),-- #E26F6F 
-								Color3.fromRGB(21, 21, 29)    -- #15151D
+								Color3.fromRGB(219, 0, 0),    
+								Color3.fromRGB(219, 27, 27),  
+								Color3.fromRGB(221, 71, 71),  
+								Color3.fromRGB(226, 111, 111),
+								Color3.fromRGB(21, 21, 29)    
 							}
 
 							local function getRandomMainColorWithVariation()
@@ -4960,7 +4780,6 @@ do
 						createTween(self.bar.dragBar.indicator, {BackgroundTransparency = 0.8}):Play()
 					end
 
-
 					local targetTransparency = self.state == "hidden" and 0.5 or 1
 					if self.bar.floatingIcon.BackgroundTransparency ~= targetTransparency then
 					local targetSize = self.state == "hidden" and UDim2.new(0, 70, 0, 70) or UDim2.new(0, 0, 0, 0)
@@ -4981,7 +4800,6 @@ do
 		}
 
 		openingModes[userSettings.cache.executor.openingMode]()
-
 
 	end
 
@@ -5005,18 +4823,13 @@ do
 		instanceUtils:Tween(self.background, 0.2, {
 			BackgroundTransparency = 0.1
 		});
-		--[[
-		instanceUtils:Tween(map[button], 0.2, {
-			Position = UDim2.new(0, 0, 1, 0)
-		});
-		]]
+
 	end
 
 	framework.pages.navbar.navbar = navbar;
 end
 
 do
-	--[[ Variables ]]--
 
 	local instanceUtils = framework.dependencies.utils.instance;
 	local mathsUtils = framework.dependencies.utils.maths;
@@ -5044,8 +4857,6 @@ do
 		}
 	};
 
-	--[[ Functions ]]--
-
 	local function generateTag(data: {any}): Instance
 		return instanceUtils:Create("TextLabel", { 
 			AutomaticSize = Enum.AutomaticSize.X, 
@@ -5069,8 +4880,6 @@ do
 			})
 		});
 	end
-
-	--[[ Module ]]--
 
 	framework.pages.globalScripts.scriptResult = (function(scriptResult: {any}): Instance
 		local viewCount = mathsUtils:FormatAsCount(scriptResult.views, 0.1);
@@ -5190,7 +4999,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local instanceUtils = framework.dependencies.utils.instance;
 	local internalUtils = framework.dependencies.utils.internal;
@@ -5199,8 +5007,6 @@ do
 	local httpService = cloneref(game:GetService("HttpService"));
 
 	local basis;
-
-	--[[ Module ]]--
 
 	local globalScripts = {
 		title = "Global Scripts",
@@ -5373,7 +5179,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local sets = {
 		keywords = {
@@ -5434,8 +5239,6 @@ do
 		globals = getfenv()
 	};
 
-	--[[ Functions ]]--
-
 	local function isDigit(character: string, index: number): boolean
 		return (character >= "0" and character <= "9") or (index > 0 and (character == "e" or character == "_"));
 	end
@@ -5451,8 +5254,6 @@ do
 	local function isWhitespace(character: string): boolean
 		return character == " " or character == "\t" or character == "\n";
 	end
-
-	--[[ Module ]]--
 
 	local lexer = {};
 
@@ -5694,7 +5495,6 @@ do
 end
 
 do
-	--[[ Variables ]]--
 
 	local editorButton = framework.components.editorButton;
 	local tabButton = framework.components.tabButton;
@@ -5724,10 +5524,6 @@ do
 	local map = {};
 
 	local base;
-
-	--[[ Functions ]]--
-
-	-- | SPDM | Riky47#3355
 
 	local debounceTime = 0.1
 	local lastUpdateTime = 0
@@ -5826,15 +5622,6 @@ do
 	end
 
 	local function handleLexResult(lexResult: {any}, addTruncateEllipsis: boolean)
-		--[[ SPDM | You can eventually enable this
-		
-		local currentTime = os.clock()
-		if currentTime - lastUpdateTime < debounceTime then
-			return
-		end
-		
-		lastUpdateTime = currentTime
-		]]
 
 		local input = base.contentContainer.inputBox
 		if needsUpdate(input, lexResult) then
@@ -5862,8 +5649,6 @@ do
 			end
 		end
 	end
-
-	-- |
 
 	local function generateLineNumberString(text: string)
 		local str = "";
@@ -5970,8 +5755,6 @@ do
 			})
 		});
 	end
-
-	--[[ Module ]]--
 
 	local editor = {
 		title = "Editor",
@@ -6137,4 +5920,4 @@ do
 end
 
 arceus_libs.renderer.startRendering()
-framework.init(); -- SPDM Team
+framework.init(); 
