@@ -1,5 +1,3 @@
-
-
 local serpent = serpent or nil
 local serpenticonmain=getcustomasset("serpent/assets/icon.png")
 
@@ -41,7 +39,7 @@ local clonefunction = function(funct: funct)
 end
 
 local executecode = executecode and clonefunction(executecode) or function(scr)
-	task.spawn(loadstring(scr));
+	loadstring(scr)
 end
 
 local setfpscap = setfpscap or unavailable(nil)
