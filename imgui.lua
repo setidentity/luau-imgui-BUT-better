@@ -197,302 +197,304 @@ Lib.FastWait = (function(arg)
 end)
 
 Lib.UIFactory = (function()
-    local funcs = {}
+	local funcs = {}
 
-local TextBox = {}
-TextBox.__index = TextBox
+	local TextBox = {}
+	TextBox.__index = TextBox
 
-local keywords = {
-	["and"] = true, ["break"] = true, ["do"] = true, ["else"] = true, ["elseif"] = true,
-	["end"] = true, ["false"] = true, ["for"] = true, ["function"] = true, ["if"] = true,
-	["in"] = true, ["local"] = true, ["nil"] = true, ["not"] = true, ["or"] = true,
-	["repeat"] = true, ["return"] = true, ["then"] = true, ["true"] = true, 
-	["until"] = true, ["while"] = true, ["plugin"] = true
-}
+	local keywords = {
+		["and"] = true, ["break"] = true, ["do"] = true, ["else"] = true, ["elseif"] = true,
+		["end"] = true, ["false"] = true, ["for"] = true, ["function"] = true, ["if"] = true,
+		["in"] = true, ["local"] = true, ["nil"] = true, ["not"] = true, ["or"] = true,
+		["repeat"] = true, ["return"] = true, ["then"] = true, ["true"] = true, 
+		["until"] = true, ["while"] = true, ["plugin"] = true
+	}
 
-local builtIns = {
-	["delay"] = true, ["elapsedTime"] = true, ["require"] = true, ["spawn"] = true,
-	["tick"] = true, ["time"] = true, ["typeof"] = true, ["UserSettings"] = true,
-	["wait"] = true, ["warn"] = true, ["game"] = true, ["shared"] = true,
-	["script"] = true, ["workspace"] = true, ["assert"] = true, ["collectgarbage"] = true,
-	["error"] = true, ["getfenv"] = true, ["getmetatable"] = true, ["ipairs"] = true,
-	["loadstring"] = true, ["newproxy"] = true, ["next"] = true, ["pairs"] = true,
-	["pcall"] = true, ["print"] = true, ["rawequal"] = true, ["rawget"] = true,
-	["rawset"] = true, ["select"] = true, ["setfenv"] = true, ["setmetatable"] = true,
-	["tonumber"] = true, ["tostring"] = true, ["type"] = true, ["unpack"] = true,
-	["xpcall"] = true, ["_G"] = true, ["_VERSION"] = true, ["coroutine"] = true,
-	["debug"] = true, ["math"] = true, ["os"] = true, ["string"] = true,
-	["table"] = true, ["bit32"] = true, ["utf8"] = true, ["Axes"] = true,
-	["BrickColor"] = true, ["CFrame"] = true, ["Color3"] = true, ["ColorSequence"] = true,
-	["ColorSequenceKeypoint"] = true, ["DockWidgetPluginGuiInfo"] = true, ["Enum"] = true,
-	["Faces"] = true, ["Instance"] = true, ["NumberRange"] = true, ["NumberSequence"] = true,
-	["NumberSequenceKeypoint"] = true, ["PathWaypoint"] = true, ["PhysicalProperties"] = true,
-	["Random"] = true, ["Ray"] = true, ["Rect"] = true, ["Region3"] = true,
-	["Region3int16"] = true, ["TweenInfo"] = true, ["UDim"] = true, ["UDim2"] = true,
-	["Vector2"] = true, ["Vector2int16"] = true, ["Vector3"] = true, ["Vector3int16"] = true
-}
+	local builtIns = {
+		["delay"] = true, ["elapsedTime"] = true, ["require"] = true, ["spawn"] = true,
+		["tick"] = true, ["time"] = true, ["typeof"] = true, ["UserSettings"] = true,
+		["wait"] = true, ["warn"] = true, ["game"] = true, ["shared"] = true,
+		["script"] = true, ["workspace"] = true, ["assert"] = true, ["collectgarbage"] = true,
+		["error"] = true, ["getfenv"] = true, ["getmetatable"] = true, ["ipairs"] = true,
+		["loadstring"] = true, ["newproxy"] = true, ["next"] = true, ["pairs"] = true,
+		["pcall"] = true, ["print"] = true, ["rawequal"] = true, ["rawget"] = true,
+		["rawset"] = true, ["select"] = true, ["setfenv"] = true, ["setmetatable"] = true,
+		["tonumber"] = true, ["tostring"] = true, ["type"] = true, ["unpack"] = true,
+		["xpcall"] = true, ["_G"] = true, ["_VERSION"] = true, ["coroutine"] = true,
+		["debug"] = true, ["math"] = true, ["os"] = true, ["string"] = true,
+		["table"] = true, ["bit32"] = true, ["utf8"] = true, ["Axes"] = true,
+		["BrickColor"] = true, ["CFrame"] = true, ["Color3"] = true, ["ColorSequence"] = true,
+		["ColorSequenceKeypoint"] = true, ["DockWidgetPluginGuiInfo"] = true, ["Enum"] = true,
+		["Faces"] = true, ["Instance"] = true, ["NumberRange"] = true, ["NumberSequence"] = true,
+		["NumberSequenceKeypoint"] = true, ["PathWaypoint"] = true, ["PhysicalProperties"] = true,
+		["Random"] = true, ["Ray"] = true, ["Rect"] = true, ["Region3"] = true,
+		["Region3int16"] = true, ["TweenInfo"] = true, ["UDim"] = true, ["UDim2"] = true,
+		["Vector2"] = true, ["Vector2int16"] = true, ["Vector3"] = true, ["Vector3int16"] = true
+	}
 
-local specialKeywords = {
-	["nil"] = "Nil",
-	["true"] = "Bool",
-	["false"] = "Bool",
-	["function"] = "Function",
-	["local"] = "Local",
-	["self"] = "Self"
-}
+	local specialKeywords = {
+		["nil"] = "Nil",
+		["true"] = "Bool",
+		["false"] = "Bool",
+		["function"] = "Function",
+		["local"] = "Local",
+		["self"] = "Self"
+	}
 
-local richReplace = {
-	["'"] = "&apos;",
-	["\""] = "&quot;",
-	["<"] = "&lt;",
-	[">"] = "&gt;",
-	["&"] = "&amp;"
-}
+	local richReplace = {
+		["'"] = "&apos;",
+		["\""] = "&quot;",
+		["<"] = "&lt;",
+		[">"] = "&gt;",
+		["&"] = "&amp;"
+	}
 
-function TextBox.new(size)
-	local self = setmetatable({}, TextBox)
-	
-	size = size or UDim2.fromOffset(400, 300)
-	
-	self.Frame = Instance.new("Frame")
-	self.Frame.Size = size
-	self.Frame.BackgroundColor3 = Settings.Theme.Syntax.Background
-	self.Frame.BorderSizePixel = 0
-	self.Frame.ClipsDescendants = true
-	
-	self.TextLabel = Instance.new("TextLabel")
-	self.TextLabel.Parent = self.Frame
-	self.TextLabel.Size = UDim2.fromScale(1, 1)
-	self.TextLabel.BackgroundTransparency = 1
-	self.TextLabel.Text = ""
-	self.TextLabel.TextColor3 = Settings.Theme.Syntax.Text
-	self.TextLabel.FontFace = Font.fromEnum(Enum.Font.Code)
-	self.TextLabel.TextSize = 14
-	self.TextLabel.TextXAlignment = Enum.TextXAlignment.Left
-	self.TextLabel.TextYAlignment = Enum.TextYAlignment.Top
-	self.TextLabel.RichText = true
-	
-	self.TextBox = Instance.new("TextBox")
-	self.TextBox.Parent = self.Frame
-	self.TextBox.Size = UDim2.fromScale(1, 1)
-	self.TextBox.BackgroundTransparency = 1
-	self.TextBox.Text = ""
-	self.TextBox.TextColor3 = Color3.fromRGB(0, 0, 0, 0)
-	self.TextBox.FontFace = Font.fromEnum(Enum.Font.Code)
-	self.TextBox.TextSize = 14
-	self.TextBox.MultiLine = true
-	self.TextBox.ClearTextOnFocus = false
-	self.TextBox.TextXAlignment = Enum.TextXAlignment.Left
-	self.TextBox.TextYAlignment = Enum.TextYAlignment.Top
-	
-	self.Lines = {""}
-	self.HasLineCounter = false
-	self.HasSyntax = false
-	self.LineCounterLabel = nil
-	
-	self.TextBox.Changed:Connect(function(prop)
-		if prop == "Text" then
-			self:UpdateText()
-		end
-	end)
-	
-	return self
-end
-
-function TextBox:UpdateText()
-	local text = self.TextBox.Text
-	self.Lines = text:split("\n")
-	
-	if self.HasSyntax then
-		self:ApplySyntaxHighlighting()
-	else
-		self.TextLabel.Text = text
+	function TextBox.new(size)
+		local self = setmetatable({}, TextBox)
+		
+		size = size or UDim2.fromOffset(400, 300)
+		
+		self.Frame = Instance.new("Frame")
+		self.Frame.Size = size
+		self.Frame.BackgroundColor3 = Settings.Theme.Syntax.Background
+		self.Frame.BorderSizePixel = 0
+		self.Frame.ClipsDescendants = true
+		
+		self.TextLabel = Instance.new("TextLabel")
+		self.TextLabel.Parent = self.Frame
+		self.TextLabel.Size = UDim2.fromScale(1, 1)
+		self.TextLabel.BackgroundTransparency = 1
+		self.TextLabel.Text = ""
+		self.TextLabel.TextColor3 = Settings.Theme.Syntax.Text
+		self.TextLabel.FontFace = Font.fromEnum(Enum.Font.Code)
+		self.TextLabel.TextSize = 14
+		self.TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+		self.TextLabel.TextYAlignment = Enum.TextYAlignment.Top
+		self.TextLabel.RichText = true
+		
+		self.TextBox = Instance.new("TextBox")
+		self.TextBox.Parent = self.Frame
+		self.TextBox.Size = UDim2.fromScale(1, 1)
+		self.TextBox.BackgroundTransparency = 1
+		self.TextBox.Text = ""
+		self.TextBox.TextColor3 = Color3.fromRGB(0, 0, 0, 0)
+		self.TextBox.FontFace = Font.fromEnum(Enum.Font.Code)
+		self.TextBox.TextSize = 14
+		self.TextBox.MultiLine = true
+		self.TextBox.ClearTextOnFocus = false
+		self.TextBox.TextXAlignment = Enum.TextXAlignment.Left
+		self.TextBox.TextYAlignment = Enum.TextYAlignment.Top
+		
+		self.Lines = {""}
+		self.HasLineCounter = false
+		self.HasSyntax = false
+		self.LineCounterLabel = nil
+		
+		self.TextBox.Changed:Connect(function(prop)
+			if prop == "Text" then
+				self:UpdateText()
+			end
+		end)
+		
+		return self
 	end
-	
-	if self.HasLineCounter then
+
+	function TextBox:UpdateText()
+		local text = self.TextBox.Text
+		self.Lines = text:split("\n")
+		
+		if self.HasSyntax then
+			self:ApplySyntaxHighlighting()
+		else
+			self.TextLabel.Text = text
+		end
+		
+		if self.HasLineCounter then
+			self:UpdateLineCounter()
+		end
+	end
+
+	function TextBox:ApplySyntaxHighlighting()
+		local lines = self.Lines
+		local richText = ""
+		
+		for i, line in ipairs(lines) do
+			richText = richText .. self:HighlightLine(line)
+			if i < #lines then
+				richText = richText .. "\n"
+			end
+		end
+		
+		self.TextLabel.Text = richText
+	end
+
+	function TextBox:HighlightLine(line)
+		local result = ""
+		local i = 1
+		
+		while i <= #line do
+			local char = line:sub(i, i)
+			
+			if char:match("%a") or char == "_" then
+				local word = ""
+				local startPos = i
+				while i <= #line and (line:sub(i, i):match("%w") or line:sub(i, i) == "_") do
+					word = word .. line:sub(i, i)
+					i = i + 1
+				end
+				
+				local colorType = nil
+				if keywords[word] then
+					colorType = specialKeywords[word] or "Keyword"
+				elseif builtIns[word] then
+					colorType = "BuiltIn"
+				end
+				
+				if colorType then
+					local color = Settings.Theme.Syntax[colorType]
+					result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', 
+						math.floor(color.r * 255), math.floor(color.g * 255), math.floor(color.b * 255), word)
+				else
+					result = result .. word:gsub("[<>&\"']", richReplace)
+				end
+			elseif char:match("%d") then
+				local number = ""
+				while i <= #line and (line:sub(i, i):match("%d") or line:sub(i, i) == ".") do
+					number = number .. line:sub(i, i)
+					i = i + 1
+				end
+				local color = Settings.Theme.Syntax.Number
+				result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', 
+					math.floor(color.r * 255), math.floor(color.g * 255), math.floor(color.b * 255), number)
+			elseif char == '"' then
+				local str = char
+				i = i + 1
+				while i <= #line and line:sub(i, i) ~= '"' do
+					if line:sub(i, i) == "\\" and i < #line then
+						str = str .. line:sub(i, i + 1)
+						i = i + 2
+					else
+						str = str .. line:sub(i, i)
+						i = i + 1
+					end
+				end
+				if i <= #line then
+					str = str .. line:sub(i, i)
+					i = i + 1
+				end
+				local color = Settings.Theme.Syntax.String
+				result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', 
+					math.floor(color.r * 255), math.floor(color.g * 255), math.floor(color.b * 255), str:gsub("[<>&\"']", richReplace))
+			elseif char == "'" then
+				local str = char
+				i = i + 1
+				while i <= #line and line:sub(i, i) ~= "'" do
+					if line:sub(i, i) == "\\" and i < #line then
+						str = str .. line:sub(i, i + 1)
+						i = i + 2
+					else
+						str = str .. line:sub(i, i)
+						i = i + 1
+					end
+				end
+				if i <= #line then
+					str = str .. line:sub(i, i)
+					i = i + 1
+				end
+				local color = Settings.Theme.Syntax.String
+				result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', 
+					math.floor(color.r * 255), math.floor(color.g * 255), math.floor(color.b * 255), str:gsub("[<>&\"']", richReplace))
+			elseif char == "-" and i < #line and line:sub(i + 1, i + 1) == "-" then
+				local comment = line:sub(i)
+				local color = Settings.Theme.Syntax.Comment
+				result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', 
+					math.floor(color.r * 255), math.floor(color.g * 255), math.floor(color.b * 255), comment:gsub("[<>&\"']", richReplace))
+				break
+			elseif char:match("[%+%-*/%^%%=<>~()%[%]{}.,;:]") then
+				local color = Settings.Theme.Syntax.Operator
+				result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', 
+					math.floor(color.r * 255), math.floor(color.g * 255), math.floor(color.b * 255), char:gsub("[<>&\"']", richReplace))
+				i = i + 1
+			else
+				result = result .. char:gsub("[<>&\"']", richReplace)
+				i = i + 1
+			end
+		end
+		
+		return result
+	end
+
+	function TextBox:UpdateLineCounter()
+		if not self.LineCounterLabel then return end
+		
+		local lineCount = #self.Lines
+		local lineNumbers = ""
+		
+		for i = 1, lineCount do
+			lineNumbers = lineNumbers .. tostring(i)
+			if i < lineCount then
+				lineNumbers = lineNumbers .. "\n"
+			end
+		end
+		
+		self.LineCounterLabel.Text = lineNumbers
+	end
+
+	function TextBox:lineCounter()
+		return self:lc()
+	end
+
+	function TextBox:lc()
+		if self.HasLineCounter then return end
+		
+		self.HasLineCounter = true
+		
+		self.LineCounterLabel = Instance.new("TextLabel")
+		self.LineCounterLabel.Parent = self.Frame
+		self.LineCounterLabel.Size = UDim2.fromOffset(30, self.Frame.Size.Y.Offset)
+		self.LineCounterLabel.Position = UDim2.fromOffset(0, 0)
+		self.LineCounterLabel.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+		self.LineCounterLabel.BorderSizePixel = 0
+		self.LineCounterLabel.Text = "1"
+		self.LineCounterLabel.TextColor3 = Settings.Theme.Syntax.Text
+		self.LineCounterLabel.FontFace = Font.fromEnum(Enum.Font.Code)
+		self.LineCounterLabel.TextSize = 14
+		self.LineCounterLabel.TextXAlignment = Enum.TextXAlignment.Right
+		self.LineCounterLabel.TextYAlignment = Enum.TextYAlignment.Top
+		
+		self.TextLabel.Position = UDim2.fromOffset(35, 0)
+		self.TextLabel.Size = UDim2.new(1, -35, 1, 0)
+		self.TextBox.Position = UDim2.fromOffset(35, 0)
+		self.TextBox.Size = UDim2.new(1, -35, 1, 0)
+		
 		self:UpdateLineCounter()
 	end
-end
 
-function TextBox:ApplySyntaxHighlighting()
-	local lines = self.Lines
-	local richText = ""
-	
-	for i, line in ipairs(lines) do
-		richText = richText .. self:HighlightLine(line)
-		if i < #lines then
-			richText = richText .. "\n"
-		end
+	function TextBox:syntax()
+		return self:sx()
 	end
-	
-	self.TextLabel.Text = richText
-end
 
-function TextBox:HighlightLine(line)
-	local result = ""
-	local i = 1
-	
-	while i <= #line do
-		local char = line:sub(i, i)
+	function TextBox:sx()
+		if self.HasSyntax then return end
 		
-		if char:match("%a") or char == "_" then
-			local word = ""
-			local startPos = i
-			while i <= #line and (line:sub(i, i):match("%w") or line:sub(i, i) == "_") do
-				word = word .. line:sub(i, i)
-				i = i + 1
-			end
-			
-			local colorType = nil
-			if keywords[word] then
-				colorType = specialKeywords[word] or "Keyword"
-			elseif builtIns[word] then
-				colorType = "BuiltIn"
-			end
-			
-			if colorType then
-				local color = Settings.Theme.Syntax[colorType]
-				result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', 
-					math.floor(color.r * 255), math.floor(color.g * 255), math.floor(color.b * 255), word)
-			else
-				result = result .. word:gsub("[<>&\"']", richReplace)
-			end
-		elseif char:match("%d") then
-			local number = ""
-			while i <= #line and (line:sub(i, i):match("%d") or line:sub(i, i) == ".") do
-				number = number .. line:sub(i, i)
-				i = i + 1
-			end
-			local color = Settings.Theme.Syntax.Number
-			result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', 
-				math.floor(color.r * 255), math.floor(color.g * 255), math.floor(color.b * 255), number)
-		elseif char == '"' then
-			local str = char
-			i = i + 1
-			while i <= #line and line:sub(i, i) ~= '"' do
-				if line:sub(i, i) == "\\" and i < #line then
-					str = str .. line:sub(i, i + 1)
-					i = i + 2
-				else
-					str = str .. line:sub(i, i)
-					i = i + 1
-				end
-			end
-			if i <= #line then
-				str = str .. line:sub(i, i)
-				i = i + 1
-			end
-			local color = Settings.Theme.Syntax.String
-			result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', 
-				math.floor(color.r * 255), math.floor(color.g * 255), math.floor(color.b * 255), str:gsub("[<>&\"']", richReplace))
-		elseif char == "'" then
-			local str = char
-			i = i + 1
-			while i <= #line and line:sub(i, i) ~= "'" do
-				if line:sub(i, i) == "\\" and i < #line then
-					str = str .. line:sub(i, i + 1)
-					i = i + 2
-				else
-					str = str .. line:sub(i, i)
-					i = i + 1
-				end
-			end
-			if i <= #line then
-				str = str .. line:sub(i, i)
-				i = i + 1
-			end
-			local color = Settings.Theme.Syntax.String
-			result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', 
-				math.floor(color.r * 255), math.floor(color.g * 255), math.floor(color.b * 255), str:gsub("[<>&\"']", richReplace))
-		elseif char == "-" and i < #line and line:sub(i + 1, i + 1) == "-" then
-			local comment = line:sub(i)
-			local color = Settings.Theme.Syntax.Comment
-			result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', 
-				math.floor(color.r * 255), math.floor(color.g * 255), math.floor(color.b * 255), comment:gsub("[<>&\"']", richReplace))
-			break
-		elseif char:match("[%+%-*/%^%%=<>~()%[%]{}.,;:]") then
-			local color = Settings.Theme.Syntax.Operator
-			result = result .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', 
-				math.floor(color.r * 255), math.floor(color.g * 255), math.floor(color.b * 255), char:gsub("[<>&\"']", richReplace))
-			i = i + 1
-		else
-			result = result .. char:gsub("[<>&\"']", richReplace)
-			i = i + 1
-		end
+		self.HasSyntax = true
+		self.TextBox.TextTransparency = 1
+		self:UpdateText()
 	end
-	
-	return result
-end
 
-function TextBox:UpdateLineCounter()
-	if not self.LineCounterLabel then return end
-	
-	local lineCount = #self.Lines
-	local lineNumbers = ""
-	
-	for i = 1, lineCount do
-		lineNumbers = lineNumbers .. tostring(i)
-		if i < lineCount then
-			lineNumbers = lineNumbers .. "\n"
-		end
+	function TextBox:SetText(text)
+		self.TextBox.Text = text
 	end
-	
-	self.LineCounterLabel.Text = lineNumbers
-end
 
-function TextBox:lineCounter()
-	return self:lc()
-end
+	function TextBox:GetText()
+		return self.TextBox.Text
+	end
 
-function TextBox:lc()
-	if self.HasLineCounter then return end
-	
-	self.HasLineCounter = true
-	
-	self.LineCounterLabel = Instance.new("TextLabel")
-	self.LineCounterLabel.Parent = self.Frame
-	self.LineCounterLabel.Size = UDim2.fromOffset(30, self.Frame.Size.Y.Offset)
-	self.LineCounterLabel.Position = UDim2.fromOffset(0, 0)
-	self.LineCounterLabel.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-	self.LineCounterLabel.BorderSizePixel = 0
-	self.LineCounterLabel.Text = "1"
-	self.LineCounterLabel.TextColor3 = Settings.Theme.Syntax.Text
-	self.LineCounterLabel.FontFace = Font.fromEnum(Enum.Font.Code)
-	self.LineCounterLabel.TextSize = 14
-	self.LineCounterLabel.TextXAlignment = Enum.TextXAlignment.Right
-	self.LineCounterLabel.TextYAlignment = Enum.TextYAlignment.Top
-	
-	self.TextLabel.Position = UDim2.fromOffset(35, 0)
-	self.TextLabel.Size = UDim2.new(1, -35, 1, 0)
-	self.TextBox.Position = UDim2.fromOffset(35, 0)
-	self.TextBox.Size = UDim2.new(1, -35, 1, 0)
-	
-	self:UpdateLineCounter()
-end
+	function TextBox:SetParent(parent)
+		self.Frame.Parent = parent
+	end
 
-function TextBox:syntax()
-	return self:sx()
-end
-
-function TextBox:sx()
-	if self.HasSyntax then return end
-	
-	self.HasSyntax = true
-	self.TextBox.TextTransparency = 1
-	self:UpdateText()
-end
-
-function TextBox:SetText(text)
-	self.TextBox.Text = text
-end
-
-function TextBox:GetText()
-	return self.TextBox.Text
-end
-
-funcs.TextBox:SetParent(parent)
-	self.Frame.Parent = parent
-end
+	funcs.TextBox = TextBox
 			
     funcs.CreateButton = function(parent, text, position, size, callback)
         local button = createSimple("TextButton", {
