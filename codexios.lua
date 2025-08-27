@@ -432,7 +432,7 @@ do
 
 	local utils = {};
 
-	function utils:RandomString(len: number) -- SPDM
+	function utils:RandomString(len: number) --  Serpent
 		local chars = {}
 		for i = 1, len or math.random(16, 32) do
 			chars[i] = string.char(math.random(33, 230))
@@ -456,7 +456,7 @@ do
 			end
 		end
 
-		--[[ SPDM | Random name protection, this system is not compatible as it access the instances by the name.
+		--[[  Serpent | Random name protection, this system is not compatible as it access the instances by the name.
 		
 			if isRunning and not isStudio then
 				instance.Name = utils:RandomString(nil)
@@ -596,7 +596,7 @@ do
 
 	local utils = {};
 	
-	-- SPDM
+	--  Serpent
 	function utils:Notify(text: string)
 		cloneref(game:GetService("StarterGui")):SetCore("SendNotification", {
 			Title = "serpent " .. (isiosdevice() and "iOS" or "pc"),
@@ -869,8 +869,8 @@ do
 	local signalCache = {};
 	local settingsCache = {
 		executor = {
-			openingMode = "Floating Icon", -- SPDM Team | Floating Icon
-			showParticles = true, -- SPDM Team | Show Particles Setting
+			openingMode = "Floating Icon", --  Serpent Team | Floating Icon
+			showParticles = true, --  Serpent Team | Show Particles Setting
 			autoExecute = true,
 			autoSaveTabs = false,
 			fps = {
@@ -2782,7 +2782,7 @@ do
 	end
 
 	local function registerCharacter(character: Instance)
-		-- SPDM | Error prevention checks
+		--  Serpent | Error prevention checks
 		if not cache then
 			cache = {}
 		end
@@ -2868,7 +2868,7 @@ do
 	local map = {
 		{
 			title = "Executor",
-			items = { -- SPDM Team | Opening Mode Setting
+			items = { --  Serpent Team | Opening Mode Setting
 				{
 					title = "Opening Mode",
 					linkedSetting = "executor.openingMode",
@@ -2876,7 +2876,7 @@ do
 					items = { "Floating Icon", "Edge Swipe", "Invisible Edge Swipe" },
 					value = "Floating Icon"
 				},
-				{ -- SPDM Team | Show Particles Setting
+				{ --  Serpent Team | Show Particles Setting
 					title = "Show Floating Icon Particles",
 					linkedSetting = "executor.showParticles",
 					optionType = "toggle",
@@ -3706,7 +3706,7 @@ do
 				popups:Show("dropdown", newDropdown, newDropdown.instance.indicator);
 				newDropdown.selectionChangedConnection = dropdownPopup.onSelectionChanged:Connect(function(value: string)
 					determiningDict[determiningKey] = value;
-					task.delay(0.3, function () popups:Hide("dropdown"); end); -- SPDM Team | Auto-close contextmenu
+					task.delay(0.3, function () popups:Hide("dropdown"); end); --  Serpent Team | Auto-close contextmenu
 				end);
 			end
 		end);
@@ -4080,7 +4080,7 @@ do
 			IgnoreGuiInset = true,
 			Name = "gui",
 			ResetOnSpawn = false,
-			ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets, -- SPDM Team | Notch-aware UI
+			ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets, --  Serpent Team | Notch-aware UI
 			ZIndexBehavior = Enum.ZIndexBehavior.Global
 		}, {
 			instanceUtils:Create("Frame", {
@@ -4235,7 +4235,7 @@ do
 					Text = "Premium User?  <font color=\"#eb4545\">Click Here!</font>", 
 					TextColor3 = Color3.fromHex("9fa4ba")
 				}),
-				textButton({ -- SPDM Team | Buy Premium Button
+				textButton({ --  Serpent Team | Buy Premium Button
 					AnchorPoint = Vector2.new(0.5, 1), 
 					AutomaticSize = Enum.AutomaticSize.None,
 					MouseButton1Click = function()
@@ -4310,7 +4310,7 @@ do
 		});
 
 		task.spawn(function()
-			local dataStep = startupStep.new("Fetching Serpent Data...", "Data Fetched!", ui.whitelist.process):Start();
+			local dataStep = startupStep.new("Fetching Data...", "Data Fetched!", ui.whitelist.process):Start();
 
 			local whitelistStep = startupStep.new("Waiting for you to Whitelist...", "Whitelisted!", ui.whitelist.process):Start();
 			internalSettings:Initialize();
@@ -4417,7 +4417,7 @@ do
 			Size = UDim2.new(0, 0, 1, 0),
 			ZIndex = 2
 		}, {
-			instanceUtils:Create("TextButton", { -- SPDM Team | Floating Icon
+			instanceUtils:Create("TextButton", { --  Serpent Team | Floating Icon
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				BackgroundColor3 = Color3.fromHex("15151d"), 
 				BackgroundTransparency = .25,
@@ -4518,7 +4518,7 @@ do
 					FontSize = Enum.FontSize.Size12, 
 					Name = "poweredBy", 
 					Position = UDim2.new(0, 78, 0, 59), 
-					Text = "Powered By SPDM Team", 
+					Text = "Powered By  Serpent Team", 
 					TextColor3 = Color3.fromHex("717176"), 
 					TextSize = 12, 
 					TextTransparency = 1, 
@@ -4543,7 +4543,7 @@ do
 			})
 		});
 		
-		-- SPDM Team | Streak & Expiring Timer
+		--  Serpent Team | Streak & Expiring Timer
 		local function fetchData()
 			local data = {
 				expiry = 0,
@@ -4615,7 +4615,7 @@ do
 				end
 			end
 
-			-- SPDM Team | Credits
+			--  Serpent Team | Credits
 			local textLabel = bar.main.poweredBy;
 			local isAnimating = false;
 
@@ -4634,7 +4634,7 @@ do
 				end
 			end
 			
-			local function displayPoweredBySPDM()
+			local function displayPoweredBy Serpent()
 				if timeLeft >= 0 and timeLeft <20 then return end; 
 				isAnimating = true
 				local originalText = textLabel.Text
@@ -4644,7 +4644,7 @@ do
 
 				fadeOut:Play()
 				fadeOut.Completed:Wait()
-				textLabel.Text = "Powered By SPDM Team"
+				textLabel.Text = "Powered By  Serpent Team"
 				fadeIn:Play()
 				fadeIn.Completed:Wait()
 
@@ -4678,7 +4678,7 @@ do
 			task.spawn(function()
 				while true do
 					wait(math.random(10, 20))
-					displayPoweredBySPDM()
+					displayPoweredBy Serpent()
 				end
 			end)
 		end
@@ -4686,7 +4686,7 @@ do
 		updateText()
 		
 
-		-- SPDM Team | Floating Icon
+		--  Serpent Team | Floating Icon
 		serpent_libs.input.handleCustomDrag(bar.floatingIcon)
 		serpent_libs.buttons.holdable(bar.floatingIcon).ShortClick.Event:Connect(function()
 			if userSettings.cache.executor.showParticles then
@@ -4848,7 +4848,7 @@ do
 			Value = indent;
 		});
 
-		-- SPDM | Indent pages
+		--  Serpent | Indent pages
 		if selected and map[selected] then
 			instanceUtils:Tween(map[selected], 0.25, {
 				Position = UDim2.new(0, indent, 1, 0);
@@ -4872,7 +4872,7 @@ do
 			end);
 		end
 
-		-- SPDM Team | Opening modes handler
+		--  Serpent Team | Opening modes handler
 		local function createTween(target, properties)
 			return game:GetService("TweenService"):Create(target, TweenInfo.new(0.25, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), properties)
 		end
@@ -5713,7 +5713,7 @@ do
 
 	--[[ Functions ]]--
 
-	-- | SPDM | Riky47#3355
+	-- |  Serpent | Riky47#3355
 
 	local debounceTime = 0.1
 	local lastUpdateTime = 0
@@ -5812,7 +5812,7 @@ do
 	end
 
 	local function handleLexResult(lexResult: {any}, addTruncateEllipsis: boolean)
-		--[[ SPDM | You can eventually enable this
+		--[[  Serpent | You can eventually enable this
 		
 		local currentTime = os.clock()
 		if currentTime - lastUpdateTime < debounceTime then
@@ -6123,4 +6123,4 @@ do
 end
 
 serpent_libs.renderer.startRendering()
-framework.init(); -- SPDM Team
+framework.init(); --  Serpent Team
