@@ -317,13 +317,13 @@ local framework = setmetatable({
 do
 	--[[ Enum ]]--
 
-	local codexEnum = {};
+	local serpentEnum = {};
 
-	function codexEnum.__index(t, k)
-		return t._map[k] or codexEnum[k];
+	function serpentEnum.__index(t, k)
+		return t._map[k] or serpentEnum[k];
 	end
 
-	function codexEnum.new(items: {any}): {any}
+	function serpentEnum.new(items: {any}): {any}
 		local map = {};
 
 		for i, v in items do
@@ -333,17 +333,17 @@ do
 		return setmetatable({
 			_map = map,
 			_items = items
-		}, codexEnum);
+		}, serpentEnum);
 	end
 
-	function codexEnum:GetEnumItems()
+	function serpentEnum:GetEnumItems()
 		return self._items;
 	end
 
 	--[[ Module ]]--
 
-	framework.dependencies.codexEnum = {
-		NavbarState = codexEnum.new({ "Hidden", "Partial", "Full" })
+	framework.dependencies.serpentEnum = {
+		NavbarState = serpentEnum.new({ "Hidden", "Partial", "Full" })
 	};
 end
 
@@ -599,7 +599,7 @@ do
 	-- SPDM
 	function utils:Notify(text: string)
 		cloneref(game:GetService("StarterGui")):SetCore("SendNotification", {
-			Title = "Codex " .. (isiosdevice() and "iOS" or "Android"),
+			Title = "serpent " .. (isiosdevice() and "iOS" or "pc"),
 			Text = text
 		});
 	end
@@ -664,7 +664,7 @@ do
 	local internalUtils = framework.dependencies.utils.internal;
 
 	local backup = {
-		androidVersion = "1",
+		pcVersion = "1",
 		iosVersion = "1",
 		
 		changelog = {
@@ -767,8 +767,8 @@ do
 	end
 
 	local function loadScriptCache()
-		if isserpentfile and isserpentfile("data/codexScriptCache.json") then
-			local s, r = pcall(httpService.JSONDecode, httpService, readserpentfile("data/codexScriptCache.json"));
+		if isserpentfile and isserpentfile("data/serpentScriptCache.json") then
+			local s, r = pcall(httpService.JSONDecode, httpService, readserpentfile("data/serpentScriptCache.json"));
 			if s and type(r) == "table" then
 				local accumulation = 0;
 				local cache = {};
@@ -805,7 +805,7 @@ do
 			for i, v in cache do
 				v.onAutoExecuteToggled = nil;
 			end
-			writeserpentfile("data/codexScriptCache.json", httpService:JSONEncode(cache));
+			writeserpentfile("data/serpentScriptCache.json", httpService:JSONEncode(cache));
 		end
 	end
 
@@ -914,7 +914,7 @@ do
 
 	local function saveUserSettings()
 		if writeserpentfile then
-			writeserpentfile("data/codexSettings.json", httpService:JSONEncode(tableUtils:DeepCopy(settingsCache)));
+			writeserpentfile("data/serpentSettings.json", httpService:JSONEncode(tableUtils:DeepCopy(settingsCache)));
 		end
 	end
 
@@ -947,8 +947,8 @@ do
 			makeserpentfolder("data");
 		end
 
-		if isserpentfile and isserpentfile("data/codexSettings.json") then
-			local succ, res = pcall(httpService.JSONDecode, httpService, readserpentfile("data/codexSettings.json"));
+		if isserpentfile and isserpentfile("data/serpentSettings.json") then
+			local succ, res = pcall(httpService.JSONDecode, httpService, readserpentfile("data/serpentSettings.json"));
 			if succ then
 				tableUtils:DeepOverwrite(settingsCache, res);
 			else
@@ -1009,8 +1009,8 @@ do
 	end
 
 	local function loadTabCache()
-		if isserpentfile and isserpentfile("data/codexTabs.json") then
-			local s, r = pcall(httpService.JSONDecode, httpService, readserpentfile("data/codexTabs.json"));
+		if isserpentfile and isserpentfile("data/serpentTabs.json") then
+			local s, r = pcall(httpService.JSONDecode, httpService, readserpentfile("data/serpentTabs.json"));
 			if s and type(r) == "table" then
 				local accumulation = 0;
 				local cache = {};
@@ -1099,7 +1099,7 @@ do
 
 	function tabSystem:Save()
 		if writeserpentfile then
-			writeserpentfile("data/codexTabs.json", httpService:JSONEncode(tableUtils:DeepCopy(self.cache)));
+			writeserpentfile("data/serpentTabs.json", httpService:JSONEncode(tableUtils:DeepCopy(self.cache)));
 		end
 	end
 
@@ -2908,8 +2908,8 @@ do
 					optionType = "toggle",
 					state = false,
 					callback = function(state)
-						if state == false and isfile and isfile("codexTabs.json") then
-							delfile("codexTabs.json");
+						if state == false and isfile and isfile("serpentTabs.json") then
+							delfile("serpentTabs.json");
 						end
 					end
 				},
@@ -4080,7 +4080,7 @@ do
 
 	local function checkWhitelist()
 		if getgenv then
-			return internalUtils:Request("https://api.codex.lol/v1/auth/authenticate", "POST") ~= false;
+			return internalUtils:Request("https://api.serpent.lol/v1/auth/authenticate", "POST") ~= false;
 		end
 		return false;
 	end
@@ -4146,7 +4146,7 @@ do
 		ui.whitelist.Visible = isMainTab;
 		ui.changelog.Visible = isMainTab;
 		ui.specialUserInput.Visible = not isMainTab;
-		ui.note.Text = isMainTab and "Please complete the whitelist to gain access to Codex" or "Please enter your key to activate your Premium License";
+		ui.note.Text = isMainTab and "Please complete the whitelist to gain access to serpent" or "Please enter your key to activate your Premium License";
 	end
 
 	local function createUI(directory: Instance): ScreenGui
@@ -4181,7 +4181,7 @@ do
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				Name = "title",
 				Position = UDim2.new(0.5, 0, 0.2, -20),
-				Text = "Codex " .. (isiosdevice() and "iOS" or "Android"),
+				Text = "serpent " .. (isiosdevice() and "iOS" or "pc"),
 				TextSize = 24
 			}),
 			textLabel({
@@ -4189,7 +4189,7 @@ do
 				FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json"),
 				Name = "note",
 				Position = UDim2.new(0.5, 0, 0.2, 2),
-				Text = "Please complete the whitelist to gain access to Codex",
+				Text = "Please complete the whitelist to gain access to serpent",
 				TextColor3 = Color3.fromRGB(159, 164, 186)
 			}),
 			instanceUtils:Create("Frame", {
@@ -4217,9 +4217,9 @@ do
 					AutomaticSize = Enum.AutomaticSize.None,
 					MouseButton1Click = function()
 						if setclipboard then
-							local data = internalUtils:Request("https://api.codex.lol/v1/auth/session", "POST");
+							local data = internalUtils:Request("https://api.serpent.lol/v1/auth/session", "POST");
 							if data then
-								setclipboard("https://mobile.codex.lol?token=" .. httpService:JSONDecode(data).token);
+								setclipboard("https://mobile.serpent.lol?token=" .. httpService:JSONDecode(data).token);
 								internalUtils:Notify("Whitelist link has been set to your clipboard.")
 								return
 							end
@@ -4251,7 +4251,7 @@ do
 					AutomaticSize = Enum.AutomaticSize.None,
 					MouseButton1Click = function()
 						if setclipboard then
-							setclipboard("https://codexseller.mysellix.io/");
+							setclipboard("https://serpentseller.mysellix.io/");
 						end
 						internalUtils:Notify("Premium License purchase link has been set to your clipboard.")
 					end,
@@ -4292,7 +4292,7 @@ do
 					MouseButton1Click = function()
 						local key = ui.specialUserInput.key.Text;
 						if #key > 0 then
-							local res = internalUtils:Request("https://api.codex.lol/v1/auth/claim", "POST", {
+							local res = internalUtils:Request("https://api.serpent.lol/v1/auth/claim", "POST", {
 								["Content-Type"] = "application/json"
 							}, {
 								key = key
@@ -4321,31 +4321,10 @@ do
 		});
 
 		task.spawn(function()
-			local dataStep = startupStep.new("Fetching Codex Data...", "Data Fetched!", ui.whitelist.process):Start();
+			local dataStep = startupStep.new("Fetching Serpent Data...", "Data Fetched!", ui.whitelist.process):Start();
 			internalSettings:Initialize();
 
-			changelog().Parent = ui;
-			local currentVersion = identifyexecutor and select(2, identifyexecutor()) or "Invalid Version";
-			if not (cloneref(game:GetService("RunService")):IsStudio() or internalUtils:AreVersionsAlike(currentVersion, isiosdevice() and internalSettings.data.iosVersion or internalSettings.data.androidVersion)) then
-				dataStep:Complete("Please update Codex.");
-				return;
-			end
-			dataStep:Complete();
-
-			local whitelistStep = startupStep.new("Waiting for you to Whitelist...", "Whitelisted!", ui.whitelist.process):Start();
-			local isStudio = cloneref(game:GetService("RunService")):IsStudio()
-			local checked = false
-			
-			repeat
-				if checked then
-					task.wait(3);
-				end
-				
-				checked = true
-			until checkWhitelist() or closed or isStudio
-			if closed then
-				return
-			end
+			task.wait(1)
 			
 			whitelistStep:Complete();
 			local setupStep = startupStep.new("Setting Up...", "Setup Completed!", ui.whitelist.process):Start();
@@ -4383,7 +4362,7 @@ do
 	local navbarButton = framework.components.navbarButton;
 	local instanceUtils = framework.dependencies.utils.instance;
 	local mathsUtils = framework.dependencies.utils.maths;
-	local codexEnum = framework.dependencies.codexEnum;
+	local serpentEnum = framework.dependencies.serpentEnum;
 	local internalUtils = framework.dependencies.utils.internal;
 	local userSettings = framework.data.userSettings;
 
@@ -4412,7 +4391,7 @@ do
 					if input.UserInputState == Enum.UserInputState.End then
 						isDragging = false;
 						endedConn:Disconnect();
-						navbar:SetState(codexEnum.NavbarState[input.Position.X > 140 and "Full" or input.Position.X > 40 and "Partial" or "Hidden"]);
+						navbar:SetState(serpentEnum.NavbarState[input.Position.X > 140 and "Full" or input.Position.X > 40 and "Partial" or "Hidden"]);
 					end
 				end);
 			end
@@ -4477,7 +4456,7 @@ do
 					BackgroundTransparency = 1, 
 					BorderSizePixel = 0, 
 					Image = "rbxassetid://11558559086", 
-					Name = "codexIcon2", 
+					Name = "serpentIcon2", 
 					Position = UDim2.new(0.5, 0 ,0.5, 0), 
 					Size = UDim2.new(1,0,1,0),
 					ZIndex = 2
@@ -4523,7 +4502,7 @@ do
 					BackgroundTransparency = 1, 
 					BorderSizePixel = 0, 
 					Image = "rbxassetid://11558559086", 
-					Name = "codexIcon", 
+					Name = "serpentIcon", 
 					Position = UDim2.new(0, 20, 0, 30), 
 					Size = UDim2.new(0, 36, 0, 36),
 					ZIndex = 2
@@ -4534,7 +4513,7 @@ do
 					FontSize = Enum.FontSize.Size18, 
 					Name = "title", 
 					Position = UDim2.new(0, 78, 0, 38), 
-					Text = "Codex " .. (isiosdevice() and "iOS" or "Android"),
+					Text = "serpent " .. (isiosdevice() and "iOS" or "pc"),
 					TextColor3 = Color3.fromHex("ffffff"), 
 					TextSize = 16, 
 					TextTransparency = 1,
@@ -4580,7 +4559,7 @@ do
 				streak = 0
 			}
 			
-			local response = internalUtils:Request("https://api.codex.lol/v1/auth/authenticate", "POST")
+			local response = internalUtils:Request("https://api.serpent.lol/v1/auth/authenticate", "POST")
 			if response then
 				local success, err = pcall(function()
 					data = httpService:JSONDecode(response)
@@ -4779,7 +4758,7 @@ do
 				wait(.15)
 			end
 			
-			navbar:SetState(codexEnum.NavbarState["Partial"])
+			navbar:SetState(serpentEnum.NavbarState["Partial"])
 		end)
 
 		bar.indent:GetPropertyChangedSignal("Value"):Connect(function()
@@ -4787,7 +4766,7 @@ do
 			local percentage = (math.clamp(value, 76, 260) - 76) / 184;
 
 			navbar.bar.Size = UDim2.new(0, value, 1, 0);
-			navbar.bar.main.codexIcon.Size = UDim2.new(0, 36 + percentage * 12, 0, 36 + percentage * 12);
+			navbar.bar.main.serpentIcon.Size = UDim2.new(0, 36 + percentage * 12, 0, 36 + percentage * 12);
 			navbar.bar.main.title.TextTransparency = 1 - percentage;
 			navbar.bar.main.poweredBy.TextTransparency = 0.2 + (1 - percentage) * 0.8;
 			for i, v in map do
@@ -4833,7 +4812,7 @@ do
 			self:Add(module.title, module.icon, module:Initialize(), module.overwritePosition);
 		end
 
-		self:SetState(codexEnum.NavbarState.Full, true);
+		self:SetState(serpentEnum.NavbarState.Full, true);
 	end
 
 	function navbar:Add(text: string, icon: string, designatedFrame: Frame, overwritePosition: UDim2?)
@@ -4859,9 +4838,9 @@ do
 
 	function navbar:SetState(navbarState: number, ignoreTimeouts: boolean?)
 		local indent, state = 0, "hidden";
-		if navbarState == codexEnum.NavbarState.Partial or (navbarState == codexEnum.NavbarState.Hidden and selected) then
+		if navbarState == serpentEnum.NavbarState.Partial or (navbarState == serpentEnum.NavbarState.Hidden and selected) then
 			indent, state = 76, "partial";
-		elseif navbarState == codexEnum.NavbarState.Full then
+		elseif navbarState == serpentEnum.NavbarState.Full then
 			indent, state = 260, "full";
 		end
 
@@ -4889,14 +4868,14 @@ do
 		if state ~= "hidden" and not ignoreTimeouts then
 			self.timeoutDelay = task.delay(10, function()
 				if self.state == state then
-					self:SetState(codexEnum.NavbarState.Hidden);
+					self:SetState(serpentEnum.NavbarState.Hidden);
 				end
 			end);
 
 			self.nextInputCheck = userInputService.InputBegan:Connect(function(input)
 				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 					if self.state ~= "hidden" and input.Position.X > self.bar.indent.Value then
-						self:SetState(codexEnum.NavbarState.Hidden);
+						self:SetState(serpentEnum.NavbarState.Hidden);
 					end
 				end
 			end);
@@ -4985,7 +4964,7 @@ do
 					task.delay(delayTime, function() self.bar.floatingIcon.Visible = self.state == "hidden" end)
 
 					createTween(self.bar.floatingIcon, {BackgroundTransparency = targetTransparency, Size = targetSize}):Play()
-					createTween(self.bar.floatingIcon.codexIcon2, {ImageTransparency = targetTransparency == 0.5 and 0 or 1}):Play()
+					createTween(self.bar.floatingIcon.serpentIcon2, {ImageTransparency = targetTransparency == 0.5 and 0 or 1}):Play()
 				end
 				end,
 			["Invisible Edge Swipe"] = 
@@ -5017,7 +4996,7 @@ do
 		end
 		selected = button;
 		selected:Highlight(true);
-		self:SetState(codexEnum.NavbarState.Partial);
+		self:SetState(serpentEnum.NavbarState.Partial);
 		instanceUtils:Tween(self.background, 0.2, {
 			BackgroundTransparency = 0.1
 		});
@@ -6130,7 +6109,7 @@ do
 	framework.init = (function()
 		local sig = signal.new();
 		local directory = instanceUtils:DynamicParent(instanceUtils:Create("Folder", {
-			Name = "Codex"
+			Name = "serpent"
 		}));
 		local login;
 
