@@ -212,21 +212,29 @@ getgenv().hookmetamethod=function(x, y, z)
     return old
 end
 
---[[getgenv().isscriptable = function(instance, property)
-    if typeof(instance) ~= "Instance" then return false end
-    if HiddenProperties[instance.ClassName .. "." .. property] then
+getgenv().isscriptable = function(instance, property)
+    if property == nil then return false end
+    if typeof and typeof(instance) == "Instance" then
+        -- instance + property
+    else
+        if type(instance) ~= "table" and type(instance) ~= "userdata" then
+            return false
+        end
+    end
+    if HiddenProperties and HiddenProperties[tostring(instance.ClassName) .. "." .. tostring(property)] then
         return false
     end
-    local _, canAccess = pcall(function() local _ = instance[property] end)
-    return canAccess, true
+    local ok = pcall(function() local _ = instance[property] end)
+    return ok, true
 end
-
+--[[
 getgenv().setscriptable = function(tbl, writable)
     if type(tbl) ~= "table" and type(tbl) ~= "userdata" then
         return
     end
     setreadonly(tbl, not writable)
 end
+]]
 
 getgenv().sethiddenproperty = function(instance, key, value)
     key = key:lower()
@@ -248,7 +256,7 @@ getgenv().gethiddenproperty = function(instance, key)
         warn("unknown property:", key)
         return nil
     end
-end]]
+end
 
 getgenv().getinstances = function()
     local x = {game}
@@ -894,14 +902,43 @@ getgenv().newcclosure=function(fn)
 	return shawarma
 end
 
-getgenv().getscripthash=function(LuaScriptContainer)
-	assert(tfind({"ModuleScript", "LocalScript"}, LuaScriptContainer.ClassName), "Invalid argument #1 to 'decompile', LuaSourceContainer expected, got " .. LuaScriptContainer.ClassName)
-
-	return LuaScriptContainer:GetHash()
+getgenv().crypt.encrypt = function(data, key, iv, mode)
+    assert(key, "Key required")
+    iv = iv or getgenv().crypt.generatekey(#key)
+    local encrypted = {}
+    for i = 1, #data do
+        local keyChar = string.byte(key, ((i-1) % #key) + 1)
+        local ivChar = string.byte(iv, ((i-1) % #iv) + 1)
+        local dataChar = string.byte(data, i)
+        encrypted[i] = string.char(bit32.bxor(dataChar, keyChar, ivChar))
+    end
+    return table.concat(encrypted), iv
 end
 
-getgenv().decompile=function(LuaScriptContainer) --> requires getscriptbytecode
-    assert(tfind({"ModuleScript", "LocalScript"}, LuaScriptContainer.ClassName), "Invalid argument #1 to 'decompile', LuaSourceContainer expected, got " .. LuaScriptContainer.ClassName)
+-- XOR-based "decryption" with IV
+getgenv().crypt.decrypt = function(data, key, iv, mode)
+    assert(key and iv, "Key and IV required")
+    local decrypted = {}
+    for i = 1, #data do
+        local keyChar = string.byte(key, ((i-1) % #key) + 1)
+        local ivChar = string.byte(iv, ((i-1) % #iv) + 1)
+        local dataChar = string.byte(data, i)
+        decrypted[i] = string.char(bit32.bxor(dataChar, keyChar, ivChar))
+    end
+    return table.concat(decrypted)
+end
+									
+getgenv().getscripthash = function(x)
+    assert(
+        table.find({ "ModuleScript", "LocalScript" }, x.ClassName),
+        "Invalid argument #1 to 'getscripthash' (LuaSourceContainer expected, got " .. x.ClassName .. ")"
+    )
+
+    return x:GetHash()
+end
+
+getgenv().decompile=function(x) --> requires getscriptbytecode
+    assert(table.find({"ModuleScript", "LocalScript"}, x.ClassName), "Invalid argument #1 to 'decompile', LuaSourceContainer expected, got " .. x.ClassName)
 
     return request({
         Url = "http://api.plusgiant5.com/konstant/decompile",
@@ -913,7 +950,51 @@ getgenv().decompile=function(LuaScriptContainer) --> requires getscriptbytecode
     }).Body
 end
 
-getgenv().isourclosure=function(fn)
+getgenv().lz4compress = function(input) 
+    local output = {}
+    local i = 1
+    while i <= #input do
+        local rl = 1
+        local c = input:sub(i,i)
+        while i+rl <= #input and input:sub(i+rl,i+rl) == c and rl < 255 do
+            rl = rl + 1
+        end
+        table.insert(output, string.char(rl))
+        table.insert(output, c)
+        i = i + rl
+    end
+    return table.concat(output)
+end
+									
+getgenv().lz4decompress = function(input) 
+    local output = {}
+    local i = 1
+    while i <= #input do
+        local len = string.byte(input:sub(i,i))
+        local char = input:sub(i+1,i+1)
+        for j = 1, len do
+            table.insert(output, char)
+        end
+        i = i + 2
+    end
+    return table.concat(output)
+end
+
+getgenv().getsenv = function(script)
+    assert(script, "No script provided")
+    local env = {}
+    env.script = script
+    setmetatable(env, {
+        __index = _G, -- fallback to globals
+        __newindex = function(t, k, v)
+            rawset(t, k, v)
+        end,
+    })
+    return env
+end
+
+
+getgenv().isexecutorclosure=function(fn)
     return islclosure(fn) and info(fn).source == info(function()end).source or (function()
         for _, v in next, getfenv(0) do
             if v == fn then
@@ -923,6 +1004,6 @@ getgenv().isourclosure=function(fn)
         return false
     end)()
 end
-
+getgenv().isourclosure=isexecutorclosure
 
 print("loaded")
