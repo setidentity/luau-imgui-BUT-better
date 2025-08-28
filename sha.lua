@@ -1,5 +1,3 @@
-local sha = {}
-
 local function u64_add(a, b)
     local low = (a[2] + b[2]) % 0x100000000
     local high = (a[1] + b[1] + math.floor((a[2] + b[2]) / 0x100000000)) % 0x100000000
@@ -39,10 +37,6 @@ end
 
 local function u64_and(a, b)
     return {a[1] & b[1], a[2] & b[2]}
-end
-
-local function u64_or(a, b)
-    return {a[1] | b[1], a[2] | b[2]}
 end
 
 local function u64_not(x)
@@ -149,7 +143,7 @@ local function transform(state, data)
     state[8] = u64_add(state[8], h)
 end
 
-function sha.sha384(input)
+getgenv().sha384 = function(input)
     local state = {
         {0xcbbb9d5d, 0xc1059ed8},
         {0x629a292a, 0x367cd507},
@@ -199,5 +193,3 @@ function sha.sha384(input)
     
     return result
 end
-
-return sha
