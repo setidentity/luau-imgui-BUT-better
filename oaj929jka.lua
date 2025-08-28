@@ -914,7 +914,7 @@ getgenv().decompile=function(LuaScriptContainer) --> requires getscriptbytecode
 end
 
 getgenv().isourclosure=function(fn)
-    return islclosure(fn) and Debug.getinfo(fn).source == Debug.getinfo(function()end).source or (function()
+    return islclosure(fn) and info(fn).source == info(function()end).source or (function()
         for _, v in next, getfenv(0) do
             if v == fn then
                 return true
