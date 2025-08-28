@@ -39,7 +39,7 @@ local clonefunction = function(funct: funct)
 end
 
 local executecode = executecode and clonefunction(executecode) or function(scr)
-	loadstring(scr)
+	task.spawn(loadstring(scr));
 end
 
 local setfpscap = setfpscap or unavailable(nil)
