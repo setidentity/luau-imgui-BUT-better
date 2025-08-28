@@ -292,6 +292,35 @@ getgenv().setthreadidentity=setidentity
 getgenv().getthreadidentity=getidentity
 getgenv().setthreadcontext=setidentity
 getgenv().getthreadcontext=getidentity
+getgenv().consolesettitle = getgenv().rconsoletitle
+getgenv().consoleinput = getgenv().rconsoleinput
+getgenv().consolecreate = getgenv().rconsolecreate
+getgenv().consoledestroy = getgenv().rconsoledestroy
+getgenv().consolename = getgenv().rconsolename
+getgenv().consoleprint = getgenv().rconsoleprint
+getgenv().consolewarn = getgenv().rconsolewarn
+getgenv().consoleerror = getgenv().rconsoleerror
+getgenv().consoleclear = getgenv().rconsoleclear
+getgenv().consoletitle = getgenv().rconsoletitle
+getgenv().base64_encode = crypt.base64encode
+getgenv().base64_decode = crypt.base64decode
+getgenv().getscriptfunction = getscripthash
+getgenv().isourclosure=getgenv().isexecutorclosure
+getgenv().checkclosure = function(fn)
+    return type(fn) == "function" and islclosure(fn)
+end
+
+getgenv().replaceclosure=function(original, replacement)
+    assert(type(original) == "function", "original must be a function")
+    assert(type(replacement) == "function", "replacement must be a function")
+    local info = debug.info(original)
+    local env = getfenv(original)
+    local wrapper = function(...)
+        return replacement(...)
+    end
+    setfenv(wrapper, env)
+    return wrapper
+end
 
 local drawingUI = nil
 task.spawn(function()
@@ -891,14 +920,6 @@ getgenv().crypt.encrypt = function(data, key, iv, mode)
     return table.concat(encrypted), iv
 end
 
-getgenv().getscriptfunction = getscripthash
-getgenv().crypt = getgenv().crypt or {}
-getgenv().base64 = getgenv().crypt.base64 or {}
-getgenv().crypt.base64_encode = getgenv().crypt.base64encode
-getgenv().crypt.base64_decode = getgenv().crypt.base64decode
-getgenv().base64.encode = getgenv().crypt.base64encode 
-getgenv().base64.decode = getgenv().crypt.base64decode
-
 getgenv().crypt.decrypt = function(data, key, iv, mode)
     assert(key and iv, "Key and IV required")
     local decrypted = {}
@@ -996,7 +1017,5 @@ getgenv().getscriptclosure = function(x)
         end
     end
 end
-									
-getgenv().isourclosure=getgenv().isexecutorclosure
 
 print("loaded")
