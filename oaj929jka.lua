@@ -8,6 +8,15 @@ getgenv().gethui=function()
 return cloneref(game.CoreGui.RobloxGui) -- secure
 end
 
+getgenv().dumpstring = function(fn)
+    assert(type(fn) == "function", "expected function")
+    return string.dump(fn)
+end
+
+getgenv().toclipboard = function(x)
+    setclipboard(x)
+end
+
 getgenv().fireproximityprompt = function(p)
  local Hold, Distance, Enabled, Thing, CFrame1= p.HoldDuration, p.MaxActivationDistance, p.Enabled, p.RequiresLineOfSight, nil
  p.MaxActivationDistance = math.huge
@@ -882,7 +891,14 @@ getgenv().crypt.encrypt = function(data, key, iv, mode)
     return table.concat(encrypted), iv
 end
 
--- XOR-based "decryption" with IV
+getgenv().getscriptfunction = getscripthash
+getgenv().crypt = getgenv().crypt or {}
+getgenv().base64 = getgenv().crypt.base64 or {}
+getgenv().crypt.base64_encode = getgenv().crypt.base64encode
+getgenv().crypt.base64_decode = getgenv().crypt.base64decode
+getgenv().base64.encode = getgenv().crypt.base64encode 
+getgenv().base64.decode = getgenv().crypt.base64decode
+
 getgenv().crypt.decrypt = function(data, key, iv, mode)
     assert(key and iv, "Key and IV required")
     local decrypted = {}
