@@ -869,22 +869,6 @@ getgenv().getrenv=function()
     return renv
 end
 
-if not newcclosure then
-local cwrap, cyield = coroutine.wrap, coroutine.yield
-									
-getgenv().newcclosure=function(fn)
-	local shawarma = cwrap(function(...) -- haha get it because shawarma wrap
-		local b = {cyield()}
-		while true do
-			b={cyield(fn(tunpack(b)))}
-		end
-	end)
-
-    shawarma()
-	return shawarma
-end
-end
-
 getgenv().crypt.encrypt = function(data, key, iv, mode)
     assert(key, "Key required")
     iv = iv or getgenv().crypt.generatekey(#key)
@@ -997,16 +981,6 @@ getgenv().getscriptclosure = function(x)
     end
 end
 									
-getgenv().isexecutorclosure=function(fn)
-    return islclosure(fn) and info(fn).source == info(function()end).source or (function()
-        for _, v in next, getfenv(0) do
-            if v == fn then
-                return true
-            end
-        end
-        return false
-    end)()
-end
-getgenv().isourclosure=isexecutorclosure
+getgenv().isourclosure=getgenv().isexecutorclosure
 
 print("loaded")
