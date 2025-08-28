@@ -869,27 +869,8 @@ getgenv().getrenv=function()
     return renv
 end
 
-getgenv().getscriptclosure = function(x)
-    for _, v in registry do
-        if type(v) == "thread" then
-            local func = info(v, 1, "f")
-            if getfenv(func).script == x then
-                return func
-            end
-        end
-    end
-    if x:IsA("ModuleScript") then
-        local src = getscriptbytecode(x) 
-        local func = loadstring(src)
-        if func then
-            local env = getfenv(func)
-            env.script = x
-            setfenv(func, env)
-            return func
-        end
-    end
-end
-
+local cwrap, cyield = coroutine.wrap, coroutine.yield
+									
 getgenv().newcclosure=function(fn)
 	local shawarma = cwrap(function(...) -- haha get it because shawarma wrap
 		local b = {cyield()}
@@ -993,7 +974,27 @@ getgenv().getsenv = function(script)
     return env
 end
 
-
+getgenv().getscriptclosure = function(x)
+    for _, v in registry do
+        if type(v) == "thread" then
+            local func = info(v, 1, "f")
+            if getfenv(func).script == x then
+                return func
+            end
+        end
+    end
+    if x:IsA("ModuleScript") then
+        local src = getscriptbytecode(x) 
+        local func = loadstring(src)
+        if func then
+            local env = getfenv(func)
+            env.script = x
+            setfenv(func, env)
+            return func
+        end
+    end
+end
+									
 getgenv().isexecutorclosure=function(fn)
     return islclosure(fn) and info(fn).source == info(function()end).source or (function()
         for _, v in next, getfenv(0) do
