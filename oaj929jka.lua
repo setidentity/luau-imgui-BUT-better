@@ -869,6 +869,7 @@ getgenv().getrenv=function()
     return renv
 end
 
+if not newcclosure then
 local cwrap, cyield = coroutine.wrap, coroutine.yield
 									
 getgenv().newcclosure=function(fn)
@@ -881,6 +882,7 @@ getgenv().newcclosure=function(fn)
 
     shawarma()
 	return shawarma
+end
 end
 
 getgenv().crypt.encrypt = function(data, key, iv, mode)
