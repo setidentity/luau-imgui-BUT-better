@@ -1,18 +1,16 @@
-local serpent = serpent or {}
-print"1"
+local serpent = serpent or nil
 local serpenticonmain=getcustomasset("serpent/assets/icon.png")
 
-print"2"
 local unavailable = function(fake)
 	return function(...)
-		internalUtils:Notify("this feature cannot be used on the current version")
+		internalUtils:Notify("This feature cannot be used on the current apk version")
 		return fake
 	end
 end
 
 local getgenv = getgenv or function()
 	if rconsolwarn then
-		warn("fake getgenv called")
+		rconsolewarn("Fake getgenv called")
 	end
 
 	return {}
@@ -20,7 +18,7 @@ end
 
 local cloneref = cloneref or function(...)
 	if rconsolwarn then
-		warn("fake cloneref called")
+		rconsolewarn("Fake cloneref called")
 	end
 
 	return ...
@@ -40,7 +38,6 @@ local clonefunction = function(funct: funct)
 	end
 end
 
-print"3"
 local executecode = executecode and clonefunction(executecode) or function(scr)
 	task.spawn(loadstring(scr));
 end
@@ -49,51 +46,12 @@ local setfpscap = setfpscap or unavailable(nil)
 local getfpscap = getfpscap or unavailable(60)
 local getfpsmax = getfpsmax or unavailable(60)
 
-print"4"
-local makeserpentfolder= makeserpentfolder or function(path: string)
-    local full = "serpent/" .. path
-    if not isfolder(full) then
-        makefolder(full)
-    end
-    return true
-end
-
-local writeserpentfile = writeserpentfile or function(path: string, content: string)
-    local full = "serpent/" .. path
-    writefile(full, content)
-    return true
-end
-
-local listserpentfiles = listserpentfiles or function(path: string)
-    local full = "serpent/" .. (path or "")
-    if isfolder(full) then
-        return listfiles(full)
-    end
-    return {}
-end
-
-local isserpentfolder = isserpentfolder or function(path: string)
-    return isfolder("serpent/" .. path)
-end
-
-local readserpentfile = readserpentfile or function(path: string)
-    local full = "serpent/" .. path
-    if isfile(full) then
-        return readfile(full)
-    end
-    return nil
-end
-
-local isserpentfile = isserpentfile or function(path: string)
-    return isfile("serpent/" .. path)
-end
-
---[[local makeserpentfolder = serpent and clonefunction(serpent.makeserpentfolder);
+local makeserpentfolder = serpent and clonefunction(serpent.makeserpentfolder);
 local writeserpentfile = serpent and clonefunction(serpent.writeserpentfile);
 local listserpentfiles = serpent and clonefunction(serpent.listserpentfiles);
 local isserpentfolder = serpent and clonefunction(serpent.isserpentfolder);
 local readserpentfile = serpent and clonefunction(serpent.readserpentfile);
-local isserpentfile = serpent and clonefunction(serpent.isserpentfile);]]
+local isserpentfile = serpent and clonefunction(serpent.isserpentfile);
 local isv2device = (serpent and clonefunction(serpent.is_v2)) or function()
 	return false 
 end
@@ -1250,7 +1208,7 @@ do
 					AnchorPoint = Vector2.new(0.5, 0.5), 
 					BackgroundTransparency = 1, 
 					BorderSizePixel = 0, 
-					Image = "", 
+					Image = "rbxassetid://11559270573", 
 					ImageTransparency = 1, 
 					Name = "glow", 
 					Position = UDim2.new(0.5, 0, 0.5, 0), 
