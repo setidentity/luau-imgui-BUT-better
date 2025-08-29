@@ -1,7 +1,8 @@
 local serpent = serpent or {}
-
+print"1"
 local serpenticonmain=getcustomasset("serpent/assets/icon.png")
 
+print"2"
 local unavailable = function(fake)
 	return function(...)
 		internalUtils:Notify("this feature cannot be used on the current version")
@@ -39,6 +40,7 @@ local clonefunction = function(funct: funct)
 	end
 end
 
+print"3"
 local executecode = executecode or function(scr)
 	task.spawn(loadstring(scr));
 end
@@ -47,7 +49,8 @@ local setfpscap = setfpscap or unavailable(nil)
 local getfpscap = getfpscap or unavailable(60)
 local getfpsmax = getfpsmax or unavailable(60)
 
-local serpent.makeserpentfolder= makeserpentfolder or function(path: string)
+print"4"
+local makeserpentfolder= makeserpentfolder or function(path: string)
     local full = "serpent/" .. path
     if not isfolder(full) then
         makefolder(full)
@@ -55,13 +58,13 @@ local serpent.makeserpentfolder= makeserpentfolder or function(path: string)
     return true
 end
 
-local serpent.writeserpentfile = writeserpentfile or function(path: string, content: string)
+local writeserpentfile = writeserpentfile or function(path: string, content: string)
     local full = "serpent/" .. path
     writefile(full, content)
     return true
 end
 
-local serpent.listserpentfiles = listserpentfiles or function(path: string)
+local listserpentfiles = listserpentfiles or function(path: string)
     local full = "serpent/" .. (path or "")
     if isfolder(full) then
         return listfiles(full)
@@ -69,11 +72,11 @@ local serpent.listserpentfiles = listserpentfiles or function(path: string)
     return {}
 end
 
-local serpent.isserpentfolder = isserpentfolder or function(path: string)
+local isserpentfolder = isserpentfolder or function(path: string)
     return isfolder("serpent/" .. path)
 end
 
-local serpent.readserpentfile = readserpentfile or function(path: string)
+local readserpentfile = readserpentfile or function(path: string)
     local full = "serpent/" .. path
     if isfile(full) then
         return readfile(full)
@@ -81,16 +84,16 @@ local serpent.readserpentfile = readserpentfile or function(path: string)
     return nil
 end
 
-local serpent.isserpentfile = isserpentfile or function(path: string)
+local isserpentfile = isserpentfile or function(path: string)
     return isfile("serpent/" .. path)
 end
 
-local makeserpentfolder = serpent and clonefunction(serpent.makeserpentfolder);
+--[[local makeserpentfolder = serpent and clonefunction(serpent.makeserpentfolder);
 local writeserpentfile = serpent and clonefunction(serpent.writeserpentfile);
 local listserpentfiles = serpent and clonefunction(serpent.listserpentfiles);
 local isserpentfolder = serpent and clonefunction(serpent.isserpentfolder);
 local readserpentfile = serpent and clonefunction(serpent.readserpentfile);
-local isserpentfile = serpent and clonefunction(serpent.isserpentfile);
+local isserpentfile = serpent and clonefunction(serpent.isserpentfile);]]
 local isv2device = (serpent and clonefunction(serpent.is_v2)) or function()
 	return false 
 end
