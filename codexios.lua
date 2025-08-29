@@ -1208,7 +1208,7 @@ do
 					AnchorPoint = Vector2.new(0.5, 0.5), 
 					BackgroundTransparency = 1, 
 					BorderSizePixel = 0, 
-					Image = "rbxassetid://1122348642", 
+					Image = "rbxassetid:/11559270573", 
 					ImageTransparency = 1, 
 					Name = "glow", 
 					Position = UDim2.new(0.5, 0, 0.5, 0), 
@@ -3963,7 +3963,10 @@ do
 		if userSettings.cache.executor.autoExecute and isserpentfolder and listserpentfiles and readserpentfile then
 			if isserpentfolder("Autoexec") then
 				for i, v in listserpentfiles("Autoexec") do
-					executecode(readserpentfile(v));
+					local a = pcall(function()
+executecode(readserpentfile(v));
+				end)
+					if not a then print("couldnt autoexecute") end
 				end
 			elseif rconsolewarn then
 				rconsolewarn("Autoexecution folder has not been found! Make sure to garant storage permissions.")
