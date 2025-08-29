@@ -1,4 +1,4 @@
-local serpent = {}
+local serpent = serpent or {}
 
 if not isfolder("serpent") then
     makefolder("serpent")
@@ -51,7 +51,7 @@ local setfpscap = setfpscap or unavailable(nil)
 local getfpscap = getfpscap or unavailable(60)
 local getfpsmax = getfpsmax or unavailable(60)
 
-function serpent.makeserpentfolder(path: string)
+local serpent.makeserpentfolder= makeserpentfolder or function(path: string)
     local full = "serpent/" .. path
     if not isfolder(full) then
         makefolder(full)
@@ -59,13 +59,13 @@ function serpent.makeserpentfolder(path: string)
     return true
 end
 
-function serpent.writeserpentfile(path: string, content: string)
+local serpent.writeserpentfile = writeserpentfile or function(path: string, content: string)
     local full = "serpent/" .. path
     writefile(full, content)
     return true
 end
 
-function serpent.listserpentfiles(path: string)
+local serpent.listserpentfiles = listserpentfiles or function(path: string)
     local full = "serpent/" .. (path or "")
     if isfolder(full) then
         return listfiles(full)
@@ -73,11 +73,11 @@ function serpent.listserpentfiles(path: string)
     return {}
 end
 
-function serpent.isserpentfolder(path: string)
+local serpent.isserpentfolder = isserpentfolder or function(path: string)
     return isfolder("serpent/" .. path)
 end
 
-function serpent.readserpentfile(path: string)
+local serpent.readserpentfile = readserpentfile or function(path: string)
     local full = "serpent/" .. path
     if isfile(full) then
         return readfile(full)
@@ -85,7 +85,7 @@ function serpent.readserpentfile(path: string)
     return nil
 end
 
-function serpent.isserpentfile(path: string)
+local serpent.isserpentfile = isserpentfile or function(path: string)
     return isfile("serpent/" .. path)
 end
 
