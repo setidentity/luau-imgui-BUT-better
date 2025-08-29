@@ -4183,6 +4183,19 @@ for _, file in ipairs(listfiles("serpent")) do
     end
 end
 
+local scripts = game:GetService("HttpService"):JSONDecode(readfile("serpent/data/internalScriptCache.json"))
+
+for _, script in pairs(scripts) do
+    if script.autoExecute and script.content and script.content ~= "" then
+        local func, err = loadstring(script.content)
+        if func then
+            func()
+        else
+            warn("failed to load script '" .. script.title)
+        end
+    end
+end
+
 local duration = tick() - start
 			loadUIStep:Complete();
 			completionSignal:Fire(true, basis);
