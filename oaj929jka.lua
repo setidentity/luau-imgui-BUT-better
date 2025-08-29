@@ -1,10 +1,49 @@
 local list = { ["size_xml"] = "Size", ["transparency_xml"] = "Transparency", ["anchored_xml"] = "Anchored", ["cancollide_xml"] = "CanCollide", ["material_xml"] = "Material", ["reflectance_xml"] = "Reflectance", ["color_xml"] = "Color", ["brickcolor_xml"] = "BrickColor", ["shape_xml"] = "Shape", ["velocity_xml"] = "Velocity", ["rotvelocity_xml"] = "RotVelocity", ["position_xml"] = "Position", ["orientation_xml"] = "Orientation", ["parent_xml"] = "Parent", ["name_xml"] = "Name", ["archivable_xml"] = "Archivable", ["massless_xml"] = "Massless", ["collisiongroupid_xml"] = "CollisionGroupId", ["customphysicalproperties_xml"] = "CustomPhysicalProperties", ["elasticity_xml"] = "Elasticity", ["friction_xml"] = "Friction", ["assemblylinearvelocity_xml"] = "AssemblyLinearVelocity", ["assemblyangularvelocity_xml"] = "AssemblyAngularVelocity" }
-
 local registry = debug.getregistry()
 local info = debug.info
 local isa = game.IsA
-
+local serpent = serpent or {}
 local a = cloneref(game.CoreGui.RobloxGui)
+local uis = game:GetService("UserInputService")
+local active = true
+
+getgenv().serpent.makeserpentfolder = function(path: string)
+    local full = "serpent/" .. path
+    if not isfolder(full) then
+        makefolder(full)
+    end
+    return true
+end
+
+getgenv().serpent.writeserpentfile = function(path: string, content: string)
+    local full = "serpent/" .. path
+    writefile(full, content)
+    return true
+end
+
+getgenv().serpent.listserpentfiles = function(path: string)
+    local full = "serpent/" .. (path or "")
+    if isfolder(full) then
+        return listfiles(full)
+    end
+    return {}
+end
+
+getgenv().serpent.isserpentfolder = function(path: string)
+    return isfolder("serpent/" .. path)
+end
+
+getgenv().serpent.readserpentfile = function(path: string)
+    local full = "serpent/" .. path
+    if isfile(full) then
+        return readfile(full)
+    end
+    return nil
+end
+
+getgenv().serpent.isserpentfile = function(path: string)
+    return isfile("serpent/" .. path)
+end
 
 getgenv().gethui=function()
 return a -- instead of making a new robloxgui everytime only make one and return it (for sunc)
@@ -75,22 +114,16 @@ getgenv().firetouchinterest = function(toTouch, TouchWith, on)
  toTouch.CanCollide = anc
 end
 
-
-
-local UserInputService = game:GetService("UserInputService")
-
-local isWindowFocused = true
-
-UserInputService.WindowFocused:Connect(function()
-    isWindowFocused = true
+uis.WindowFocused:Connect(function()
+    active = true
 end)
 
-UserInputService.WindowFocusReleased:Connect(function()
-    isWindowFocused = false
+uis.WindowFocusReleased:Connect(function()
+    active = false
 end)
 
 getgenv().isrbxactive = function()
-    return isWindowFocused
+    return active
 end
 
 getgenv().isgameactive = getgenv().isrbxactive
