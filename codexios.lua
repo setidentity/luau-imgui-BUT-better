@@ -1,20 +1,5 @@
 local serpent = serpent or {}
-
-getgenv().isfolder = function(path)
-    local test = path .. "/isfolder.txt"
-    local ok = pcall(function()
-        writefile(test, "isfolder")
-    end)
-    if ok then
-        delfile(test)
-        return true
-    end
-    return false
-end
-
-if not isfolder("serpent") then
-    makefolder("serpent")
-end
+makefolder("serpent")
 
 local serpenticonmain=getcustomasset("serpent/assets/icon.png")
 
