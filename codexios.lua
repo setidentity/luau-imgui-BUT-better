@@ -1,4 +1,9 @@
-local serpent = serpent or nil
+local serpent = {}
+
+if not isfolder("serpent") then
+    makefolder("serpent")
+end
+
 local serpenticonmain=getcustomasset("serpent/assets/icon.png")
 
 local unavailable = function(fake)
@@ -45,6 +50,44 @@ end
 local setfpscap = setfpscap or unavailable(nil)
 local getfpscap = getfpscap or unavailable(60)
 local getfpsmax = getfpsmax or unavailable(60)
+
+function serpent.makeserpentfolder(path: string)
+    local full = "serpent/" .. path
+    if not isfolder(full) then
+        makefolder(full)
+    end
+    return true
+end
+
+function serpent.writeserpentfile(path: string, content: string)
+    local full = "serpent/" .. path
+    writefile(full, content)
+    return true
+end
+
+function serpent.listserpentfiles(path: string)
+    local full = "serpent/" .. (path or "")
+    if isfolder(full) then
+        return listfiles(full)
+    end
+    return {}
+end
+
+function serpent.isserpentfolder(path: string)
+    return isfolder("serpent/" .. path)
+end
+
+function serpent.readserpentfile(path: string)
+    local full = "serpent/" .. path
+    if isfile(full) then
+        return readfile(full)
+    end
+    return nil
+end
+
+function serpent.isserpentfile(path: string)
+    return isfile("serpent/" .. path)
+end
 
 local makeserpentfolder = serpent and clonefunction(serpent.makeserpentfolder);
 local writeserpentfile = serpent and clonefunction(serpent.writeserpentfile);
@@ -1208,7 +1251,7 @@ do
 					AnchorPoint = Vector2.new(0.5, 0.5), 
 					BackgroundTransparency = 1, 
 					BorderSizePixel = 0, 
-					Image = "rbxassetid://11559270573", 
+					Image = "", 
 					ImageTransparency = 1, 
 					Name = "glow", 
 					Position = UDim2.new(0.5, 0, 0.5, 0), 
@@ -1307,7 +1350,7 @@ do
 	framework.components.base.textButton = (function(overwriteProps: {any}, children: {any}): Instance
 		return instanceUtils:Create("TextButton", tableUtils:DeepOverwrite({
 			AutomaticSize = Enum.AutomaticSize.X,
-			BackgroundColor3 = Color3.fromRGB(38, 38, 41),
+			BackgroundColor3 = Color3.fromRGB(255,255,255),
 			FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold),
 			Size = UDim2.new(0, 0, 0, 32),
 			TextColor3 = Color3.new(1, 1, 1),
@@ -1804,7 +1847,8 @@ do
 			Parent = directory, 
 			Position = UDim2.new(0.5, 0, 0.5, 0), 
 			Size = UDim2.new(0.6, 0, 0.4, 100), 
-			Visible = false
+			Visible = false,
+		    ZIndex = 9999999
 		}, {
 			instanceUtils:Create("UICorner", { 
 				CornerRadius = UDim.new(0, 5), 
@@ -2159,13 +2203,13 @@ do
 					}),
 					instanceUtils:Create("UIStroke", { 
 						ApplyStrokeMode = Enum.ApplyStrokeMode.Border, 
-						Color = scriptData.autoExecute and Color3.fromRGB(38, 38, 41) or Color3.fromRGB(58, 58, 74), 
+						Color = scriptData.autoExecute and Color3.fromRGB(255,255,255) or Color3.fromRGB(58, 58, 74), 
 						Name = "stroke", 
 						Thickness = 2
 					}),
 					instanceUtils:Create("Frame", { 
 						AnchorPoint = Vector2.new(0.5, 0.5), 
-						BackgroundColor3 = scriptData.autoExecute and Color3.fromRGB(38, 38, 41) or Color3.fromRGB(58, 58, 74), 
+						BackgroundColor3 = scriptData.autoExecute and Color3.fromRGB(255,255,255) or Color3.fromRGB(58, 58, 74), 
 						BorderColor3 = Color3.fromHex("000000"), 
 						BorderSizePixel = 0, 
 						Name = "dot", 
@@ -2242,11 +2286,11 @@ do
 
 	function savedScript:ToggleAutomaticExecution(state: boolean)
 		instanceUtils:Tween(self.instance.autoExecute.indicator.dot, 0.2, {
-			BackgroundColor3 = state and Color3.fromRGB(38, 38, 41) or Color3.fromHex("3a3a4a"),
+			BackgroundColor3 = state and Color3.fromRGB(255,255,255) or Color3.fromHex("3a3a4a"),
 			Position = UDim2.new(0.5, state and 9 or -9, 0.5, 0)
 		});
 		instanceUtils:Tween(self.instance.autoExecute.indicator.stroke, 0.2, {
-			Color = state and Color3.fromRGB(38, 38, 41) or Color3.fromHex("3a3a4a")
+			Color = state and Color3.fromRGB(255,255,255) or Color3.fromHex("3a3a4a")
 		});
 	end
 
@@ -2502,7 +2546,7 @@ do
 		self.selected = button;
 		map[button].Visible = true;
 		instanceUtils:Tween(self.selected, 0.2, {
-			BackgroundColor3 = Color3.fromRGB(38, 38, 41),
+			BackgroundColor3 = Color3.fromRGB(255,255,255),
 			TextColor3 = Color3.fromRGB(255, 255, 255)
 		});
 	end
@@ -3143,11 +3187,11 @@ do
 
 	function toggle:Set(state: boolean)
 		instanceUtils:Tween(self.instance.indicator.dot, 0.2, {
-			BackgroundColor3 = state and Color3.fromRGB(38, 38, 41) or Color3.fromHex("3a3a4a"),
+			BackgroundColor3 = state and Color3.fromRGB(255,255,255) or Color3.fromHex("3a3a4a"),
 			Position = UDim2.new(0.5, state and 9 or -9, 0.5, 0)
 		});
 		instanceUtils:Tween(self.instance.indicator.stroke, 0.2, {
-			Color = state and Color3.fromRGB(38, 38, 41) or Color3.fromHex("3a3a4a")
+			Color = state and Color3.fromRGB(255,255,255) or Color3.fromHex("3a3a4a")
 		});
 		if self.callback then
 			self.callback(state);
@@ -3724,7 +3768,7 @@ do
 		local newMap = map[tab];
 		newMap.frame.Visible = true;
 		instanceUtils:Tween(newMap.btn, 0.2, {
-			BackgroundColor3 = Color3.fromRGB(38, 38, 41),
+			BackgroundColor3 = Color3.fromRGB(255,255,255),
 			TextColor3 = Color3.fromRGB(255, 255, 255)
 		});
 	end
@@ -3816,7 +3860,7 @@ do
 			instanceUtils:Create("ImageLabel", {
 				BackgroundTransparency = 1,
 				Image = "rbxassetid://14840862230",
-				ImageColor3 = Color3.fromRGB(38, 38, 41),
+				ImageColor3 = Color3.fromRGB(255,255,255),
 				ImageTransparency = 1,
 				Name = "icon",
 				Size = UDim2.new(0, 22, 0, 22)
@@ -5825,7 +5869,7 @@ do
 			});
 
 			editorButton("Execute", "rbxassetid://14808225296", {
-				BackgroundColor3 = Color3.fromRGB(38, 38, 41),
+				BackgroundColor3 = Color3.fromRGB(255,255,255),
 				MouseButton1Click = function()
 					internalUtils:Notify("Editor Executed!")
 					internalUtils:Execute(self.text);
