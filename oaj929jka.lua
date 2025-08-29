@@ -327,23 +327,6 @@ getgenv().setthreadidentity=setidentity
 getgenv().getthreadidentity=getidentity
 getgenv().setthreadcontext=setidentity
 getgenv().getthreadcontext=getidentity
-getgenv().consolesettitle = getgenv().rconsoletitle
-getgenv().consoleinput = getgenv().rconsoleinput
-getgenv().consolecreate = getgenv().rconsolecreate
-getgenv().consoledestroy = getgenv().rconsoledestroy
-getgenv().consolename = getgenv().rconsolename
-getgenv().consoleprint = getgenv().rconsoleprint
-getgenv().consolewarn = getgenv().rconsolewarn
-getgenv().consoleerror = getgenv().rconsoleerror
-getgenv().consoleclear = getgenv().rconsoleclear
-getgenv().consoletitle = getgenv().rconsoletitle
-getgenv().base64_encode = crypt.base64encode
-getgenv().base64_decode = crypt.base64decode
-getgenv().getscriptfunction = getscripthash
-getgenv().isourclosure=getgenv().isexecutorclosure
-getgenv().checkclosure = function(fn)
-    return type(fn) == "function" and islclosure(fn)
-end
 
 getgenv().replaceclosure=function(original, replacement)
     assert(type(original) == "function", "original must be a function")
