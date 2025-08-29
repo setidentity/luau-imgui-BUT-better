@@ -43,7 +43,7 @@ local clonefunction = function(funct: funct)
 	end
 end
 
-local executecode = executecode and clonefunction(executecode) or function(scr)
+local executecode = function(scr)
 	task.spawn(loadstring(scr));
 end
 
