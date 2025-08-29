@@ -8,7 +8,7 @@ local serpenticonmain=getcustomasset("serpent/assets/icon.png")
 
 local unavailable = function(fake)
 	return function(...)
-		internalUtils:Notify("This feature cannot be used on the current apk version")
+		internalUtils:Notify("this feature cannot be used on the current version")
 		return fake
 	end
 end
