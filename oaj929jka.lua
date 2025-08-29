@@ -4,11 +4,13 @@ local registry = debug.getregistry()
 local info = debug.info
 local isa = game.IsA
 
+local a = cloneref(game.CoreGui.RobloxGui)
+
 getgenv().gethui=function()
-return cloneref(game.CoreGui.RobloxGui) -- secure
+return a -- instead of making a new robloxgui everytime only make one and return it (for sunc)
 end
 
-getgenv().dumpstring = function(fn)
+getgenv().dumpstring = function(fn) -- alias
     assert(type(fn) == "function", "expected function")
     return string.dump(fn)
 end
