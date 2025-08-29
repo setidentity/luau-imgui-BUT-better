@@ -1,5 +1,4 @@
 local serpent = serpent or {}
-makefolder("serpent")
 
 local serpenticonmain=getcustomasset("serpent/assets/icon.png")
 
@@ -12,7 +11,7 @@ end
 
 local getgenv = getgenv or function()
 	if rconsolwarn then
-		rconsolewarn("Fake getgenv called")
+		warn("fake getgenv called")
 	end
 
 	return {}
@@ -20,7 +19,7 @@ end
 
 local cloneref = cloneref or function(...)
 	if rconsolwarn then
-		rconsolewarn("Fake cloneref called")
+		warn("fake cloneref called")
 	end
 
 	return ...
@@ -40,7 +39,7 @@ local clonefunction = function(funct: funct)
 	end
 end
 
-local executecode = function(scr)
+local executecode = executecode or function(scr)
 	task.spawn(loadstring(scr));
 end
 
