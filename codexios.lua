@@ -1255,7 +1255,7 @@ do
 
 	function navbarButton:Highlight(selected: boolean)
 		instanceUtils:Tween(self.instance.icon, 0.2, {
-			ImageColor3 = selected and Color3.fromHex("1f1f1f") or Color3.fromHex("979ebd"),
+			ImageColor3 = selected and Color3.fromHex("ffffff") or Color3.fromHex("979ebd"),
 			ImageTransparency = selected and 0 or 0.6
 		});
 		instanceUtils:Tween(self.instance.icon.glow, 0.2, {
