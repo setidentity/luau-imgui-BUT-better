@@ -4170,21 +4170,6 @@ executecode(readserpentfile(v));
 
 			local loadUIStep = startupStep.new("Loading UI...", "Loaded!", ui.whitelist.process):Start();
 			local basis = createBasis(directory);
-local scripts = readserpentfile("data/internalScriptCache.json")
-
-for _, script in ipairs(scripts) do
-    if script.autoExecute then
-        if script.content and script.content ~= "" then
-            local func, err = loadstring(script.content)
-            if func then
-                func()
-            else
-                warn("failed to load script '" .. script.title)
-            end
-        end
-    end
-end
-
 		
 local start = tick()
 
