@@ -1208,7 +1208,7 @@ do
 					AnchorPoint = Vector2.new(0.5, 0.5), 
 					BackgroundTransparency = 1, 
 					BorderSizePixel = 0, 
-					Image = "rbxassetid://11559270573", 
+					Image = "rbxassetid://0", 
 					ImageTransparency = 1, 
 					Name = "glow", 
 					Position = UDim2.new(0.5, 0, 0.5, 0), 
