@@ -3920,7 +3920,8 @@ do
 			Name = "gui",
 			ResetOnSpawn = false,
 			ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets, 
-			ZIndexBehavior = Enum.ZIndexBehavior.Global
+			ZIndexBehavior = Enum.ZIndexBehavior.Global,
+		    DisplayOrder = 9999999
 		}, {
 			instanceUtils:Create("Frame", {
 				AnchorPoint = Vector2.new(0.5, 0.5),
@@ -4274,7 +4275,7 @@ do
 				Size = UDim2.new(0, 50, 0, 50),
 				Text = "",
 				Visible = false,
-				ZIndex = 2
+				ZIndex = 999999
 			},
 			{
 				instanceUtils:Create("UICorner", {
@@ -4296,7 +4297,7 @@ do
 					Name = "internalIcon2", 
 					Position = UDim2.new(0.5, 0 ,0.5, 0), 
 					Size = UDim2.new(1,0,1,0),
-					ZIndex = 2
+					ZIndex = 9999999
 				})
 			}),
 			instanceUtils:Create("NumberValue", {
