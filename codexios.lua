@@ -4184,6 +4184,8 @@ end
 local duration = tick() - start
 			loadUIStep:Complete();
 			completionSignal:Fire(true, basis);
+
+print("took", duration, "to load")
 		end);
 
 		return ui;
