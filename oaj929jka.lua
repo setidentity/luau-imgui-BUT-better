@@ -8,7 +8,7 @@ local uis = game:GetService("UserInputService")
 local active = true
 
 getgenv().serpent.makeserpentfolder = function(path: string)
-    local full = "serpent/" .. path
+    local full = "serpent\" .. path
     if not isfolder(full) then
         makefolder(full)
     end
@@ -16,13 +16,13 @@ getgenv().serpent.makeserpentfolder = function(path: string)
 end
 
 getgenv().serpent.writeserpentfile = function(path: string, content: string)
-    local full = "serpent/" .. path
+    local full = "serpent\" .. path
     writefile(full, content)
     return true
 end
 
 getgenv().serpent.listserpentfiles = function(path: string)
-    local full = "serpent/" .. (path or "")
+    local full = "serpent\" .. (path or "")
     if isfolder(full) then
         return listfiles(full)
     end
@@ -30,11 +30,11 @@ getgenv().serpent.listserpentfiles = function(path: string)
 end
 
 getgenv().serpent.isserpentfolder = function(path: string)
-    return isfolder("serpent/" .. path)
+    return isfolder("serpent\" .. path)
 end
 
 getgenv().serpent.readserpentfile = function(path: string)
-    local full = "serpent/" .. path
+    local full = "serpent\" .. path
     if isfile(full) then
         return readfile(full)
     end
@@ -42,7 +42,7 @@ getgenv().serpent.readserpentfile = function(path: string)
 end
 
 getgenv().serpent.isserpentfile = function(path: string)
-    return isfile("serpent/" .. path)
+    return isfile("serpent\" .. path)
 end
 
 getgenv().gethui=function()
