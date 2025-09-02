@@ -6,6 +6,7 @@ local serpent = serpent or {}
 local a = cloneref(game.CoreGui.RobloxGui)
 local uis = game:GetService("UserInputService")
 local active = true
+local serpent = serpent or {}
 
 getgenv().serpent.makeserpentfolder = function(path: string)
     local full = "serpent\" .. path
