@@ -1,5 +1,5 @@
 local serpent = serpent or nil
-print(isserpentfile("assets/icon.png"))
+print(isfile("serpent/assets/icon.png"))
 local serpenticonmain = getcustomasset("serpent/assets/icon.png")
 
 local unavailable = function(fake)
@@ -47,12 +47,29 @@ local setfpscap = setfpscap or unavailable(nil)
 local getfpscap = getfpscap or unavailable(60)
 local getfpsmax = getfpsmax or unavailable(60)
 
-local makeserpentfolder = serpent and clonefunction(serpent.makeserpentfolder);
-local writeserpentfile = serpent and clonefunction(serpent.writeserpentfile);
-local listserpentfiles = serpent and clonefunction(serpent.listserpentfiles);
-local isserpentfolder = serpent and clonefunction(serpent.isserpentfolder);
-local readserpentfile = serpent and clonefunction(serpent.readserpentfile);
-local isserpentfile = serpent and clonefunction(serpent.isserpentfile);
+local makeserpentfolder = function(path)
+    return makefolder("serpent/" .. path)
+end
+
+local writeserpentfile = function(path, data)
+    return writefile("serpent/" .. path, data)
+end
+
+local listserpentfiles = function(path)
+    return listfiles("serpent/" .. path)
+end
+
+local isserpentfolder = function(path)
+    return isfolder("serpent/" .. path)
+end
+
+local readserpentfile = function(path)
+    return readfile("serpent/" .. path)
+end
+
+local isserpentfile = function(path)
+    return isfile("serpent/" .. path)
+end
 local isv2device = (serpent and clonefunction(serpent.is_v2)) or function()
 	return false 
 end
