@@ -582,10 +582,10 @@ do
 	local utils = {};
 
 	function utils:Notify(text: string)
-		cloneref(game:GetService("StarterGui")):SetCore("SendNotification", {
-			Title = "internal " .. (isv2device() and "v2" or "v1"),
+		game:GetService("StarterGui")):SetCore("SendNotification", {
+			Title = "internal v1"),
 			Text = text
-		});
+		};
 	end
 
 	function utils:Request(url: string, method: string?, headers: {any}?, body: any?): string
