@@ -1,5 +1,6 @@
 local serpent = serpent or nil
-local serpenticonmain=getcustomasset("serpent\assets\icon.png")
+print(isserpentfile("assets\icon.png"))
+local serpenticonmain=getcustomasset(readserpentfile("assets\icon.png"))
 
 local unavailable = function(fake)
 	return function(...)
